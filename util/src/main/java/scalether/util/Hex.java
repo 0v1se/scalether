@@ -1,4 +1,4 @@
-package scalether.abi.util;
+package scalether.util;
 
 public class Hex {
     private Hex() {

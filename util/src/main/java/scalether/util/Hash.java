@@ -1,4 +1,4 @@
-package scalether.abi.util;
+package scalether.util;
 
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 

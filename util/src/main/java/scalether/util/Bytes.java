@@ -1,4 +1,4 @@
-package scalether.abi.util;
+package scalether.util;
 
 public class Bytes {
     public static final byte ZERO = 0x0;

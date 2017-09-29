@@ -1,7 +1,7 @@
 package scalether.abi
 
-import scalether.abi.util.Bytes
-import scalether.abi.util.Padding.padLeft
+import scalether.util.Padding.padLeft
+import scalether.util.Bytes
 
 class UintType(bits: Int) extends Type[BigInt] {
   def string = s"uint$bits"

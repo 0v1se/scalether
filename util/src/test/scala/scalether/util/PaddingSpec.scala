@@ -1,4 +1,4 @@
-package scalether.abi.util
+package scalether.util
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen

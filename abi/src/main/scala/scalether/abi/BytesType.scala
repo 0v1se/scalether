@@ -1,6 +1,6 @@
 package scalether.abi
 
-import scalether.abi.util.{Bytes, Padding}
+import scalether.util.{Bytes, Padding}
 
 object BytesType extends Type[Array[Byte]] {
   def string = "bytes"

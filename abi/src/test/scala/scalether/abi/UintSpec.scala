@@ -1,7 +1,7 @@
 package scalether.abi
 
 import org.scalatest.FlatSpec
-import scalether.abi.util.Hex
+import scalether.util.Hex
 
 class UintSpec extends FlatSpec {
   "Uint64" should "encode values" in {

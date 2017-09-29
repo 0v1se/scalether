@@ -1,4 +1,6 @@
-package scalether.abi.util;
+package scalether.util;
+
+import scalether.util.Bytes;
 
 public class Padding {
     private Padding() {

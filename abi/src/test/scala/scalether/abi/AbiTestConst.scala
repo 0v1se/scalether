@@ -1,6 +1,7 @@
 package scalether.abi
 
-import scalether.abi.util.{Bytes, Hex, Padding}
+import scalether.abi.util.Padding
+import scalether.util.{Bytes, Hex, Padding}
 
 object AbiTestConst {
   def fill(size: Int, byte: Byte): Array[Byte] = List.fill(size)(byte).toArray

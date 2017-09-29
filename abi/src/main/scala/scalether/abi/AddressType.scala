@@ -1,6 +1,7 @@
 package scalether.abi
 
-import scalether.abi.util.{Bytes, Hex, Padding}
+import scalether.abi.util.Padding
+import scalether.util.{Bytes, Hex, Padding}
 
 object AddressType extends Type[String] {
   def string = "address"

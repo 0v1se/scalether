@@ -2,7 +2,7 @@ package scalether.abi
 
 import org.scalatest.FlatSpec
 import org.scalatest.prop.PropertyChecks
-import scalether.abi.util.Bytes
+import scalether.util.Bytes
 
 class StringSpec extends FlatSpec with PropertyChecks {
   "StringType" should "decode encoded" in {

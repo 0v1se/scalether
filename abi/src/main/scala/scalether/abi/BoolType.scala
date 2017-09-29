@@ -1,6 +1,6 @@
 package scalether.abi
 
-import scalether.abi.util.{Bytes, Padding}
+import scalether.util.{Bytes, Padding}
 
 object BoolType extends Type[Boolean] {
   val FALSE = Bytes.filled(32, Bytes.ZERO)
