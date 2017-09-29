@@ -1,7 +1,7 @@
 package scalether.core.json
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 
@@ -11,6 +11,7 @@ class JsonConverter {
   val objectMapper = new ObjectMapper() with ScalaObjectMapper
   objectMapper.registerModule(DefaultScalaModule)
   objectMapper.registerModule(bigIntModule)
+  objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
   private def bigIntModule: SimpleModule = {
     val mod = new SimpleModule()

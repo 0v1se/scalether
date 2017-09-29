@@ -27,5 +27,5 @@ lazy val `async-http-client` = common(project).dependsOn(core)
 lazy val `scalaj-http` = common(project).dependsOn(core)
 
 lazy val root = (project in file(".")).
-  aggregate(core, abi, contract, `async-http-client`, `scalaj-http`)
+  aggregate(util, core, abi, contract, extra, `async-http-client`, `scalaj-http`)
 

@@ -1,6 +1,5 @@
 package scalether.abi
 
-import scalether.abi.util.Padding
 import scalether.util.{Bytes, Hex, Padding}
 
 object AbiTestConst {

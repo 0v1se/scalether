@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets
 
 import cats.Functor
 import cats.implicits._
-import scalether.abi.util.Hex
 import scalether.util.{Hash, Hex}
 
 import scala.language.higherKinds

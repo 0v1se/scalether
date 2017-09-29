@@ -2,10 +2,11 @@ package scalether.core
 
 import cats.MonadError
 import cats.implicits._
+import scalether.core.request.Transaction
 
 import scala.language.higherKinds
 
-class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Throwable]) {
+class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Throwable]) extends TransactionSender[F] {
 
   def web3ClientVersion(): F[String] =
     exec("web3_clientVersion")
@@ -22,14 +23,17 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def ethCall(transaction: Transaction): F[String] =
     exec("eth_call", transaction)
 
-  def ethSendTransactin(transaction: Transaction): F[String] =
+  def ethSendTransaction(transaction: request.Transaction): F[String] =
     exec("eth_sendTransaction", transaction)
 
   def ethSendRawTransaction(transaction: String): F[String] =
     exec("eth_sendRawTransaction", transaction)
 
-  def ethGetTransactionReceipt(hash: String): F[Option[TransactionReceipt]] =
+  def ethGetTransactionReceipt(hash: String): F[TransactionReceipt] =
     exec("eth_getTransactionReceipt", hash)
+
+  def ethGetTransactionByHash(hash: String): F[response.Transaction] =
+    exec("eth_getTransactionByHash", hash)
 
   def netPeerCount(): F[BigInt] =
     exec("net_peerCount")
@@ -39,6 +43,9 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
 
   def ethGasPrice(): F[BigInt] =
     exec("eth_gasPrice")
+
+  def sendTransaction(transaction: Transaction): F[String] =
+    ethSendTransaction(transaction)
 
   private def exec[T](method: String, params: Any*)(implicit mf: Manifest[T]): F[T] = {
     service.execute[T](Request(1, method, params: _*)).flatMap {
