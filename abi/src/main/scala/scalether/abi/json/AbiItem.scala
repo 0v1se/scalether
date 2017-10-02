@@ -1,7 +1,7 @@
 package scalether.abi.json
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As
-import com.fasterxml.jackson.annotation.{JsonProperty, JsonSubTypes, JsonTypeInfo}
+import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
 
 
 @JsonSubTypes(Array(
