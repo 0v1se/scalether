@@ -16,7 +16,7 @@ object Call {
     }
   }
 
-  def encode[T, R](signature: Signature[T, R], arg: T): String = {
+  def encode[T](signature: Signature[T, _], arg: T): String = {
     val id = buildId(signature)
     id + Hex.bytesToHex(signature.in.encode(arg))
   }

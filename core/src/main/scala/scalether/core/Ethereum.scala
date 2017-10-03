@@ -6,7 +6,7 @@ import scalether.core.request.Transaction
 
 import scala.language.higherKinds
 
-class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Throwable]) extends TransactionSender[F] {
+class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Throwable]) {
 
   def web3ClientVersion(): F[String] =
     exec("web3_clientVersion")
@@ -43,9 +43,6 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
 
   def ethGasPrice(): F[BigInt] =
     exec("eth_gasPrice")
-
-  def sendTransaction(transaction: Transaction): F[String] =
-    ethSendTransaction(transaction)
 
   private def exec[T](method: String, params: Any*)(implicit mf: Manifest[T]): F[T] = {
     service.execute[T](Request(1, method, params: _*)).flatMap {

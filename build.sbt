@@ -18,9 +18,9 @@ lazy val core = common(project).dependsOn(util)
 
 lazy val abi = common(project).dependsOn(core)
 
-lazy val contract = common(project).dependsOn(abi)
-
 lazy val extra = common(project).dependsOn(core)
+
+lazy val contract = common(project).dependsOn(abi, extra)
 
 lazy val `async-http-client` = common(project).dependsOn(core)
 
