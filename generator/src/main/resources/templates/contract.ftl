@@ -67,7 +67,7 @@ import cats.implicits._
 import cats.{Functor, Monad}
 import scalether.abi._
 import scalether.abi.tuple._
-import scalether.contract.Contract
+import scalether.contract._
 import scalether.core.TransactionSender
 import scalether.core.request.Transaction
 import scalether.util.Hex
@@ -93,8 +93,10 @@ class ${truffle.name}[F[_] : Functor](address: String, sender: TransactionSender
     </#list>
 }
 
-object ${truffle.name} {
+object ${truffle.name} extends ContractObject {
+  val name = "${truffle.name}"
   val bin = "${truffle.bin}"
+  val abi = ${abi}
   val constructor = <@type constructor_args/>
 
   def encodeArgs<@args constructor_args/>: Array[Byte] =
