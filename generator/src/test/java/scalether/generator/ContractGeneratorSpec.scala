@@ -6,12 +6,24 @@ import scalether.core.json.JsonConverter
 import scala.io.Source
 
 class ContractGeneratorSpec extends FlatSpec {
-  val json = new JsonConverter
+  val converter = new JsonConverter
   val generator = new ContractGenerator
 
-  "Generator" should "generate for Token" in {
-    val token = Source.fromResource("IssuedToken.json").mkString
-    val truffle = json.fromJson[TruffleContract](token)
-    println(generator.generate(truffle, "daomao.contract"))
+  def generate(name: String) = {
+    val json = Source.fromResource(s"$name.json").mkString
+    val truffle = converter.fromJson[TruffleContract](json)
+    generator.generate(truffle, "org.daomao.contract")
+  }
+
+  "Generator" should "generate IssuedToken" in {
+    println(generate("IssuedToken"))
+  }
+
+  "Generator" should "generate ERC20" in {
+    println(generate("ERC20"))
+  }
+
+  "Generator" should "generate ERC20Basic" in {
+    println(generate("ERC20Basic"))
   }
 }

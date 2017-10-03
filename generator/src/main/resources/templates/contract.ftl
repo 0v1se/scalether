@@ -50,10 +50,11 @@
 </#compress></#macro>
 <#macro args inputs><#if inputs?has_content>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
 <#macro args_values inputs><#list inputs as inp>${inp.name}<#if inp?has_next>, </#if></#list></#macro>
+<#macro args_params inputs><#if inputs?size != 0>(</#if><@args_values inputs/><#if inputs?size != 0>)</#if></#macro>
 <#macro args_tuple inputs><#if inputs?size != 1>(</#if><@args_values inputs/><#if inputs?size != 1>)</#if></#macro>
 <#function find_constructor_args>
     <#list truffle.abi as item>
-        <#if item.type?? && item.type.getId == 'constructor'>
+        <#if item.type != "event" && item.type?? && item.type.getId == 'constructor'>
             <#return item.inputs/>
         </#if>
     </#list>
@@ -67,18 +68,26 @@ import cats.{Functor, Monad}
 import scalether.abi._
 import scalether.abi.tuple._
 import scalether.contract.Contract
+import scalether.core.TransactionSender
 import scalether.core.request.Transaction
-import scalether.core.{Ethereum, TransactionSender}
 import scalether.util.Hex
 import scalether.util.transaction.TransactionService
 
 import scala.language.higherKinds
 
-class ${truffle.name}[F[_] : Functor](address: String, ethereum: Ethereum[F]) extends Contract[F](address, ethereum) {
+class ${truffle.name}[F[_] : Functor](address: String, sender: TransactionSender[F]) extends Contract[F](address, sender) {
   <#list truffle.abi as item>
         <#if item.type != 'event' && item.name??>
+            <#if item.constant>
   def ${item.name}<@args item.inputs/>: F[<@output_type item.outputs/>] =
     call(<@signature item/>, <@args_tuple item.inputs/>)
+            <#else>
+  def call${item.name?capitalize}<@args item.inputs/>: F[<@output_type item.outputs/>] =
+    call(<@signature item/>, <@args_tuple item.inputs/>)
+
+  def ${item.name}<@args item.inputs/>: F[String] =
+    sendTransaction(<@signature item/>, <@args_tuple item.inputs/>)
+            </#if>
 
         </#if>
     </#list>
@@ -92,15 +101,15 @@ object ${truffle.name} {
     constructor.encode(<@args_values constructor_args/>)
 
   def deployTransactionData<@args constructor_args/>: String =
-    bin + Hex.bytesToHex(encodeArgs(<@args_values constructor_args/>))
+    bin + Hex.bytesToHex(encodeArgs<@args_params constructor_args/>)
 
   def deploy[F[_] : Functor](sender: TransactionSender[F])<@args constructor_args/>: F[String] =
-    sender.sendTransaction(Transaction(data = Some(deployTransactionData(<@args_values constructor_args/>))))
+    sender.sendTransaction(Transaction(data = Some(deployTransactionData<@args_params constructor_args/>)))
 
   def deployAndWait[F[_] : Monad](sender: TransactionSender[F], service: TransactionService[F])
                                  <@args constructor_args/>: F[${truffle.name}[F]] =
-    deploy(sender)(<@args_values constructor_args/>)
+    deploy(sender)<@args_params constructor_args/>
       .flatMap(hash => service.waitForTransaction(hash))
-      .map(receipt => new IssuedToken[F](receipt.contractAddress, service.ethereum))
+      .map(receipt => new ${truffle.name}[F](receipt.contractAddress, sender))
 
 }
