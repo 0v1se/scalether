@@ -82,7 +82,7 @@ class ${truffle.name}[F[_] : Functor](address: String, sender: TransactionSender
   def ${item.name}<@args item.inputs/>: F[<@output_type item.outputs/>] =
     call(<@signature item/>, <@args_tuple item.inputs/>)
             <#else>
-  def call${item.name?capitalize}<@args item.inputs/>: F[<@output_type item.outputs/>] =
+  def call${item.name?cap_first}<@args item.inputs/>: F[<@output_type item.outputs/>] =
     call(<@signature item/>, <@args_tuple item.inputs/>)
 
   def ${item.name}<@args item.inputs/>: F[String] =
