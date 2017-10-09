@@ -58,7 +58,7 @@ object Events extends ContractObject {
   case class SimpleEvent(topic: Hash, value: String)
 
   object SimpleEvent {
-    val event = Event("SimpleEvent", Tuple1Type(StringType), Tuple1Type(StringType))
+    val event = Event("SimpleEvent", List(StringType, StringType), Tuple1Type(StringType), Tuple1Type(StringType))
 
     def apply(log: Log): SimpleEvent = {
       assert(log.topics.head == event.id)
@@ -73,7 +73,7 @@ object Events extends ContractObject {
   case class AddressEvent(topic: Address, value: String)
 
   object AddressEvent {
-    val event = Event("AddressEvent", Tuple1Type(AddressType), Tuple1Type(StringType))
+    val event = Event("AddressEvent", List(AddressType, StringType), Tuple1Type(AddressType), Tuple1Type(StringType))
 
     def apply(log: Log): AddressEvent = {
       assert(log.topics.head == event.id)
@@ -88,7 +88,7 @@ object Events extends ContractObject {
   case class MixedEvent(topic: Address, test: Address, value: String)
 
   object MixedEvent {
-    val event = Event("MixedEvent", Tuple2Type(AddressType, AddressType), Tuple1Type(StringType))
+    val event = Event("MixedEvent", List(AddressType, StringType, AddressType), Tuple2Type(AddressType, AddressType), Tuple1Type(StringType))
 
     def apply(log: Log): MixedEvent = {
       assert(log.topics.head == event.id)

@@ -31,11 +31,14 @@
         Type
     </#if>
 </#compress></#macro>
+<#macro type_list types=[]><#compress>
+    <#list types as type><@single_type type.type/><#if type?has_next>, </#if></#list>
+</#compress></#macro>
 <#macro type types=[]><#compress>
     <#if types?size == 0>
         UnitType
     <#else>
-        Tuple${types?size}Type(<#list types as type><@single_type type.type/><#if type?has_next>, </#if></#list>)
+        Tuple${types?size}Type(<@type_list types/>)
     </#if>
 </#compress></#macro>
 <#macro signature item>Signature("${item.name}", <@type item.inputs/>, <@type item.outputs/>)</#macro>
@@ -138,7 +141,7 @@ object ${truffle.name} extends ContractObject {
   case class ${item.name}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
 
   object ${item.name} {
-    val event = Event("${item.name}", <@type item.indexed/>, <@type item.nonIndexed/>)
+    val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
 
     def apply(log: Log): ${item.name} = {
       assert(log.topics.head == event.id)

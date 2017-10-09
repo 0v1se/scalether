@@ -6,6 +6,7 @@ import scalether.abi.data.Address
 import scalether.core.request.LogFilter
 import scalether.core.transaction.SimpleTransactionSender
 import scalether.core.{Ethereum, EthereumServiceImpl}
+import scalether.test.Events.MixedEvent
 import scalether.transport.ScalajHttpTransportService
 import scalether.util.timer.tries.Implicits._
 import scalether.util.transaction.TransactionService
@@ -30,7 +31,7 @@ class TestRpcIntegrationSpec extends FlatSpec {
     val hash = events.get.emitMixedEvent(Address("0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c"), "value", Address("0xc00000000928f7840a6b0d373c1cd825c97e3c7c")).get
 
     val receipt = transactionService.waitForTransaction(hash).get
-    println(receipt.logs)
+    println(receipt.logs.map(log => MixedEvent(log)))
   }
 
   it should "get logs immediately" in {
