@@ -16,6 +16,7 @@ class JsonConverter {
   private def bigIntModule: SimpleModule = {
     val mod = new SimpleModule()
     mod.addDeserializer(classOf[BigInt], BigIntHexDeserializer)
+    mod.addSerializer(classOf[BigInt], BigIntHexSerializer)
     mod
   }
 

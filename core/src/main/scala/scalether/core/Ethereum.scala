@@ -2,7 +2,7 @@ package scalether.core
 
 import cats.MonadError
 import cats.implicits._
-import scalether.core.request.Transaction
+import scalether.core.request.{LogFilter, LogFilterRequest, Transaction}
 
 import scala.language.higherKinds
 
@@ -43,6 +43,15 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
 
   def ethGasPrice(): F[BigInt] =
     exec("eth_gasPrice")
+
+  def ethGetLogs(filter: LogFilter): F[List[Log]] =
+    exec("eth_getLogs", filter)
+
+  def ethNewFilter(filter: LogFilter): F[BigInt] =
+    exec("eth_newFilter", filter)
+
+  def ethGetFilterChanges(id: BigInt): F[List[Log]] =
+    exec("eth_getFilterChanges", id)
 
   private def exec[T](method: String, params: Any*)(implicit mf: Manifest[T]): F[T] = {
     service.execute[T](Request(1, method, params: _*)).flatMap {
