@@ -28,11 +28,15 @@ case class AbiEvent(name: String,
                     inputs: List[AbiEventParam] = Nil,
                     anonymous: Boolean = false) extends AbiItem {
   val `type` = "event"
+
+  def indexed = inputs.filter(_.indexed)
+
+  def nonIndexed = inputs.filterNot(_.indexed)
 }
 
 case class AbiEventParam(name: String,
                          `type`: String,
-                         indexed: Boolean,
+                         indexed: Boolean = false,
                          components: List[AbiComponent] = Nil)
 
 case class AbiComponent(name: String,

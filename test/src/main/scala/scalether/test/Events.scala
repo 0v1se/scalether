@@ -3,9 +3,10 @@ package scalether.test
 import cats.implicits._
 import cats.{Functor, Monad}
 import scalether.abi._
+import scalether.abi.data._
 import scalether.abi.tuple._
 import scalether.contract._
-import scalether.core.TransactionSender
+import scalether.core._
 import scalether.core.request.Transaction
 import scalether.util.Hex
 import scalether.util.transaction.TransactionService
@@ -19,10 +20,10 @@ class Events[F[_] : Functor](address: String, sender: TransactionSender[F]) exte
   def emitEvent(topic: String, value: String): F[String] =
     sendTransaction(Signature("emitEvent", Tuple2Type(StringType, StringType), UnitType), (topic, value))
 
-  def callEmitAddressEvent(topic: String, value: String): F[Unit] =
+  def callEmitAddressEvent(topic: Address, value: String): F[Unit] =
     call(Signature("emitAddressEvent", Tuple2Type(AddressType, StringType), UnitType), (topic, value))
 
-  def emitAddressEvent(topic: String, value: String): F[String] =
+  def emitAddressEvent(topic: Address, value: String): F[String] =
     sendTransaction(Signature("emitAddressEvent", Tuple2Type(AddressType, StringType), UnitType), (topic, value))
 
 }
@@ -47,5 +48,29 @@ object Events extends ContractObject {
     deploy(sender)
       .flatMap(hash => service.waitForTransaction(hash))
       .map(receipt => new Events[F](receipt.contractAddress, sender))
+
+  case class Event(topic: Array[Byte], value: String)
+
+  object Event {
+    val event = scalether.abi.Event("Event", Tuple1Type(StringType), Tuple1Type(StringType))
+
+    def apply(log: Log) = {
+      assert(log.topics.head == event.id)
+
+
+    }
+  }
+
+  case class AddressEvent(topic: Address, value: String)
+
+  object AddressEvent {
+    val event = scalether.abi.Event("AddressEvent", Tuple1Type(AddressType), Tuple1Type(StringType))
+
+    def apply(log: Log) = {
+      assert(log.topics.head == event.id)
+
+
+    }
+  }
 
 }

@@ -4,12 +4,13 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.FlatSpec
 import org.scalatest.prop.PropertyChecks
+import scalether.abi.data.Address
 import scalether.util.{Bytes, Padding}
 
 class AddressSpec extends FlatSpec with PropertyChecks {
   "Address" should "encode address" in {
     val address = "0x8283ffd0f535e1103c3599d2d00b85815774a896"
-    val bytes = AddressType.encode(address)
+    val bytes = AddressType.encode(Address(address))
     assert("0x" + BigInt(bytes).toString(16) == address)
   }
 

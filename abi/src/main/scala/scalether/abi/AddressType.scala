@@ -1,13 +1,13 @@
 package scalether.abi
 
-import scalether.util.{Bytes, Hex, Padding}
+import scalether.abi.data.Address
 
-object AddressType extends Type[String] {
+object AddressType extends Type[Address] {
   def string = "address"
 
-  def encode(value: String) =
-    Padding.padLeft(Hex.hexToBytes(value), Bytes.ZERO)
+  def encode(value: Address) =
+    value.padded
 
   def decode(bytes: Array[Byte], offset: Int) =
-    Decoded(Hex.bytesToHex(bytes.slice(offset + 12, offset + 32)), offset + 32)
+    Decoded(Address(bytes.slice(offset + 12, offset + 32)), offset + 32)
 }

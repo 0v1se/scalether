@@ -1,6 +1,6 @@
 <#macro single_scala_type abiType><#compress>
     <#if abiType == 'address'>
-        String
+        Address
     <#elseif abiType == 'string'>
         String
     <#elseif abiType?starts_with("uint")>
@@ -14,8 +14,6 @@
 <#macro scala_type types><#compress>
     <#if types?size == 0>
         Unit
-    <#elseif types?size == 1>
-        <@single_scala_type types[0].type/>
     <#else>
         <#list types as type><@single_scala_type type.type/><#if type?has_next>, </#if></#list>
     </#if>
@@ -48,10 +46,25 @@
         (<@scala_type types/>)
     </#if>
 </#compress></#macro>
+<#function isHashTopic arg>
+    <#return arg.type == 'string'>
+</#function>
+<#macro event_arg_type arg><#compress>
+    <#if arg.indexed && isHashTopic(arg.type)>
+        Array[Byte]
+    <#else>
+        <@single_scala_type arg.type/>
+    </#if>
+</#compress></#macro>
 <#macro args inputs><#if inputs?has_content>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
 <#macro args_values inputs><#list inputs as inp>${inp.name}<#if inp?has_next>, </#if></#list></#macro>
 <#macro args_params inputs><#if inputs?size != 0>(</#if><@args_values inputs/><#if inputs?size != 0>)</#if></#macro>
 <#macro args_tuple inputs><#if inputs?size != 1>(</#if><@args_values inputs/><#if inputs?size != 1>)</#if></#macro>
+<#macro event_indexed_arg arg index><#compress>
+    <#if arg.type == 'string'>
+
+    </#if>
+</#compress></#macro>
 <#function find_constructor_args>
     <#list truffle.abi as item>
         <#if item.type != "event" && item.type?? && item.type.getId == 'constructor'>
@@ -66,9 +79,10 @@ package ${package}
 import cats.implicits._
 import cats.{Functor, Monad}
 import scalether.abi._
+import scalether.abi.data._
 import scalether.abi.tuple._
 import scalether.contract._
-import scalether.core.TransactionSender
+import scalether.core._
 import scalether.core.request.Transaction
 import scalether.util.Hex
 import scalether.util.transaction.TransactionService
@@ -114,4 +128,21 @@ object ${truffle.name} extends ContractObject {
       .flatMap(hash => service.waitForTransaction(hash))
       .map(receipt => new ${truffle.name}[F](receipt.contractAddress, sender))
 
+  <#list truffle.abi as item>
+      <#if item.type == "event">
+  case class ${item.name}(<#list item.inputs as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
+
+  object ${item.name} {
+    val event = scalether.abi.Event("${item.name}", <@type item.indexed/>, <@type item.nonIndexed/>)
+
+    def apply(log: Log) = {
+      assert(log.topics.head == event.id)
+
+      val data = event.decode(log.data)
+      ${item.name}()
+    }
+  }
+
+      </#if>
+  </#list>
 }

@@ -2,6 +2,7 @@ package scalether.test
 
 import cats.implicits._
 import org.scalatest.FlatSpec
+import scalether.abi.data.Address
 import scalether.core.request.LogFilter
 import scalether.core.transaction.SimpleTransactionSender
 import scalether.core.{Ethereum, EthereumServiceImpl}
@@ -18,7 +19,7 @@ class TestRpcIntegrationSpec extends FlatSpec {
 
   "Scalether" should "get logs in receipts" in {
     val events = Events.deployAndWait(sender, transactionService)
-    val hash = events.get.emitAddressEvent("0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c", "value").get
+    val hash = events.get.emitAddressEvent(Address("0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c"), "value").get
 
     val receipt = transactionService.waitForTransaction(hash).get
     println(receipt.logs)
