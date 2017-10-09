@@ -4,7 +4,7 @@ import scalether.abi.{Decoded, Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
 
-class Tuple5Type[T1, T2, T3, T4, T5](type1: Type[T1], type2: Type[T2], type3: Type[T3], type4: Type[T4], type5: Type[T5]) extends TupleType[(T1, T2, T3, T4, T5)] {
+class Tuple5Type[T1, T2, T3, T4, T5](val type1: Type[T1], val type2: Type[T2], val type3: Type[T3], val type4: Type[T4], val type5: Type[T5]) extends TupleType[(T1, T2, T3, T4, T5)] {
   def string = s"(${type1.string},${type2.string},${type3.string},${type4.string},${type5.string})"
 
   def types = List(type1, type2, type3, type4, type5)

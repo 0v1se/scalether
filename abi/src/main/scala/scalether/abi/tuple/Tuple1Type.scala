@@ -4,7 +4,7 @@ import scalether.abi.{Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
 
-class Tuple1Type[T1](type1: Type[T1]) extends TupleType[T1] {
+class Tuple1Type[T1](val type1: Type[T1]) extends TupleType[T1] {
   def string = s"(${type1.string})"
 
   def types = List(type1)

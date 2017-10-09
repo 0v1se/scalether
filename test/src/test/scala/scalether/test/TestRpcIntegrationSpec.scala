@@ -25,6 +25,14 @@ class TestRpcIntegrationSpec extends FlatSpec {
     println(receipt.logs)
   }
 
+  it should "emit MixedEvent" in {
+    val events = Events.deployAndWait(sender, transactionService)
+    val hash = events.get.emitMixedEvent(Address("0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c"), "value", Address("0xc00000000928f7840a6b0d373c1cd825c97e3c7c")).get
+
+    val receipt = transactionService.waitForTransaction(hash).get
+    println(receipt.logs)
+  }
+
   it should "get logs immediately" in {
     val filter = LogFilter(
       topics = List("0x39b8d23135cdeca3f85b347e5285f40c9b1de764cf9f8126e7f3b34d77ff0cf0"),

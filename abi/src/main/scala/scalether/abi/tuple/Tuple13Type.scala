@@ -4,7 +4,7 @@ import scalether.abi.{Decoded, Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
 
-class Tuple13Type[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13](type1: Type[T1], type2: Type[T2], type3: Type[T3], type4: Type[T4], type5: Type[T5], type6: Type[T6], type7: Type[T7], type8: Type[T8], type9: Type[T9], type10: Type[T10], type11: Type[T11], type12: Type[T12], type13: Type[T13]) extends TupleType[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)] {
+class Tuple13Type[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13](val type1: Type[T1], val type2: Type[T2], val type3: Type[T3], val type4: Type[T4], val type5: Type[T5], val type6: Type[T6], val type7: Type[T7], val type8: Type[T8], val type9: Type[T9], val type10: Type[T10], val type11: Type[T11], val type12: Type[T12], val type13: Type[T13]) extends TupleType[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)] {
   def string = s"(${type1.string},${type2.string},${type3.string},${type4.string},${type5.string},${type6.string},${type7.string},${type8.string},${type9.string},${type10.string},${type11.string},${type12.string},${type13.string})"
 
   def types = List(type1, type2, type3, type4, type5, type6, type7, type8, type9, type10, type11, type12, type13)

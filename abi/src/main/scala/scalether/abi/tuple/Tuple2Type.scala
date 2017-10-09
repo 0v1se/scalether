@@ -4,7 +4,7 @@ import scalether.abi.{Decoded, Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
 
-class Tuple2Type[T1, T2](type1: Type[T1], type2: Type[T2]) extends TupleType[(T1, T2)] {
+class Tuple2Type[T1, T2](val type1: Type[T1], val type2: Type[T2]) extends TupleType[(T1, T2)] {
   def string = s"(${type1.string},${type2.string})"
 
   def types = List(type1, type2)

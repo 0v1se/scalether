@@ -32,6 +32,8 @@ case class AbiEvent(name: String,
   def indexed = inputs.filter(_.indexed)
 
   def nonIndexed = inputs.filterNot(_.indexed)
+
+  def all = indexed ++ nonIndexed
 }
 
 case class AbiEventParam(name: String,

@@ -10,7 +10,7 @@ def generate(arity: Int, writer: PrintWriter): Unit = {
   writer.println("import scala.collection.mutable.ListBuffer")
   writer.println()
   val ts = range.map(i => s"T$i").mkString(", ")
-  writer.println(s"class Tuple${arity}Type[$ts](${range.map(i => s"type$i: Type[T$i]").mkString(", ")}) extends TupleType[($ts)] {")
+  writer.println(s"class Tuple${arity}Type[$ts](${range.map(i => s"val type$i: Type[T$i]").mkString(", ")}) extends TupleType[($ts)] {")
   writer.println("  def string = s\"(" + range.map(i => "${type" + i + ".string}").mkString(",") + ")\"")
   writer.println()
   writer.println(s"  def types = List(${range.map(i => "type" + i).mkString(", ")})")

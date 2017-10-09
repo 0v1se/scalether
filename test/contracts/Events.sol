@@ -1,14 +1,19 @@
 pragma solidity ^0.4.11;
 
 contract Events {
-    event Event(string indexed topic, string value);
+    event SimpleEvent(string indexed topic, string value);
     event AddressEvent(address indexed topic, string value);
+    event MixedEvent(address indexed topic, string value, address indexed test);
 
-    function emitEvent(string topic, string value) {
-        Event(topic, value);
+    function emitSimpleEvent(string topic, string value) {
+        SimpleEvent(topic, value);
     }
 
     function emitAddressEvent(address topic, string value) {
         AddressEvent(topic, value);
+    }
+
+    function emitMixedEvent(address topic, string value, address test) {
+        MixedEvent(topic, value, test);
     }
 }

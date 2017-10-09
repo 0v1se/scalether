@@ -4,7 +4,7 @@ import scalether.abi.{Decoded, Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
 
-class Tuple9Type[T1, T2, T3, T4, T5, T6, T7, T8, T9](type1: Type[T1], type2: Type[T2], type3: Type[T3], type4: Type[T4], type5: Type[T5], type6: Type[T6], type7: Type[T7], type8: Type[T8], type9: Type[T9]) extends TupleType[(T1, T2, T3, T4, T5, T6, T7, T8, T9)] {
+class Tuple9Type[T1, T2, T3, T4, T5, T6, T7, T8, T9](val type1: Type[T1], val type2: Type[T2], val type3: Type[T3], val type4: Type[T4], val type5: Type[T5], val type6: Type[T6], val type7: Type[T7], val type8: Type[T8], val type9: Type[T9]) extends TupleType[(T1, T2, T3, T4, T5, T6, T7, T8, T9)] {
   def string = s"(${type1.string},${type2.string},${type3.string},${type4.string},${type5.string},${type6.string},${type7.string},${type8.string},${type9.string})"
 
   def types = List(type1, type2, type3, type4, type5, type6, type7, type8, type9)

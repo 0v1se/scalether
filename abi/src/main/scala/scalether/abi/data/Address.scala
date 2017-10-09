@@ -1,17 +1,12 @@
 package scalether.abi.data
 
-import scalether.util.{Bytes, Hex, Padding}
+import scalether.util.Hex
 
-case class Address(bytes: Array[Byte]) {
+case class Address(bytes: Array[Byte]) extends Bytes {
   assert(bytes.length == 20)
-
-  def padded =
-    Padding.padLeft(bytes, Bytes.ZERO)
-
-  override def toString =
-    "0x" + Hex.bytesToHex(padded)
 }
 
 object Address {
-  def apply(hex: String) = new Address(Hex.hexToBytes(hex))
+  def apply(hex: String): Address =
+    new Address(Hex.hexToBytes(hex))
 }
