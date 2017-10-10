@@ -7,7 +7,7 @@
         BigInt
     <#elseif abiType == "bool">
         Boolean
-    <#elseif abiType == "bytes">
+    <#elseif abiType?starts_with("bytes")>
         Array[Byte]
     <#else>
         generic
@@ -25,12 +25,16 @@
         AddressType
     <#elseif abiType == 'string'>
         StringType
+    <#elseif abiType == 'uint'>
+        Uint${abiType?substring(4)}Type
     <#elseif abiType?starts_with("uint")>
-        Uint256Type
+        Uint${abiType?substring(4)}Type
     <#elseif abiType == "bool">
         BoolType
     <#elseif abiType == "bytes">
         BytesType
+    <#elseif abiType?starts_with("bytes")>
+        Bytes${abiType?substring(5)}Type
     <#else>
         Type
     </#if>
