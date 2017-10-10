@@ -75,7 +75,7 @@
     </#if>
 </#compress></#macro>
 <#macro event_non_indexed_arg arg index><#compress>
-    data._${index}
+    decodedData._${index + 1}
 </#compress></#macro>
 <#macro args inputs><#if inputs?has_content>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
 <#macro args_values inputs><#list inputs as inp>${inp.name}<#if inp?has_next>, </#if></#list></#macro>
@@ -154,13 +154,13 @@ object ${truffle.name} extends ContractObject {
     def apply(log: Log): ${item.name} = {
       assert(log.topics.head == event.id)
 
-      val data = event.decode(log.data)
+      <#if item.nonIndexed?has_content>val decodedData = event.decode(log.data)</#if>
       <#list item.indexed as arg>
       val ${arg.name} = <@event_indexed_arg arg arg?index/>
       </#list>
       <#if item.nonIndexed?size == 1>
           <#list item.nonIndexed as arg>
-      val ${arg.name} = data
+      val ${arg.name} = decodedData
           </#list>
       <#else>
           <#list item.nonIndexed as arg>
