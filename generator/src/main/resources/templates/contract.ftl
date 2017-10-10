@@ -7,6 +7,8 @@
         BigInt
     <#elseif abiType == "bool">
         Boolean
+    <#elseif abiType == "bytes">
+        Array[Byte]
     <#else>
         generic
     </#if>
@@ -27,6 +29,8 @@
         Uint256Type
     <#elseif abiType == "bool">
         BoolType
+    <#elseif abiType == "bytes">
+        BytesType
     <#else>
         Type
     </#if>
