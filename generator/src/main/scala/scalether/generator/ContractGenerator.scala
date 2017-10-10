@@ -19,11 +19,16 @@ class ContractGenerator {
   configuration.setDefaultEncoding(StandardCharsets.UTF_8.displayName())
   configuration.setObjectWrapper(new ScalaObjectWrapper)
 
-  def generate(contract: TruffleContract, packageName: String): String = {
+  def generate(contract: TruffleContract, packageName: String, java: Boolean): String = {
     val bytes = new ByteArrayOutputStream()
     cleanly(bytes) { out =>
       cleanly(new OutputStreamWriter(out)) { writer =>
         val model = Map(
+          "F" -> (if (java) "CompletableFuture" else ""),
+          "monadType" -> (if (java) "java.util.concurrent.CompletableFuture" else ""),
+          "monadImport" -> (if (java) "scalether.java.implicits._" else ""),
+          "transactionSender" -> (if (java) "JavaTransactionSender" else ""),
+          "transactionService" -> (if (java) "JavaTransactionService" else ""),
           "truffle" -> contract,
           "package" -> packageName,
           "abi" -> escape(converter.toJson(contract.abi))
@@ -34,6 +39,11 @@ class ContractGenerator {
       out.flush()
     }
     new String(bytes.toByteArray)
+  }
+
+  private def simpleName(fullName: String): String = {
+    val idx = fullName.lastIndexOf(".")
+    fullName.substring(idx + 1)
   }
 
   private def generate(template: String, model: Map[String, AnyRef], out: Writer): Unit = {
@@ -59,12 +69,12 @@ object ContractGenerator {
   private val generator = new ContractGenerator
 
   def main(args: Array[String]): Unit = {
-    generate(args(0), args(1), args(2))
+    generate(args(0), args(1), args(2), if (args.length > 3) args(3).toBoolean else false)
   }
 
-  def generate(jsonPath: String, sourcePath: String, packageName: String): Unit = {
+  def generate(jsonPath: String, sourcePath: String, packageName: String, java: Boolean): Unit = {
     val truffle = generator.converter.fromJson[TruffleContract](Source.fromFile(jsonPath).mkString)
-    val source = generator.generate(truffle, packageName)
+    val source = generator.generate(truffle, packageName, java)
     val resultPath = sourcePath + "/" + packageName.replace(".", "/")
     new File(resultPath).mkdirs()
     Files.write(Paths.get(resultPath + "/" + truffle.name + ".scala"), source.getBytes())

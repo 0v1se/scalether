@@ -13,7 +13,9 @@ import scalether.util.transaction.TransactionService
 
 import scala.language.higherKinds
 
-class Events[F[_] : Functor](address: String, sender: TransactionSender[F]) extends Contract[F](address, sender) {
+class Events[F[_]](address: String, sender: TransactionSender[F])(implicit f: Functor[F])
+  extends Contract[F](address, sender) {
+
   def callEmitSimpleEvent(topic: String, value: String): F[Unit] =
     call(Signature("emitSimpleEvent", Tuple2Type(StringType, StringType), UnitType), (topic, value))
 
@@ -46,11 +48,10 @@ object Events extends ContractObject {
   def deployTransactionData: String =
     bin + Hex.bytesToHex(encodeArgs)
 
-  def deploy[F[_] : Functor](sender: TransactionSender[F]): F[String] =
+  def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData)))
 
-  def deployAndWait[F[_] : Monad](sender: TransactionSender[F], service: TransactionService[F])
-                                 : F[Events[F]] =
+  def deployAndWait[F[_]](sender: TransactionSender[F], service: TransactionService[F])(implicit m: Monad[F]) : F[Events[F]] =
     deploy(sender)
       .flatMap(hash => service.waitForTransaction(hash))
       .map(receipt => new Events[F](receipt.contractAddress, sender))
@@ -63,9 +64,9 @@ object Events extends ContractObject {
     def apply(log: Log): SimpleEvent = {
       assert(log.topics.head == event.id)
 
-      val data = event.decode(log.data)
+      val decodedData = event.decode(log.data)
       val topic = Hash(log.topics(1))
-      val value = data
+      val value = decodedData
       SimpleEvent(topic, value)
     }
   }
@@ -78,9 +79,9 @@ object Events extends ContractObject {
     def apply(log: Log): AddressEvent = {
       assert(log.topics.head == event.id)
 
-      val data = event.decode(log.data)
+      val decodedData = event.decode(log.data)
       val topic = event.indexed.type1.decode(Hex.hexToBytes(log.topics(1)), 0).value
-      val value = data
+      val value = decodedData
       AddressEvent(topic, value)
     }
   }
@@ -93,10 +94,10 @@ object Events extends ContractObject {
     def apply(log: Log): MixedEvent = {
       assert(log.topics.head == event.id)
 
-      val data = event.decode(log.data)
+      val decodedData = event.decode(log.data)
       val topic = event.indexed.type1.decode(Hex.hexToBytes(log.topics(1)), 0).value
       val test = event.indexed.type2.decode(Hex.hexToBytes(log.topics(2)), 0).value
-      val value = data
+      val value = decodedData
       MixedEvent(topic, test, value)
     }
   }

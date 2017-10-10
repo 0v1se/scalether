@@ -1,3 +1,34 @@
+<#macro monad><#compress>
+    <#if F?has_content>
+        ${F}
+    <#else>
+        F
+    </#if>
+</#compress></#macro>
+<#macro monad_param><#compress>
+    <#if !(F?has_content)>
+        [F[_]]
+    </#if>
+</#compress></#macro>
+<#macro sender><#compress>
+    <#if transactionSender?has_content>
+        ${transactionSender}
+    <#else>
+        TransactionSender[<@monad/>]
+    </#if>
+</#compress></#macro>
+<#macro service><#compress>
+    <#if transactionService?has_content>
+        ${transactionService}
+    <#else>
+        TransactionService[<@monad/>]
+    </#if>
+</#compress></#macro>
+<#macro implicit><#compress>
+    <#if !(monadImport?has_content)>
+        <#nested/>
+    </#if>
+</#compress></#macro>
 <#macro single_scala_type abiType><#compress>
     <#if abiType == 'address'>
         Address
@@ -92,6 +123,12 @@
 <#assign constructor_args = find_constructor_args()/>
 package ${package}
 
+<#if monadType?has_content>
+import ${monadType}
+</#if>
+<#if monadImport?has_content>
+import ${monadImport}
+</#if>
 import cats.implicits._
 import cats.{Functor, Monad}
 import scalether.abi._
@@ -105,17 +142,19 @@ import scalether.util.transaction.TransactionService
 
 import scala.language.higherKinds
 
-class ${truffle.name}[F[_] : Functor](address: String, sender: TransactionSender[F]) extends Contract[F](address, sender) {
+class ${truffle.name}<@monad_param/>(address: String, sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@>
+  extends Contract[<@monad/>](address, sender) {
+
   <#list truffle.abi as item>
         <#if item.type != 'event' && item.name??>
             <#if item.constant>
-  def ${item.name}<@args item.inputs/>: F[<@output_type item.outputs/>] =
+  def ${item.name}<@args item.inputs/>: <@monad/>[<@output_type item.outputs/>] =
     call(<@signature item/>, <@args_tuple item.inputs/>)
             <#else>
-  def call${item.name?cap_first}<@args item.inputs/>: F[<@output_type item.outputs/>] =
+  def call${item.name?cap_first}<@args item.inputs/>: <@monad/>[<@output_type item.outputs/>] =
     call(<@signature item/>, <@args_tuple item.inputs/>)
 
-  def ${item.name}<@args item.inputs/>: F[String] =
+  def ${item.name}<@args item.inputs/>: <@monad/>[String] =
     sendTransaction(<@signature item/>, <@args_tuple item.inputs/>)
             </#if>
 
@@ -135,14 +174,13 @@ object ${truffle.name} extends ContractObject {
   def deployTransactionData<@args constructor_args/>: String =
     bin + Hex.bytesToHex(encodeArgs<@args_params constructor_args/>)
 
-  def deploy[F[_] : Functor](sender: TransactionSender[F])<@args constructor_args/>: F[String] =
+  def deploy<@monad_param/>(sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@><@args constructor_args/>: <@monad/>[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData<@args_params constructor_args/>)))
 
-  def deployAndWait[F[_] : Monad](sender: TransactionSender[F], service: TransactionService[F])
-                                 <@args constructor_args/>: F[${truffle.name}[F]] =
+  def deployAndWait<@monad_param/>(sender: <@sender/>, service: <@service/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
     deploy(sender)<@args_params constructor_args/>
       .flatMap(hash => service.waitForTransaction(hash))
-      .map(receipt => new ${truffle.name}[F](receipt.contractAddress, sender))
+      .map(receipt => new ${truffle.name}<#if !(F?has_content)>[F]</#if>(receipt.contractAddress, sender))
 
   <#list truffle.abi as item>
       <#if item.type == "event">

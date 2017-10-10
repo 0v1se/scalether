@@ -7,7 +7,7 @@ import scalether.core.request.Transaction
 
 import scala.language.higherKinds
 
-abstract class Contract[F[_] : Functor](val address: String, sender: TransactionSender[F]) {
+abstract class Contract[F[_]](val address: String, sender: TransactionSender[F])(implicit f: Functor[F]) {
   def sendTransaction[I](signature: Signature[I, _], in: I): F[String] =
     sender.sendTransaction(Transaction(to = Some(address), data = Some(Call.encode(signature, in))))
 
