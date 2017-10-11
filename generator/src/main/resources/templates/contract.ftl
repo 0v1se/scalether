@@ -183,34 +183,34 @@ object ${truffle.name} extends ContractObject {
     deploy(sender)<@args_params constructor_args/>
       .flatMap(hash => poller.waitForTransaction(hash))
       .map(receipt => new ${truffle.name}<#if !(F?has_content)>[F]</#if>(receipt.contractAddress, sender))
-
-  <#list truffle.abi as item>
-      <#if item.type == "event">
-  case class ${item.name}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
-
-  object ${item.name} {
-    val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
-
-    def apply(log: Log): ${item.name} = {
-      assert(log.topics.head == event.id)
-
-      <#if item.nonIndexed?has_content>val decodedData = event.decode(log.data)</#if>
-      <#list item.indexed as arg>
-      val ${arg.name} = <@event_indexed_arg arg arg?index/>
-      </#list>
-      <#if item.nonIndexed?size == 1>
-          <#list item.nonIndexed as arg>
-      val ${arg.name} = decodedData
-          </#list>
-      <#else>
-          <#list item.nonIndexed as arg>
-      val ${arg.name} = <@event_non_indexed_arg arg arg?index/>
-          </#list>
-      </#if>
-      ${item.name}(<#list item.all as arg>${arg.name}<#if arg?has_next>, </#if></#list>)
-    }
-  }
-
-      </#if>
-  </#list>
 }
+
+<#list truffle.abi as item>
+  <#if item.type == "event">
+case class ${item.name}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
+
+object ${item.name} {
+  val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
+
+  def apply(log: Log): ${item.name} = {
+    assert(log.topics.head == event.id)
+
+    <#if item.nonIndexed?has_content>val decodedData = event.decode(log.data)</#if>
+    <#list item.indexed as arg>
+    val ${arg.name} = <@event_indexed_arg arg arg?index/>
+    </#list>
+    <#if item.nonIndexed?size == 1>
+      <#list item.nonIndexed as arg>
+    val ${arg.name} = decodedData
+      </#list>
+    <#else>
+      <#list item.nonIndexed as arg>
+    val ${arg.name} = <@event_non_indexed_arg arg arg?index/>
+      </#list>
+    </#if>
+    ${item.name}(<#list item.all as arg>${arg.name}<#if arg?has_next>, </#if></#list>)
+  }
+}
+
+  </#if>
+</#list>

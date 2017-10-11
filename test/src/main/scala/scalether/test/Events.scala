@@ -57,51 +57,51 @@ object Events extends ContractObject {
     deploy(sender)
       .flatMap(hash => poller.waitForTransaction(hash))
       .map(receipt => new Events[F](receipt.contractAddress, sender))
-
-  case class SimpleEvent(topic: Hash, value: String)
-
-  object SimpleEvent {
-    val event = Event("SimpleEvent", List(StringType, StringType), Tuple1Type(StringType), Tuple1Type(StringType))
-
-    def apply(log: Log): SimpleEvent = {
-      assert(log.topics.head == event.id)
-
-      val decodedData = event.decode(log.data)
-      val topic = Hash(log.topics(1))
-      val value = decodedData
-      SimpleEvent(topic, value)
-    }
-  }
-
-  case class AddressEvent(topic: Address, value: String)
-
-  object AddressEvent {
-    val event = Event("AddressEvent", List(AddressType, StringType), Tuple1Type(AddressType), Tuple1Type(StringType))
-
-    def apply(log: Log): AddressEvent = {
-      assert(log.topics.head == event.id)
-
-      val decodedData = event.decode(log.data)
-      val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
-      val value = decodedData
-      AddressEvent(topic, value)
-    }
-  }
-
-  case class MixedEvent(topic: Address, test: Address, value: String)
-
-  object MixedEvent {
-    val event = Event("MixedEvent", List(AddressType, StringType, AddressType), Tuple2Type(AddressType, AddressType), Tuple1Type(StringType))
-
-    def apply(log: Log): MixedEvent = {
-      assert(log.topics.head == event.id)
-
-      val decodedData = event.decode(log.data)
-      val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
-      val test = event.indexed.type2.decode(Hex.toBytes(log.topics(2)), 0).value
-      val value = decodedData
-      MixedEvent(topic, test, value)
-    }
-  }
-
 }
+
+case class SimpleEvent(topic: Hash, value: String)
+
+object SimpleEvent {
+  val event = Event("SimpleEvent", List(StringType, StringType), Tuple1Type(StringType), Tuple1Type(StringType))
+
+  def apply(log: Log): SimpleEvent = {
+    assert(log.topics.head == event.id)
+
+    val decodedData = event.decode(log.data)
+    val topic = Hash(log.topics(1))
+    val value = decodedData
+    SimpleEvent(topic, value)
+  }
+}
+
+case class AddressEvent(topic: Address, value: String)
+
+object AddressEvent {
+  val event = Event("AddressEvent", List(AddressType, StringType), Tuple1Type(AddressType), Tuple1Type(StringType))
+
+  def apply(log: Log): AddressEvent = {
+    assert(log.topics.head == event.id)
+
+    val decodedData = event.decode(log.data)
+    val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
+    val value = decodedData
+    AddressEvent(topic, value)
+  }
+}
+
+case class MixedEvent(topic: Address, test: Address, value: String)
+
+object MixedEvent {
+  val event = Event("MixedEvent", List(AddressType, StringType, AddressType), Tuple2Type(AddressType, AddressType), Tuple1Type(StringType))
+
+  def apply(log: Log): MixedEvent = {
+    assert(log.topics.head == event.id)
+
+    val decodedData = event.decode(log.data)
+    val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
+    val test = event.indexed.type2.decode(Hex.toBytes(log.topics(2)), 0).value
+    val value = decodedData
+    MixedEvent(topic, test, value)
+  }
+}
+

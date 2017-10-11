@@ -7,7 +7,6 @@ import scalether.core.data.{Address, Hash}
 import scalether.core.request.LogFilter
 import scalether.core.transaction.SimpleTransactionSender
 import scalether.core.{Ethereum, EthereumService}
-import scalether.test.Events.MixedEvent
 import scalether.transport.ScalajHttpTransportService
 import scalether.util.timer.tries.Implicits._
 import scalether.util.transaction.TransactionPoller
