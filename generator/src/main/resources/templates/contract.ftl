@@ -174,7 +174,7 @@ object ${truffle.name} extends ContractObject {
     constructor.encode(<@args_values constructor_args/>)
 
   def deployTransactionData<@args constructor_args/>: String =
-    bin + Hex.toHex(encodeArgs<@args_params constructor_args/>)
+    bin + Hex.to(encodeArgs<@args_params constructor_args/>)
 
   def deploy<@monad_param/>(sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@><@args constructor_args/>: <@monad/>[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData<@args_params constructor_args/>)))

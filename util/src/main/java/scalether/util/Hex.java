@@ -6,7 +6,7 @@ public class Hex {
 
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
 
-    public static String toPrefixed(byte[] bytes) {
+    public static String prefixed(byte[] bytes) {
         char[] hexChars = new char[2 + bytes.length * 2];
         hexChars[0] = '0';
         hexChars[1] = 'x';
