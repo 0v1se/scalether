@@ -179,9 +179,9 @@ object ${truffle.name} extends ContractObject {
   def deploy<@monad_param/>(sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@><@args constructor_args/>: <@monad/>[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData<@args_params constructor_args/>)))
 
-  def deployAndWait<@monad_param/>(sender: <@sender/>, service: <@poller/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
+  def deployAndWait<@monad_param/>(sender: <@sender/>, poller: <@poller/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
     deploy(sender)<@args_params constructor_args/>
-      .flatMap(hash => service.waitForTransaction(hash))
+      .flatMap(hash => poller.waitForTransaction(hash))
       .map(receipt => new ${truffle.name}<#if !(F?has_content)>[F]</#if>(receipt.contractAddress, sender))
 
   <#list truffle.abi as item>
