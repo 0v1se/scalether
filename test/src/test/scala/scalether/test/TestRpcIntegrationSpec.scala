@@ -3,6 +3,7 @@ package scalether.test
 import cats.implicits._
 import org.scalatest.FlatSpec
 import scalether.abi.data.Address
+import scalether.core.bigint.implicits._
 import scalether.core.request.LogFilter
 import scalether.core.transaction.SimpleTransactionSender
 import scalether.core.{Ethereum, EthereumService}

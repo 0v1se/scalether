@@ -1,16 +1,18 @@
 package scalether.abi
 
+import java.math.BigInteger
+
 import scalether.util.Padding.padLeft
 import scalether.util.Bytes
 
-class UintType(bits: Int) extends Type[BigInt] {
+class UintType(bits: Int) extends Type[BigInteger] {
   def string = s"uint$bits"
 
-  def encode(t: BigInt) =
-    padLeft(t.bigInteger.toByteArray, Bytes.ZERO)
+  def encode(t: BigInteger) =
+    padLeft(t.toByteArray, Bytes.ZERO)
 
   def decode(bytes: Array[Byte], offset: Int) = {
-    Decoded(BigInt(bytes.slice(offset, offset + 32)), offset + 32)
+    Decoded(new BigInteger(bytes.slice(offset, offset + 32)), offset + 32)
   }
 }
 

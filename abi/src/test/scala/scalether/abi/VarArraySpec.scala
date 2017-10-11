@@ -1,5 +1,7 @@
 package scalether.abi
 
+import java.math.BigInteger
+
 import org.scalatest.FlatSpec
 import scalether.abi.AbiTestConst._
 import scalether.abi.array.VarArrayType
@@ -14,9 +16,9 @@ class VarArraySpec extends FlatSpec {
   }
 
   it should "decode non-empty uint256" in {
-    val result = arr.decode(Uint256Type.encode(2) ++ ten ++ maxLong, 0)
+    val result = arr.decode(Uint256Type.encode(BigInteger.valueOf(2)) ++ ten ++ maxLong, 0)
     assert(result.offset == 96)
-    assert(result.value == List(BigInt(10), BigInt(Long.MaxValue)))
+    assert(result.value == List(BigInteger.valueOf(10), BigInteger.valueOf(Long.MaxValue)))
   }
 
   it should "encode empty array" in {
@@ -25,7 +27,7 @@ class VarArraySpec extends FlatSpec {
   }
 
   it should "encode non-empty array" in {
-    val result = arr.encode(List(BigInt(0)))
+    val result = arr.encode(List(BigInteger.ZERO))
     assert(result sameElements (one ++ zero))
   }
 }

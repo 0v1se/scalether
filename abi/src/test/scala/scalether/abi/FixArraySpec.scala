@@ -1,5 +1,7 @@
 package scalether.abi
 
+import java.math.BigInteger
+
 import org.scalatest.FlatSpec
 import scalether.abi.AbiTestConst._
 import scalether.abi.array.FixArrayType
@@ -11,17 +13,17 @@ class FixArraySpec extends FlatSpec {
   "FixArrayType" should "decode 1-item array" in {
     val result = arr1.decode(one, 0)
     assert(result.offset == 32)
-    assert(result.value == List(BigInt(1)))
+    assert(result.value == List(BigInteger.valueOf(1)))
   }
 
   it should "decode arrays with greater lengths" in {
     val result = arr2.decode(ten ++ one, 0)
     assert(result.offset == 64)
-    assert(result.value == List(BigInt(10), BigInt(1)))
+    assert(result.value == List(BigInteger.valueOf(10), BigInteger.valueOf(1)))
   }
 
   it should "encode arrays" in {
-    val result = arr2.encode(List(BigInt(Long.MaxValue), BigInt(0)))
+    val result = arr2.encode(List(BigInteger.valueOf(Long.MaxValue), BigInteger.valueOf(0)))
     assert(result sameElements (maxLong ++ zero))
   }
 }

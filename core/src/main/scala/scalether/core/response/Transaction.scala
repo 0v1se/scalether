@@ -1,13 +1,15 @@
 package scalether.core.response
 
+import java.math.BigInteger
+
 case class Transaction(hash: String,
-                       nonce: BigInt,
+                       nonce: BigInteger,
                        blockHash: String,
-                       blockNumber: BigInt,
-                       transactionIndex: BigInt,
+                       blockNumber: BigInteger,
+                       transactionIndex: BigInteger,
                        from: String,
                        to: Option[String],
-                       value: BigInt,
-                       gasPrice: BigInt,
-                       gas: BigInt,
+                       value: BigInteger,
+                       gasPrice: BigInteger,
+                       gas: BigInteger,
                        input: String)

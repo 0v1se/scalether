@@ -1,5 +1,7 @@
 package scalether.abi.tuple
 
+import java.math.BigInteger
+
 import scalether.abi.{Decoded, Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
@@ -13,67 +15,67 @@ class Tuple11Type[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11](val type1: Type[
     val head = ListBuffer[Byte]()
     val tail = ListBuffer[Byte]()
     if (type1.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type1.encode(value._1)
     } else {
       head ++= type1.encode(value._1)
     } 
     if (type2.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type2.encode(value._2)
     } else {
       head ++= type2.encode(value._2)
     } 
     if (type3.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type3.encode(value._3)
     } else {
       head ++= type3.encode(value._3)
     } 
     if (type4.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type4.encode(value._4)
     } else {
       head ++= type4.encode(value._4)
     } 
     if (type5.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type5.encode(value._5)
     } else {
       head ++= type5.encode(value._5)
     } 
     if (type6.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type6.encode(value._6)
     } else {
       head ++= type6.encode(value._6)
     } 
     if (type7.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type7.encode(value._7)
     } else {
       head ++= type7.encode(value._7)
     } 
     if (type8.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type8.encode(value._8)
     } else {
       head ++= type8.encode(value._8)
     } 
     if (type9.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type9.encode(value._9)
     } else {
       head ++= type9.encode(value._9)
     } 
     if (type10.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type10.encode(value._10)
     } else {
       head ++= type10.encode(value._10)
     } 
     if (type11.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type11.encode(value._11)
     } else {
       head ++= type11.encode(value._11)

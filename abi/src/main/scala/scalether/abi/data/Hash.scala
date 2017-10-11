@@ -8,5 +8,5 @@ case class Hash(bytes: Array[Byte]) extends Bytes {
 
 object Hash {
   def apply(hex: String): Hash =
-    Hash(Hex.hexToBytes(hex))
+    Hash(Hex.toBytes(hex))
 }

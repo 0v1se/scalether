@@ -46,7 +46,7 @@ object Events extends ContractObject {
     constructor.encode()
 
   def deployTransactionData: String =
-    bin + Hex.bytesToHex(encodeArgs)
+    bin + Hex.toHex(encodeArgs)
 
   def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData)))
@@ -80,7 +80,7 @@ object Events extends ContractObject {
       assert(log.topics.head == event.id)
 
       val decodedData = event.decode(log.data)
-      val topic = event.indexed.type1.decode(Hex.hexToBytes(log.topics(1)), 0).value
+      val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
       val value = decodedData
       AddressEvent(topic, value)
     }
@@ -95,8 +95,8 @@ object Events extends ContractObject {
       assert(log.topics.head == event.id)
 
       val decodedData = event.decode(log.data)
-      val topic = event.indexed.type1.decode(Hex.hexToBytes(log.topics(1)), 0).value
-      val test = event.indexed.type2.decode(Hex.hexToBytes(log.topics(2)), 0).value
+      val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
+      val test = event.indexed.type2.decode(Hex.toBytes(log.topics(2)), 0).value
       val value = decodedData
       MixedEvent(topic, test, value)
     }

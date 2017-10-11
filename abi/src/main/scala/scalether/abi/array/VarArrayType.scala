@@ -1,5 +1,7 @@
 package scalether.abi.array
 
+import java.math.BigInteger
+
 import scalether.abi.{Type, Uint256Type}
 
 class VarArrayType[T](`type`: Type[T]) extends ArrayType[T](`type`) {
@@ -8,7 +10,7 @@ class VarArrayType[T](`type`: Type[T]) extends ArrayType[T](`type`) {
   def string = s"${`type`.string}[]"
 
   override def encode(list: List[T]) =
-    Uint256Type.encode(BigInt(list.size)) ++ super.encode(list)
+    Uint256Type.encode(BigInteger.valueOf(list.size)) ++ super.encode(list)
 
   def decode(bytes: Array[Byte], offset: Int) = {
     val length = Uint256Type.decode(bytes, offset)

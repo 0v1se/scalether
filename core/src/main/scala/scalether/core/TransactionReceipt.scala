@@ -1,11 +1,13 @@
 package scalether.core
 
+import java.math.BigInteger
+
 case class TransactionReceipt(transactionHash: String,
-                              transactionIndex: BigInt,
+                              transactionIndex: BigInteger,
                               blockHash: String,
-                              blockNumber: BigInt,
-                              cumulativeGasUsed: BigInt,
-                              gasUsed: BigInt,
+                              blockNumber: BigInteger,
+                              cumulativeGasUsed: BigInteger,
+                              gasUsed: BigInteger,
                               contractAddress: String,
                               from: String,
                               to: String,

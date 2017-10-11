@@ -1,4 +1,6 @@
-package scalether.core.json
+package scalether.core.bigint
+
+import java.math.BigInteger
 
 import com.fasterxml.jackson.core.JsonToken.{START_ARRAY, VALUE_NUMBER_FLOAT, VALUE_NUMBER_INT, VALUE_STRING}
 import com.fasterxml.jackson.core.{JsonParser, JsonToken}
@@ -6,18 +8,18 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer
 
-object BigIntHexDeserializer extends StdScalarDeserializer[BigInt](classOf[BigInt]) {
-  override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigInt = {
+object BigIntegerHexDeserializer extends StdScalarDeserializer[BigInteger](classOf[BigInteger]) {
+  override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigInteger = {
     val t = jp.getCurrentToken
     t match {
-      case VALUE_NUMBER_INT | VALUE_NUMBER_FLOAT => BigInt(jp.getText.trim)
+      case VALUE_NUMBER_INT | VALUE_NUMBER_FLOAT => new BigInteger(jp.getText.trim)
       case VALUE_STRING =>
         val text = jp.getText.trim
         if (text.isEmpty) null else try {
           if (text.startsWith("0x")) {
-            BigInt(text.substring(2), 16)
+            new BigInteger(text.substring(2), 16)
           } else {
-            BigInt(text)
+            new BigInteger(text)
           }
         } catch {
           case _: IllegalArgumentException => throw ctxt.weirdStringException(text, _valueClass, "not a valid representation")
@@ -30,7 +32,7 @@ object BigIntHexDeserializer extends StdScalarDeserializer[BigInt](classOf[BigIn
         }
         value
       case _ =>
-        ctxt.handleUnexpectedToken(_valueClass, jp).asInstanceOf[BigInt]
+        ctxt.handleUnexpectedToken(_valueClass, jp).asInstanceOf[BigInteger]
     }
   }
 }

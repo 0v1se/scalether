@@ -1,5 +1,7 @@
 package scalether.abi
 
+import java.math.BigInteger
+
 import cats.implicits._
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
@@ -18,7 +20,7 @@ class CallSpec extends FlatSpec with MockitoSugar {
 
   it should "encode example from ethereum docs" in {
     val signature = Signature("f", new Tuple4Type(Uint256Type, new VarArrayType(Uint32Type), Bytes10Type, BytesType), UnitType)
-    val result = Call.encode(signature, (BigInt(0x123), List(BigInt(0x456), BigInt(0x789)), "1234567890".getBytes(), "Hello, world!".getBytes()))
+    val result = Call.encode(signature, (BigInteger.valueOf(0x123), List(BigInteger.valueOf(0x456), BigInteger.valueOf(0x789)), "1234567890".getBytes(), "Hello, world!".getBytes()))
     val testResult = "0x8be65246" + "0000000000000000000000000000000000000000000000000000000000000123" + "0000000000000000000000000000000000000000000000000000000000000080" + "3132333435363738393000000000000000000000000000000000000000000000" + "00000000000000000000000000000000000000000000000000000000000000e0" + "0000000000000000000000000000000000000000000000000000000000000002" + "0000000000000000000000000000000000000000000000000000000000000456" + "0000000000000000000000000000000000000000000000000000000000000789" + "000000000000000000000000000000000000000000000000000000000000000d" + "48656c6c6f2c20776f726c642100000000000000000000000000000000000000"
     println(result)
     println(testResult)
@@ -29,6 +31,6 @@ class CallSpec extends FlatSpec with MockitoSugar {
     val exec = mock[String => Try[String]]
     when(exec.apply("0x18160ddd")).thenReturn(Try("000000000000000000000000000000000000000000000000000110D9316EC000"))
     val result = Call.call(totalSupply, ())(exec)
-    assert(result.get == BigInt("300000000000000"))
+    assert(result.get == new BigInteger("300000000000000"))
   }
 }

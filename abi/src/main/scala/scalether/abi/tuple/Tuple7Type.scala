@@ -1,5 +1,7 @@
 package scalether.abi.tuple
 
+import java.math.BigInteger
+
 import scalether.abi.{Decoded, Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
@@ -13,43 +15,43 @@ class Tuple7Type[T1, T2, T3, T4, T5, T6, T7](val type1: Type[T1], val type2: Typ
     val head = ListBuffer[Byte]()
     val tail = ListBuffer[Byte]()
     if (type1.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type1.encode(value._1)
     } else {
       head ++= type1.encode(value._1)
     } 
     if (type2.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type2.encode(value._2)
     } else {
       head ++= type2.encode(value._2)
     } 
     if (type3.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type3.encode(value._3)
     } else {
       head ++= type3.encode(value._3)
     } 
     if (type4.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type4.encode(value._4)
     } else {
       head ++= type4.encode(value._4)
     } 
     if (type5.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type5.encode(value._5)
     } else {
       head ++= type5.encode(value._5)
     } 
     if (type6.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type6.encode(value._6)
     } else {
       head ++= type6.encode(value._6)
     } 
     if (type7.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type7.encode(value._7)
     } else {
       head ++= type7.encode(value._7)

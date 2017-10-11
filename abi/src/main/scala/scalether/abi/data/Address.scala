@@ -8,5 +8,5 @@ case class Address(bytes: Array[Byte]) extends Bytes {
 
 object Address {
   def apply(hex: String): Address =
-    new Address(Hex.hexToBytes(hex))
+    new Address(Hex.toBytes(hex))
 }

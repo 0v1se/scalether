@@ -7,7 +7,7 @@ import scalether.util.{Hash, Hex}
 
 case class Event[IT <: TupleType[_], NI](name: String, types: List[Type[_]], indexed: IT, nonIndexed: TupleType[NI]) {
   def decode(data: String): NI = {
-    val bytes = Hex.hexToBytes(data)
+    val bytes = Hex.toBytes(data)
     nonIndexed.decode(bytes, 0).value
   }
 
@@ -15,6 +15,6 @@ case class Event[IT <: TupleType[_], NI](name: String, types: List[Type[_]], ind
 
   def id = {
     val bytes = toString.getBytes(StandardCharsets.US_ASCII)
-    "0x" + Hex.bytesToHex(Hash.sha3(bytes))
+    Hex.toHexPrefixed(Hash.sha3(bytes))
   }
 }

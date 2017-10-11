@@ -1,5 +1,7 @@
 package scalether.core
 
+import java.math.BigInteger
+
 import cats.MonadError
 import cats.implicits._
 import scalether.core.request.{LogFilter, LogFilterRequest, Transaction}
@@ -35,22 +37,22 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def ethGetTransactionByHash(hash: String): F[response.Transaction] =
     exec("eth_getTransactionByHash", hash)
 
-  def netPeerCount(): F[BigInt] =
+  def netPeerCount(): F[BigInteger] =
     exec("net_peerCount")
 
-  def ethGetBalance(address: String, defaultBlockParameter: String): F[BigInt] =
+  def ethGetBalance(address: String, defaultBlockParameter: String): F[BigInteger] =
     exec("eth_getBalance", address, defaultBlockParameter)
 
-  def ethGasPrice(): F[BigInt] =
+  def ethGasPrice(): F[BigInteger] =
     exec("eth_gasPrice")
 
   def ethGetLogs(filter: LogFilter): F[List[Log]] =
     exec("eth_getLogs", filter)
 
-  def ethNewFilter(filter: LogFilter): F[BigInt] =
+  def ethNewFilter(filter: LogFilter): F[BigInteger] =
     exec("eth_newFilter", filter)
 
-  def ethGetFilterChanges(id: BigInt): F[List[Log]] =
+  def ethGetFilterChanges(id: BigInteger): F[List[Log]] =
     exec("eth_getFilterChanges", id)
 
   private def exec[T](method: String, params: Any*)(implicit mf: Manifest[T]): F[T] = {

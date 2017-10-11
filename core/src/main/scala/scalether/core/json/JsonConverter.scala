@@ -1,9 +1,12 @@
 package scalether.core.json
 
+import java.math.BigInteger
+
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import scalether.core.bigint.{BigIntegerHexDeserializer, BigIntegerHexSerializer}
 
 import scala.reflect.Manifest
 
@@ -15,8 +18,8 @@ class JsonConverter {
 
   private def bigIntModule: SimpleModule = {
     val mod = new SimpleModule()
-    mod.addDeserializer(classOf[BigInt], BigIntHexDeserializer)
-    mod.addSerializer(classOf[BigInt], BigIntHexSerializer)
+    mod.addDeserializer(classOf[BigInteger], BigIntegerHexDeserializer)
+    mod.addSerializer(classOf[BigInteger], BigIntegerHexSerializer)
     mod
   }
 

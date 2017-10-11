@@ -1,5 +1,6 @@
 package scalether.core
 
+import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
 import scalether.java.implicits
@@ -24,15 +25,15 @@ class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFut
 
   override def ethGetTransactionByHash(hash: String): CompletableFuture[response.Transaction] = super.ethGetTransactionByHash(hash)
 
-  override def netPeerCount(): CompletableFuture[BigInt] = super.netPeerCount()
+  override def netPeerCount(): CompletableFuture[BigInteger] = super.netPeerCount()
 
-  override def ethGetBalance(address: String, defaultBlockParameter: String): CompletableFuture[BigInt] = super.ethGetBalance(address, defaultBlockParameter)
+  override def ethGetBalance(address: String, defaultBlockParameter: String): CompletableFuture[BigInteger] = super.ethGetBalance(address, defaultBlockParameter)
 
-  override def ethGasPrice(): CompletableFuture[BigInt] = super.ethGasPrice()
+  override def ethGasPrice(): CompletableFuture[BigInteger] = super.ethGasPrice()
 
   override def ethGetLogs(filter: LogFilter): CompletableFuture[List[Log]] = super.ethGetLogs(filter)
 
-  override def ethNewFilter(filter: LogFilter): CompletableFuture[BigInt] = super.ethNewFilter(filter)
+  override def ethNewFilter(filter: LogFilter): CompletableFuture[BigInteger] = super.ethNewFilter(filter)
 
-  override def ethGetFilterChanges(id: BigInt): CompletableFuture[List[Log]] = super.ethGetFilterChanges(id)
+  override def ethGetFilterChanges(id: BigInteger): CompletableFuture[List[Log]] = super.ethGetFilterChanges(id)
 }

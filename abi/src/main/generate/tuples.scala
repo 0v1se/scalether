@@ -5,6 +5,8 @@ def generate(arity: Int, writer: PrintWriter): Unit = {
 
   writer.println("package scalether.abi.tuple")
   writer.println()
+  writer.println("import java.math.BigInteger")
+  writer.println()
   writer.println("import scalether.abi.{Decoded, Type, Uint256Type}")
   writer.println()
   writer.println("import scala.collection.mutable.ListBuffer")
@@ -20,7 +22,7 @@ def generate(arity: Int, writer: PrintWriter): Unit = {
   writer.println(s"    val tail = ListBuffer[Byte]()")
   for (i <- range) {
     writer.println(s"    if (type$i.dynamic) {")
-    writer.println(s"      head ++= Uint256Type.encode(headSize + tail.size)")
+    writer.println(s"      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))")
     writer.println(s"      tail ++= type$i.encode(value._$i)")
     writer.println(s"    } else {")
     writer.println(s"      head ++= type$i.encode(value._$i)")

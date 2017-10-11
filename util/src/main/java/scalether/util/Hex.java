@@ -6,17 +6,29 @@ public class Hex {
 
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
 
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-        }
+    public static String toHexPrefixed(byte[] bytes) {
+        char[] hexChars = new char[2 + bytes.length * 2];
+        hexChars[0] = '0';
+        hexChars[1] = 'x';
+        putHex(hexChars, bytes, 2);
         return new String(hexChars);
     }
 
-    public static byte[] hexToBytes(String s) {
+    public static String toHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        putHex(hexChars, bytes, 0);
+        return new String(hexChars);
+    }
+
+    private static void putHex(char[] hexChars, byte[] bytes, int start) {
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[start + j * 2] = hexArray[v >>> 4];
+            hexChars[start + j * 2 + 1] = hexArray[v & 0x0F];
+        }
+    }
+
+    public static byte[] toBytes(String s) {
         if (s.startsWith("0x")) {
             s = s.substring(2);
         }

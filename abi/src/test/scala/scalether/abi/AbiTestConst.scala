@@ -8,7 +8,7 @@ object AbiTestConst {
   val zero = new Array[Byte](32)
   val one = Padding.padLeft(Array[Byte](1.toByte), Bytes.ZERO)
   val ten = Padding.padLeft(Array[Byte](10.toByte), Bytes.ZERO)
-  val minusOne = Hex.hexToBytes(List.fill(64)('f').mkString)
-  val maxLong = Hex.hexToBytes(List.fill(48)('0').mkString + "7fffffffffffffff")
-  val minLong = Hex.hexToBytes(List.fill(48)('f').mkString + "8000000000000000")
+  val minusOne = Hex.toBytes(List.fill(64)('f').mkString)
+  val maxLong = Hex.toBytes(List.fill(48)('0').mkString + "7fffffffffffffff")
+  val minLong = Hex.toBytes(List.fill(48)('f').mkString + "8000000000000000")
 }

@@ -1,10 +1,12 @@
 package scalether.core
 
-case class Log(logIndex: BigInt,
-               transactionIndex: BigInt,
+import java.math.BigInteger
+
+case class Log(logIndex: BigInteger,
+               transactionIndex: BigInteger,
                transactionHash: String,
                blockHash: String,
-               blockNumber: BigInt,
+               blockNumber: BigInteger,
                address: String,
                data: String,
                topics: List[String],

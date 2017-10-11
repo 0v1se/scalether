@@ -1,5 +1,7 @@
 package scalether.abi
 
+import java.math.BigInteger
+
 import scalether.util.{Bytes, Padding}
 
 object BytesType extends Type[Array[Byte]] {
@@ -8,11 +10,11 @@ object BytesType extends Type[Array[Byte]] {
   override def size = None
 
   def encode(bytes: Array[Byte]) =
-    Uint256Type.encode(bytes.length) ++ Padding.padRight(bytes, Bytes.ZERO)
+    Uint256Type.encode(BigInteger.valueOf(bytes.length)) ++ Padding.padRight(bytes, Bytes.ZERO)
 
   def decode(bytes: Array[Byte], offset: Int) = {
     val ld = Uint256Type.decode(bytes, offset)
-    val length = ld.value.toInt
+    val length = ld.value.intValue()
     Decoded(bytes.slice(ld.offset, ld.offset + length), ld.offset + Padding.getLength(length))
   }
 }

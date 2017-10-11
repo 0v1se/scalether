@@ -1,5 +1,7 @@
 package scalether.abi.tuple
 
+import java.math.BigInteger
+
 import scalether.abi.{Decoded, Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
@@ -13,31 +15,31 @@ class Tuple5Type[T1, T2, T3, T4, T5](val type1: Type[T1], val type2: Type[T2], v
     val head = ListBuffer[Byte]()
     val tail = ListBuffer[Byte]()
     if (type1.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type1.encode(value._1)
     } else {
       head ++= type1.encode(value._1)
     } 
     if (type2.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type2.encode(value._2)
     } else {
       head ++= type2.encode(value._2)
     } 
     if (type3.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type3.encode(value._3)
     } else {
       head ++= type3.encode(value._3)
     } 
     if (type4.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type4.encode(value._4)
     } else {
       head ++= type4.encode(value._4)
     } 
     if (type5.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type5.encode(value._5)
     } else {
       head ++= type5.encode(value._5)

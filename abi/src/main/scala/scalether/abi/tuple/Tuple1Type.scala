@@ -1,5 +1,7 @@
 package scalether.abi.tuple
 
+import java.math.BigInteger
+
 import scalether.abi.{Type, Uint256Type}
 
 import scala.collection.mutable.ListBuffer
@@ -13,7 +15,7 @@ class Tuple1Type[T1](val type1: Type[T1]) extends TupleType[T1] {
     val head = ListBuffer[Byte]()
     val tail = ListBuffer[Byte]()
     if (type1.dynamic) {
-      head ++= Uint256Type.encode(headSize + tail.size)
+      head ++= Uint256Type.encode(BigInteger.valueOf(headSize + tail.size))
       tail ++= type1.encode(value)
     } else {
       head ++= type1.encode(value)

@@ -34,7 +34,7 @@ public class Utils {
     }
 
     public static String generateContractAddress(String address, BigInteger nonce) {
-        byte[] result = generateContractAddress(Hex.hexToBytes(address), nonce);
-        return "0x" + Hex.bytesToHex(result);
+        byte[] result = generateContractAddress(Hex.toBytes(address), nonce);
+        return Hex.toHexPrefixed(result);
     }
 }

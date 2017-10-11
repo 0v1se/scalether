@@ -9,5 +9,5 @@ trait Bytes {
     Padding.padLeft(bytes, scalether.util.Bytes.ZERO)
 
   override def toString =
-    "0x" + Hex.bytesToHex(padded)
+    Hex.toHexPrefixed(padded)
 }
