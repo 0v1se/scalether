@@ -35,7 +35,7 @@
     <#elseif abiType == 'string'>
         String
     <#elseif abiType?starts_with("uint")>
-        BigInt
+        BigInteger
     <#elseif abiType == "bool">
         Boolean
     <#elseif abiType?starts_with("bytes")>
@@ -102,7 +102,7 @@
     <#if isHashTopic(arg)>
         Hash(log.topics(${index + 1}))
     <#else>
-        event.indexed.type${index + 1}.decode(Hex.hexToBytes(log.topics(${index + 1})), 0).value
+        event.indexed.type${index + 1}.decode(Hex.toBytes(log.topics(${index + 1})), 0).value
     </#if>
 </#compress></#macro>
 <#macro event_non_indexed_arg arg index><#compress>
@@ -122,6 +122,8 @@
 </#function>
 <#assign constructor_args = find_constructor_args()/>
 package ${package}
+
+import java.math.BigInteger
 
 <#if monadType?has_content>
 import ${monadType}
@@ -172,7 +174,7 @@ object ${truffle.name} extends ContractObject {
     constructor.encode(<@args_values constructor_args/>)
 
   def deployTransactionData<@args constructor_args/>: String =
-    bin + Hex.bytesToHex(encodeArgs<@args_params constructor_args/>)
+    bin + Hex.toHex(encodeArgs<@args_params constructor_args/>)
 
   def deploy<@monad_param/>(sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@><@args constructor_args/>: <@monad/>[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData<@args_params constructor_args/>)))

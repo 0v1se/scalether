@@ -1,5 +1,7 @@
 package scalether.test
 
+import java.math.BigInteger
+
 import cats.implicits._
 import cats.{Functor, Monad}
 import scalether.abi._
