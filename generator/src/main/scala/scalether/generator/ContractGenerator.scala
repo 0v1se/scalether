@@ -28,7 +28,7 @@ class ContractGenerator {
           "monadType" -> (if (java) "java.util.concurrent.CompletableFuture" else ""),
           "monadImport" -> (if (java) "scalether.java.implicits._" else ""),
           "transactionSender" -> (if (java) "JavaTransactionSender" else ""),
-          "transactionService" -> (if (java) "JavaTransactionService" else ""),
+          "transactionPoller" -> (if (java) "JavaTransactionPoller" else ""),
           "truffle" -> contract,
           "package" -> packageName,
           "abi" -> escape(converter.toJson(contract.abi))

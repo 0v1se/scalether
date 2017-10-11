@@ -17,11 +17,11 @@
         TransactionSender[<@monad/>]
     </#if>
 </#compress></#macro>
-<#macro service><#compress>
-    <#if transactionService?has_content>
-        ${transactionService}
+<#macro poller><#compress>
+    <#if transactionPoller?has_content>
+        ${transactionPoller}
     <#else>
-        TransactionService[<@monad/>]
+        TransactionPoller[<@monad/>]
     </#if>
 </#compress></#macro>
 <#macro implicit><#compress>
@@ -140,7 +140,7 @@ import scalether.contract._
 import scalether.core._
 import scalether.core.request.Transaction
 import scalether.util.Hex
-import scalether.util.transaction.TransactionService
+import scalether.util.transaction.TransactionPoller
 
 import scala.language.higherKinds
 
@@ -179,7 +179,7 @@ object ${truffle.name} extends ContractObject {
   def deploy<@monad_param/>(sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@><@args constructor_args/>: <@monad/>[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData<@args_params constructor_args/>)))
 
-  def deployAndWait<@monad_param/>(sender: <@sender/>, service: <@service/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
+  def deployAndWait<@monad_param/>(sender: <@sender/>, service: <@poller/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
     deploy(sender)<@args_params constructor_args/>
       .flatMap(hash => service.waitForTransaction(hash))
       .map(receipt => new ${truffle.name}<#if !(F?has_content)>[F]</#if>(receipt.contractAddress, sender))

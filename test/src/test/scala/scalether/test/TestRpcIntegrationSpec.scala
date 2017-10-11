@@ -17,21 +17,21 @@ import scala.util.Try
 class TestRpcIntegrationSpec extends FlatSpec {
   val ethereum = new Ethereum[Try](new EthereumService[Try](new ScalajHttpTransportService("http://localhost:8545"), log = true))
   val sender = new SimpleTransactionSender[Try](ethereum, "0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c", 2000000, 10)
-  val transactionService = new TransactionPoller[Try](ethereum)
+  val transactionPoller = new TransactionPoller[Try](ethereum)
 
   "Scalether" should "get logs in receipts" in {
-    val events = Events.deployAndWait(sender, transactionService)
+    val events = Events.deployAndWait(sender, transactionPoller)
     val hash = events.get.emitAddressEvent(Address("0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c"), "value").get
 
-    val receipt = transactionService.waitForTransaction(hash).get
+    val receipt = transactionPoller.waitForTransaction(hash).get
     println(receipt.logs)
   }
 
   it should "emit MixedEvent" in {
-    val events = Events.deployAndWait(sender, transactionService)
+    val events = Events.deployAndWait(sender, transactionPoller)
     val hash = events.get.emitMixedEvent(Address("0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c"), "value", Address("0xc00000000928f7840a6b0d373c1cd825c97e3c7c")).get
 
-    val receipt = transactionService.waitForTransaction(hash).get
+    val receipt = transactionPoller.waitForTransaction(hash).get
     println(receipt.logs.map(log => MixedEvent(log)))
   }
 
