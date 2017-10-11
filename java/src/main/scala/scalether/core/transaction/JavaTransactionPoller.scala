@@ -5,8 +5,8 @@ import java.util.concurrent.CompletableFuture
 import scalether.core.JavaEthereum
 import scalether.java.implicits._
 import scalether.util.timer.Implicits._
-import scalether.util.transaction.TransactionService
+import scalether.util.transaction.TransactionPoller
 
-class JavaTransactionService(ethereum: JavaEthereum) extends TransactionService[CompletableFuture](ethereum) {
+class JavaTransactionPoller(ethereum: JavaEthereum) extends TransactionPoller[CompletableFuture](ethereum) {
 
 }

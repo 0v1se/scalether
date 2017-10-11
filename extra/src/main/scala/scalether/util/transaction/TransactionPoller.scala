@@ -7,9 +7,9 @@ import scalether.util.timer.Poller
 
 import scala.language.higherKinds
 
-class TransactionService[F[_]](val ethereum: Ethereum[F])(implicit f: Functor[F], pollService: Poller[F]) {
+class TransactionPoller[F[_]](val ethereum: Ethereum[F])(implicit f: Functor[F], poller: Poller[F]) {
   def waitForTransaction(txHash: String): F[TransactionReceipt] = {
-    pollService.poll(1000)(pollForTransaction(txHash))
+    poller.poll(1000)(pollForTransaction(txHash))
   }
 
   private def pollForTransaction(txHash: String): F[Option[TransactionReceipt]] =

@@ -10,14 +10,14 @@ import scalether.core.{Ethereum, EthereumService}
 import scalether.test.Events.MixedEvent
 import scalether.transport.ScalajHttpTransportService
 import scalether.util.timer.tries.Implicits._
-import scalether.util.transaction.TransactionService
+import scalether.util.transaction.TransactionPoller
 
 import scala.util.Try
 
 class TestRpcIntegrationSpec extends FlatSpec {
   val ethereum = new Ethereum[Try](new EthereumService[Try](new ScalajHttpTransportService("http://localhost:8545"), log = true))
   val sender = new SimpleTransactionSender[Try](ethereum, "0xc66d094ed928f7840a6b0d373c1cd825c97e3c7c", 2000000, 10)
-  val transactionService = new TransactionService[Try](ethereum)
+  val transactionService = new TransactionPoller[Try](ethereum)
 
   "Scalether" should "get logs in receipts" in {
     val events = Events.deployAndWait(sender, transactionService)
