@@ -1,4 +1,4 @@
-package scalether.abi.data
+package scalether.core.data
 
 import scalether.util.Hex
 

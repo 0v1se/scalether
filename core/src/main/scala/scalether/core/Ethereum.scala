@@ -4,7 +4,6 @@ import java.math.BigInteger
 
 import cats.MonadError
 import cats.implicits._
-import scalether.core.request.{LogFilter, LogFilterRequest, Transaction}
 
 import scala.language.higherKinds
 
@@ -22,7 +21,10 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def netListening(): F[Boolean] =
     exec("net_listening")
 
-  def ethCall(transaction: Transaction): F[String] =
+  def ethBlockNumber(): F[BigInteger] =
+    exec("eth_blocknumber")
+
+  def ethCall(transaction: request.Transaction): F[String] =
     exec("eth_call", transaction)
 
   def ethSendTransaction(transaction: request.Transaction): F[String] =
@@ -46,10 +48,10 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def ethGasPrice(): F[BigInteger] =
     exec("eth_gasPrice")
 
-  def ethGetLogs(filter: LogFilter): F[List[Log]] =
+  def ethGetLogs(filter: request.LogFilter): F[List[Log]] =
     exec("eth_getLogs", filter)
 
-  def ethNewFilter(filter: LogFilter): F[BigInteger] =
+  def ethNewFilter(filter: request.LogFilter): F[BigInteger] =
     exec("eth_newFilter", filter)
 
   def ethGetFilterChanges(id: BigInteger): F[List[Log]] =

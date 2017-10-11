@@ -2,8 +2,8 @@ package scalether.test
 
 import cats.implicits._
 import org.scalatest.FlatSpec
-import scalether.abi.data.Address
 import scalether.core.bigint.implicits._
+import scalether.core.data.{Address, Hash}
 import scalether.core.request.LogFilter
 import scalether.core.transaction.SimpleTransactionSender
 import scalether.core.{Ethereum, EthereumService}
@@ -37,7 +37,7 @@ class TestRpcIntegrationSpec extends FlatSpec {
 
   it should "get logs immediately" in {
     val filter = LogFilter(
-      topics = List("0x39b8d23135cdeca3f85b347e5285f40c9b1de764cf9f8126e7f3b34d77ff0cf0"),
+      topics = List(Hash("0x39b8d23135cdeca3f85b347e5285f40c9b1de764cf9f8126e7f3b34d77ff0cf0")),
       fromBlock = "0x0"
     )
     val logs = ethereum.ethGetLogs(filter).get
@@ -47,7 +47,7 @@ class TestRpcIntegrationSpec extends FlatSpec {
 
   it should "get logs" in {
     val filter = LogFilter(
-      topics = List("0x39b8d23135cdeca3f85b347e5285f40c9b1de764cf9f8126e7f3b34d77ff0cf0"),
+      topics = List(Hash("0x39b8d23135cdeca3f85b347e5285f40c9b1de764cf9f8126e7f3b34d77ff0cf0")),
       fromBlock = "0x0"
     )
     val id = ethereum.ethNewFilter(filter).get

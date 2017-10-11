@@ -134,10 +134,10 @@ import ${monadImport}
 import cats.implicits._
 import cats.{Functor, Monad}
 import scalether.abi._
-import scalether.abi.data._
 import scalether.abi.tuple._
 import scalether.contract._
 import scalether.core._
+import scalether.core.data._
 import scalether.core.request.Transaction
 import scalether.util.Hex
 import scalether.util.transaction.TransactionPoller

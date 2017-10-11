@@ -10,8 +10,9 @@ class ScalajHttpTransportService(rpcUrl: String, connTimeoutMs: Int = 10000, rea
     .timeout(connTimeoutMs, readTimeoutMs)
 
   override def execute(request: String) = Try {
-    requestTemplate
+    val response = requestTemplate
       .postData(request)
-      .asString.body
+      .asString
+    response.body
   }
 }

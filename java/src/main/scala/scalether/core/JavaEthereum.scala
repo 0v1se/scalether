@@ -1,10 +1,9 @@
 package scalether.core
-
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
-import scalether.java.implicits
 import scalether.core.request.LogFilter
+import scalether.java.implicits
 
 class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFuture](service)(implicits.completableFutureInstance) {
   override def web3ClientVersion(): CompletableFuture[String] = super.web3ClientVersion()
@@ -36,4 +35,6 @@ class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFut
   override def ethNewFilter(filter: LogFilter): CompletableFuture[BigInteger] = super.ethNewFilter(filter)
 
   override def ethGetFilterChanges(id: BigInteger): CompletableFuture[List[Log]] = super.ethGetFilterChanges(id)
+
+  override def ethBlockNumber(): CompletableFuture[BigInteger] = super.ethBlockNumber()
 }

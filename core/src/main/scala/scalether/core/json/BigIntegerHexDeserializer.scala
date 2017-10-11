@@ -1,4 +1,4 @@
-package scalether.core.bigint
+package scalether.core.json
 
 import java.math.BigInteger
 

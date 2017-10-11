@@ -5,10 +5,10 @@ import java.math.BigInteger
 import cats.implicits._
 import cats.{Functor, Monad}
 import scalether.abi._
-import scalether.abi.data._
 import scalether.abi.tuple._
 import scalether.contract._
 import scalether.core._
+import scalether.core.data._
 import scalether.core.request.Transaction
 import scalether.util.Hex
 import scalether.util.transaction.TransactionPoller
@@ -53,9 +53,9 @@ object Events extends ContractObject {
   def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData)))
 
-  def deployAndWait[F[_]](sender: TransactionSender[F], service: TransactionPoller[F])(implicit m: Monad[F]) : F[Events[F]] =
+  def deployAndWait[F[_]](sender: TransactionSender[F], poller: TransactionPoller[F])(implicit m: Monad[F]) : F[Events[F]] =
     deploy(sender)
-      .flatMap(hash => service.waitForTransaction(hash))
+      .flatMap(hash => poller.waitForTransaction(hash))
       .map(receipt => new Events[F](receipt.contractAddress, sender))
 
   case class SimpleEvent(topic: Hash, value: String)
