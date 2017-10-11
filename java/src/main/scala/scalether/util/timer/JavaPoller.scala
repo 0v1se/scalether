@@ -6,5 +6,5 @@ import scalether.java.implicits._
 import scalether.util.timer.Implicits._
 
 class JavaPoller extends Poller[CompletableFuture]{
-
+  override def poll[T](sleep: Long)(poller: => CompletableFuture[Option[T]]) = super.poll(sleep)(poller)
 }

@@ -22,7 +22,7 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
     exec("net_listening")
 
   def ethBlockNumber(): F[BigInteger] =
-    exec("eth_blocknumber")
+    exec("eth_blockNumber")
 
   def ethCall(transaction: request.Transaction): F[String] =
     exec("eth_call", transaction)
