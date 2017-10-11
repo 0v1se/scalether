@@ -6,7 +6,7 @@ public class Hex {
 
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
 
-    public static String toHexPrefixed(byte[] bytes) {
+    public static String toPrefixed(byte[] bytes) {
         char[] hexChars = new char[2 + bytes.length * 2];
         hexChars[0] = '0';
         hexChars[1] = 'x';
@@ -14,7 +14,7 @@ public class Hex {
         return new String(hexChars);
     }
 
-    public static String toHex(byte[] bytes) {
+    public static String to(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         putHex(hexChars, bytes, 0);
         return new String(hexChars);

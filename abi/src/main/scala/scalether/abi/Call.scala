@@ -15,5 +15,5 @@ object Call {
   }
 
   def encode[T](signature: Signature[T, _], arg: T): String =
-    signature.id + Hex.toHex(signature.in.encode(arg))
+    signature.id + Hex.to(signature.in.encode(arg))
 }

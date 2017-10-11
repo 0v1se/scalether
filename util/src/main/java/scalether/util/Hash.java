@@ -9,7 +9,7 @@ public class Hash {
     public static String sha3(String hexInput) {
         byte[] bytes = Hex.toBytes(hexInput);
         byte[] result = sha3(bytes);
-        return Hex.toHex(result);
+        return Hex.to(result);
     }
 
     public static byte[] sha3(byte[] input, int offset, int length) {

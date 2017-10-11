@@ -48,7 +48,7 @@ object Events extends ContractObject {
     constructor.encode()
 
   def deployTransactionData: String =
-    bin + Hex.toHex(encodeArgs)
+    bin + Hex.to(encodeArgs)
 
   def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
     sender.sendTransaction(Transaction(data = Some(deployTransactionData)))

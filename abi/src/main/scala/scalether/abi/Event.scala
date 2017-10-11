@@ -15,6 +15,6 @@ case class Event[IT <: TupleType[_], NI](name: String, types: List[Type[_]], ind
 
   def id = {
     val bytes = toString.getBytes(StandardCharsets.US_ASCII)
-    Hex.toHexPrefixed(Hash.sha3(bytes))
+    Hex.toPrefixed(Hash.sha3(bytes))
   }
 }
