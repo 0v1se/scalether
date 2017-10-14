@@ -48,5 +48,5 @@ lazy val java = common(project)
   .dependsOn(abi, extra)
 
 lazy val root = (project in file(".")).
-  aggregate(util, core, abi, contract, extra, `async-http-client`, `scalaj-http`, generator, java)
+  aggregate(util, domain, core, abi, contract, extra, `async-http-client`, `scalaj-http`, generator, java)
 

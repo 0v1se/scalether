@@ -1,4 +1,4 @@
-package scalether.util
+package scalether.java
 
 import scala.collection.JavaConverters._
 

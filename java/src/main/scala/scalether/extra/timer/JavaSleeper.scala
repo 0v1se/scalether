@@ -1,8 +1,6 @@
-package scalether.util.timer
+package scalether.extra.timer
 
 import java.util.concurrent.{CompletableFuture, Executors, TimeUnit}
-
-import scalether.extra.timer.Sleeper
 
 class JavaSleeper extends Sleeper[CompletableFuture] {
   val executor = Executors.newScheduledThreadPool(1)

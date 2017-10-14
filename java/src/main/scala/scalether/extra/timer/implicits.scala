@@ -1,4 +1,4 @@
-package scalether.util.timer
+package scalether.extra.timer
 
 object implicits {
   implicit val sleeper = new JavaSleeper

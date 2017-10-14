@@ -1,13 +1,10 @@
-package scalether.core.transaction
+package scalether.extra.transaction
 
 import java.math.BigInteger
-
-import scalether.java.implicits._
 import java.util.concurrent.CompletableFuture
 
-import scalether.core.{JavaEthereum, JavaTransactionSender}
+import scalether.core.JavaEthereum
 import scalether.domain.Address
-import scalether.extra.transaction.SimpleTransactionSender
 
 class JavaSimpleTransactionSender(ethereum: JavaEthereum, from: Address, gas: BigInteger, gasPrice: BigInteger)
   extends SimpleTransactionSender[CompletableFuture](ethereum, from, gas, gasPrice) with JavaTransactionSender {

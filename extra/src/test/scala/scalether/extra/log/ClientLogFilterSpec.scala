@@ -1,15 +1,14 @@
-package scalether.util.log
+package scalether.extra.log
 
-import cats.implicits._
 import java.math.BigInteger
 
+import cats.implicits._
 import org.mockito.Mockito.when
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
-import scalether.domain.implicits._
 import scalether.core.request.LogFilter
-import scalether.extra.log.{ClientLogFilter, LogFilterState}
+import scalether.domain.implicits._
 
 import scala.util.{Success, Try}
 

@@ -1,6 +1,7 @@
 package scalether.util;
 
 import scala.collection.immutable.List;
+import scalether.java.Lists;
 
 import java.util.Arrays;
 

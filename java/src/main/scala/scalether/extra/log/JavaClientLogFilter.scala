@@ -1,11 +1,10 @@
-package scalether.util.log
+package scalether.extra.log
 
-import scalether.java.implicits._
 import java.util.concurrent.CompletableFuture
 
 import scalether.core.JavaEthereum
 import scalether.core.request.LogFilter
-import scalether.extra.log.ClientLogFilter
+import scalether.java.implicits._
 
 class JavaClientLogFilter(ethereum: JavaEthereum, logFilter: LogFilter, state: JavaLogFilterState)
   extends ClientLogFilter[CompletableFuture](ethereum, logFilter, state) {

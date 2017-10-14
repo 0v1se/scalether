@@ -1,9 +1,7 @@
-package scalether.util.log
+package scalether.extra.log
 
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
-
-import scalether.extra.log.LogFilterState
 
 trait JavaLogFilterState extends LogFilterState[CompletableFuture] {
   def getBlock: CompletableFuture[BigInteger]

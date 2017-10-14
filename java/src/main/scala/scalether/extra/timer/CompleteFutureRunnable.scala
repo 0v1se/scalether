@@ -1,4 +1,4 @@
-package scalether.util.timer
+package scalether.extra.timer
 
 import java.util.concurrent.CompletableFuture
 

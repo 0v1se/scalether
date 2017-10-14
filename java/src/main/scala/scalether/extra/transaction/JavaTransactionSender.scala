@@ -1,8 +1,6 @@
-package scalether.core
+package scalether.extra.transaction
 
 import java.util.concurrent.CompletableFuture
-
-import scalether.extra.transaction.TransactionSender
 
 trait JavaTransactionSender extends TransactionSender[CompletableFuture] {
 

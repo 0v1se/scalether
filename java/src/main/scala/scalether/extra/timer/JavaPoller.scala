@@ -1,10 +1,9 @@
-package scalether.util.timer
+package scalether.extra.timer
 
 import java.util.concurrent.CompletableFuture
 
-import scalether.extra.timer.Poller
+import scalether.extra.timer.implicits._
 import scalether.java.implicits._
-import scalether.util.timer.implicits._
 
 class JavaPoller extends Poller[CompletableFuture]{
   override def poll[T](sleep: Long)(poller: => CompletableFuture[Option[T]]) = super.poll(sleep)(poller)
