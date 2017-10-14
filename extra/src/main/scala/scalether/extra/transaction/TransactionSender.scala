@@ -1,4 +1,4 @@
-package scalether.core
+package scalether.extra.transaction
 
 import scalether.core.request.Transaction
 

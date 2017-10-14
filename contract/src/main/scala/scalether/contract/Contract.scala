@@ -2,9 +2,9 @@ package scalether.contract
 
 import cats.Functor
 import scalether.abi.{Call, Signature}
-import scalether.core.TransactionSender
 import scalether.core.request.Transaction
 import scalether.domain.Address
+import scalether.extra.transaction.TransactionSender
 
 import scala.language.higherKinds
 

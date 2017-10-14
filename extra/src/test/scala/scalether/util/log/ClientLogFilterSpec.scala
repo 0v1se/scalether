@@ -7,7 +7,7 @@ import org.mockito.Mockito.when
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
-import scalether.core.implicits._
+import scalether.domain.implicits._
 import scalether.core.request.LogFilter
 import scalether.extra.log.{ClientLogFilter, LogFilterState}
 

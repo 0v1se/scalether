@@ -1,6 +1,12 @@
 pragma solidity ^0.4.11;
 
-contract Events {
+contract IntegrationTest {
+    uint256 public state;
+
+    function setState(uint256 _state) public {
+        state = _state;
+    }
+
     event SimpleEvent(string indexed topic, string value);
     event AddressEvent(address indexed topic, string value);
     event MixedEvent(address indexed topic, string value, address indexed test);

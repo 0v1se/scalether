@@ -184,8 +184,7 @@ object ${truffle.name} extends ContractObject {
     sender.sendTransaction(Transaction(data = deployTransactionData<@args_params constructor_args/>))
 
   def deployAndWait<@monad_param/>(sender: <@sender/>, poller: <@poller/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
-    deploy(sender)<@args_params constructor_args/>
-      .flatMap(hash => poller.waitForTransaction(hash))
+      poller.waitForTransaction(deploy(sender)<@args_params constructor_args/>)
       .map(receipt => new ${truffle.name}<#if !(F?has_content)>[F]</#if>(receipt.contractAddress, sender))
   </#if>
 }

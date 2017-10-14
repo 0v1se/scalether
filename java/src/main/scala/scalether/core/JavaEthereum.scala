@@ -27,9 +27,13 @@ class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFut
 
   override def ethGetTransactionByHash(hash: String) = super.ethGetTransactionByHash(hash)
 
+  override def ethGetTransactionCount(address: Address, defaultBlockParameter: String) =
+    super.ethGetTransactionCount(address, defaultBlockParameter)
+
   override def netPeerCount() = super.netPeerCount()
 
-  override def ethGetBalance(address: Address, defaultBlockParameter: String) = super.ethGetBalance(address, defaultBlockParameter)
+  override def ethGetBalance(address: Address, defaultBlockParameter: String) =
+    super.ethGetBalance(address, defaultBlockParameter)
 
   override def ethGasPrice() = super.ethGasPrice()
 

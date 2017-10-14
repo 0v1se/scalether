@@ -8,5 +8,5 @@ import scalether.java.implicits._
 import scalether.util.timer.implicits._
 
 class JavaTransactionPoller(ethereum: JavaEthereum) extends TransactionPoller[CompletableFuture](ethereum) {
-  override def waitForTransaction(txHash: String) = super.waitForTransaction(txHash)
+  override def waitForTransaction(txHash: CompletableFuture[String]) = super.waitForTransaction(txHash)
 }

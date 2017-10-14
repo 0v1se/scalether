@@ -71,7 +71,7 @@ public class RlpEncoder {
     }
 
     static byte[] encodeList(RlpList value) {
-        List<RlpType> values = value.getValues();
+        List<? extends RlpType> values = value.getValues();
         if (values.isEmpty()) {
             return encode(new byte[]{ }, LIST_OFFSET);
         } else {

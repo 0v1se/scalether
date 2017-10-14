@@ -1,5 +1,7 @@
 package org.web3j.rlp;
 
+import scalether.util.Hex;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -66,5 +68,10 @@ public class RlpString implements RlpType {
     @Override
     public int hashCode() {
         return Arrays.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return Hex.prefixed(value);
     }
 }

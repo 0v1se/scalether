@@ -9,7 +9,7 @@ import scalether.abi.tuple._
 import scalether.contract._
 import scalether.core._
 import scalether.domain._
-import scalether.extra.transaction._
+import scalether.extra.transaction.{TransactionSender, _}
 import scalether.core.request.Transaction
 import scalether.util.Hex
 

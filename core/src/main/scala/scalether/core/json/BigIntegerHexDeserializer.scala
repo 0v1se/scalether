@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.{JsonParser, JsonToken}
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer
+import scalether.domain.implicits
 
 object BigIntegerHexDeserializer extends StdScalarDeserializer[BigInteger](classOf[BigInteger]) {
   override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigInteger = {
@@ -15,12 +16,8 @@ object BigIntegerHexDeserializer extends StdScalarDeserializer[BigInteger](class
       case VALUE_NUMBER_INT | VALUE_NUMBER_FLOAT => new BigInteger(jp.getText.trim)
       case VALUE_STRING =>
         val text = jp.getText.trim
-        if (text.isEmpty) null else try {
-          if (text.startsWith("0x")) {
-            new BigInteger(text.substring(2), 16)
-          } else {
-            new BigInteger(text)
-          }
+        try {
+          implicits.stringToBigInteger(text)
         } catch {
           case _: IllegalArgumentException => throw ctxt.weirdStringException(text, _valueClass, "not a valid representation")
         }

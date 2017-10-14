@@ -43,6 +43,9 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def netPeerCount(): F[BigInteger] =
     exec("net_peerCount")
 
+  def ethGetTransactionCount(address: Address, defaultBlockParameter: String): F[BigInteger] =
+    exec("eth_getTransactionCount", address, defaultBlockParameter)
+
   def ethGetBalance(address: Address, defaultBlockParameter: String): F[BigInteger] =
     exec("eth_getBalance", address, defaultBlockParameter)
 

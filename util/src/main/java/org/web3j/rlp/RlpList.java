@@ -7,17 +7,17 @@ import java.util.List;
  * RLP list type.
  */
 public class RlpList implements RlpType {
-    private final List<RlpType> values;
+    private final List<? extends RlpType> values;
 
     public RlpList(RlpType... values) {
         this.values = Arrays.asList(values);
     }
 
-    public RlpList(List<RlpType> values) {
+    public RlpList(List<? extends RlpType> values) {
         this.values = values;
     }
 
-    public List<RlpType> getValues() {
+    public List<? extends RlpType> getValues() {
         return values;
     }
 }
