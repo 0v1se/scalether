@@ -4,7 +4,7 @@ import java.math.BigInteger
 
 import cats.MonadError
 import cats.implicits._
-import scalether.core.data.Address
+import scalether.domain.Address
 
 import scala.language.higherKinds
 

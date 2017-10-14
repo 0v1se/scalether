@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
-import scalether.core.data.{Address, Hash}
+import scalether.domain.{Address, Word}
 
 import scala.reflect.Manifest
 
@@ -22,8 +22,8 @@ class JsonConverter {
     mod.addSerializer(classOf[BigInteger], BigIntegerHexSerializer)
     mod.addDeserializer(classOf[Address], AddressDeserializer)
     mod.addSerializer(classOf[Address], AddressSerializer)
-    mod.addDeserializer(classOf[Hash], HashDeserializer)
-    mod.addSerializer(classOf[Hash], HashSerializer)
+    mod.addDeserializer(classOf[Word], WordDeserializer)
+    mod.addSerializer(classOf[Word], WordSerializer)
     mod
   }
 

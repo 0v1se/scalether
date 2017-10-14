@@ -2,8 +2,8 @@ package scalether.core
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
-import scalether.core.data.Address
 import scalether.core.request.{LogFilter, Transaction}
+import scalether.domain.Address
 import scalether.java.implicits._
 
 class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFuture](service) {

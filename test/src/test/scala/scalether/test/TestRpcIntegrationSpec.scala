@@ -3,13 +3,13 @@ package scalether.test
 import cats.implicits._
 import org.scalatest.FlatSpec
 import scalether.core.implicits._
-import scalether.core.data.{Address, Hash}
 import scalether.core.request.LogFilter
 import scalether.core.transaction.SimpleTransactionSender
 import scalether.core.{Ethereum, EthereumService}
+import scalether.domain.{Address, Word}
+import scalether.extra.timer.tries.implicits._
+import scalether.extra.transaction.TransactionPoller
 import scalether.transport.ScalajHttpTransportService
-import scalether.util.timer.tries.implicits._
-import scalether.util.transaction.TransactionPoller
 
 import scala.util.Try
 
@@ -36,7 +36,7 @@ class TestRpcIntegrationSpec extends FlatSpec {
 
   it should "get logs immediately" in {
     val filter = LogFilter(
-      topics = List(Hash("0x8d38f5a0c1764ff1cca876ce8fe136163fddfce925659e6ad05437cfff6fd392")),
+      topics = List(Word("0x8d38f5a0c1764ff1cca876ce8fe136163fddfce925659e6ad05437cfff6fd392")),
       fromBlock = "0x0"
     )
     val logs = ethereum.ethGetLogs(filter).get
@@ -46,7 +46,7 @@ class TestRpcIntegrationSpec extends FlatSpec {
 
   it should "get logs" in {
     val filter = LogFilter(
-      topics = List(Hash("0x39b8d23135cdeca3f85b347e5285f40c9b1de764cf9f8126e7f3b34d77ff0cf0")),
+      topics = List(Word("0x39b8d23135cdeca3f85b347e5285f40c9b1de764cf9f8126e7f3b34d77ff0cf0")),
       fromBlock = "0x0"
     )
     val id = ethereum.ethNewFilter(filter).get

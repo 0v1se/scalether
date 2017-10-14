@@ -9,6 +9,7 @@ import freemarker.template.Configuration
 import scalether.abi.json.AbiItem
 import scalether.core.json.JsonConverter
 import scalether.generator.template.{ResourceTemplateLoader, ScalaObjectWrapper}
+import scalether.util.Hex
 
 import scala.io.Source
 
@@ -84,4 +85,6 @@ object ContractGenerator {
 
 case class TruffleContract(@JsonProperty("contract_name") name: String,
                            @JsonProperty("abi") abi: List[AbiItem],
-                           @JsonProperty("unlinked_binary") bin: String)
+                           @JsonProperty("unlinked_binary") bin: String) {
+  def isAbstract: Boolean = Hex.toBytes(bin).length == 0
+}

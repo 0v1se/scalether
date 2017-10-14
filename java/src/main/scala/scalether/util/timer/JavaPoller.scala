@@ -2,6 +2,7 @@ package scalether.util.timer
 
 import java.util.concurrent.CompletableFuture
 
+import scalether.extra.timer.Poller
 import scalether.java.implicits._
 import scalether.util.timer.implicits._
 

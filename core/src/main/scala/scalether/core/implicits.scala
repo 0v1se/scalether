@@ -2,7 +2,7 @@ package scalether.core
 
 import java.math.BigInteger
 
-import scalether.core.data.Address
+import scalether.domain.Address
 
 import scala.language.implicitConversions
 

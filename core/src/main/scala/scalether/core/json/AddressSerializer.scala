@@ -3,7 +3,7 @@ package scalether.core.json
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer
-import scalether.core.data.Address
+import scalether.domain.Address
 import scalether.util.Hex
 
 object AddressSerializer extends StdScalarSerializer[Address](classOf[Address]) {

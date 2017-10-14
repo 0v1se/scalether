@@ -1,5 +1,7 @@
 package scalether.util;
 
+import java.util.Arrays;
+
 public class Bytes {
     public static final byte ZERO = 0x0;
     public static final byte ONE = 0x1;
@@ -19,4 +21,19 @@ public class Bytes {
         }
         return result;
     }
+
+    public static byte[] trimLeadingBytes(byte[] bytes, byte b) {
+        int offset = 0;
+        for (; offset < bytes.length - 1; offset++) {
+            if (bytes[offset] != b) {
+                break;
+            }
+        }
+        return Arrays.copyOfRange(bytes, offset, bytes.length);
+    }
+
+    public static byte[] trimLeadingZeroes(byte[] bytes) {
+        return trimLeadingBytes(bytes, (byte) 0);
+    }
+
 }

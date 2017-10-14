@@ -4,7 +4,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.FlatSpec
 import org.scalatest.prop.PropertyChecks
-import scalether.core.data.Address
+import scalether.domain.Address
 import scalether.util.{Bytes, Padding}
 
 class AddressSpec extends FlatSpec with PropertyChecks {

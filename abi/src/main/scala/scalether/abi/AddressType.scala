@@ -1,6 +1,6 @@
 package scalether.abi
 
-import scalether.core.data.Address
+import scalether.domain.Address
 
 object AddressType extends Type[Address] {
   def string = "address"

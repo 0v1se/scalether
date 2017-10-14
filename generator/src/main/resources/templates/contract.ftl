@@ -93,14 +93,14 @@
 </#function>
 <#macro event_arg_type arg><#compress>
     <#if arg.indexed && isHashTopic(arg)>
-        Hash
+        Word
     <#else>
         <@single_scala_type arg.type/>
     </#if>
 </#compress></#macro>
 <#macro event_indexed_arg arg index><#compress>
     <#if isHashTopic(arg)>
-        Hash(log.topics(${index + 1}))
+        Word(log.topics(${index + 1}))
     <#else>
         event.indexed.type${index + 1}.decode(Hex.toBytes(log.topics(${index + 1})), 0).value
     </#if>
@@ -139,8 +139,8 @@ import scalether.abi._
 import scalether.abi.tuple._
 import scalether.contract._
 import scalether.core._
-import scalether.core.data._
-import scalether.core.transaction._
+import scalether.domain._
+import scalether.extra.transaction._
 import scalether.core.request.Transaction
 import scalether.util.Hex
 
@@ -168,8 +168,10 @@ class ${truffle.name}<@monad_param/>(address: Address, sender: <@sender/>)<@impl
 
 object ${truffle.name} extends ContractObject {
   val name = "${truffle.name}"
-  val bin = "${truffle.bin}"
   val abi = ${abi}
+  val bin = "${truffle.bin}"
+  <#if !truffle.isAbstract>
+
   val constructor = <@type constructor_args/>
 
   def encodeArgs<@args constructor_args/>: Array[Byte] =
@@ -179,12 +181,13 @@ object ${truffle.name} extends ContractObject {
     bin + Hex.to(encodeArgs<@args_params constructor_args/>)
 
   def deploy<@monad_param/>(sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@><@args constructor_args/>: <@monad/>[String] =
-    sender.sendTransaction(Transaction(data = Some(deployTransactionData<@args_params constructor_args/>)))
+    sender.sendTransaction(Transaction(data = deployTransactionData<@args_params constructor_args/>))
 
   def deployAndWait<@monad_param/>(sender: <@sender/>, poller: <@poller/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
     deploy(sender)<@args_params constructor_args/>
       .flatMap(hash => poller.waitForTransaction(hash))
       .map(receipt => new ${truffle.name}<#if !(F?has_content)>[F]</#if>(receipt.contractAddress, sender))
+  </#if>
 }
 
 <#list truffle.abi as item>
