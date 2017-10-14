@@ -7,7 +7,7 @@ import org.mockito.Mockito.when
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
-import scalether.core.bigint.implicits._
+import scalether.core.implicits._
 import scalether.core.request.LogFilter
 
 import scala.util.{Success, Try}

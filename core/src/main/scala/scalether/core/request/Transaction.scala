@@ -2,8 +2,10 @@ package scalether.core.request
 
 import java.math.BigInteger
 
-case class Transaction(to: Option[String] = None,
-                       from: Option[String] = None,
+import scalether.core.data.Address
+
+case class Transaction(to: Option[Address] = None,
+                       from: Option[Address] = None,
                        gas: Option[BigInteger] = None,
                        gasPrice: Option[BigInteger] = None,
                        value: BigInteger = BigInteger.ZERO,

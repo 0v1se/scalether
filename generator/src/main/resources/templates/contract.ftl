@@ -131,20 +131,22 @@ import ${monadType}
 <#if monadImport?has_content>
 import ${monadImport}
 </#if>
+<#list imports![] as import>
+import ${import}
+</#list>
 import cats.implicits._
-import cats.{Functor, Monad}
 import scalether.abi._
 import scalether.abi.tuple._
 import scalether.contract._
 import scalether.core._
 import scalether.core.data._
+import scalether.core.transaction._
 import scalether.core.request.Transaction
 import scalether.util.Hex
-import scalether.util.transaction.TransactionPoller
 
 import scala.language.higherKinds
 
-class ${truffle.name}<@monad_param/>(address: String, sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@>
+class ${truffle.name}<@monad_param/>(address: Address, sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@>
   extends Contract[<@monad/>](address, sender) {
 
   <#list truffle.abi as item>

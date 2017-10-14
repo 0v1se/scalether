@@ -29,6 +29,7 @@ class ContractGenerator {
           "monadImport" -> (if (java) "scalether.java.implicits._" else ""),
           "transactionSender" -> (if (java) "JavaTransactionSender" else ""),
           "transactionPoller" -> (if (java) "JavaTransactionPoller" else ""),
+          "imports" -> (if (java) Nil else List("cats.{Functor, Monad}")),
           "truffle" -> contract,
           "package" -> packageName,
           "abi" -> escape(converter.toJson(contract.abi))

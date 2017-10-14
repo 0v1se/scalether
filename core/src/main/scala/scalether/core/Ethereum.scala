@@ -4,6 +4,7 @@ import java.math.BigInteger
 
 import cats.MonadError
 import cats.implicits._
+import scalether.core.data.Address
 
 import scala.language.higherKinds
 
@@ -42,7 +43,7 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def netPeerCount(): F[BigInteger] =
     exec("net_peerCount")
 
-  def ethGetBalance(address: String, defaultBlockParameter: String): F[BigInteger] =
+  def ethGetBalance(address: Address, defaultBlockParameter: String): F[BigInteger] =
     exec("eth_getBalance", address, defaultBlockParameter)
 
   def ethGasPrice(): F[BigInteger] =

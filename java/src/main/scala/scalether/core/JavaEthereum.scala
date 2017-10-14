@@ -2,39 +2,40 @@ package scalether.core
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
-import scalether.core.request.LogFilter
-import scalether.java.implicits
+import scalether.core.data.Address
+import scalether.core.request.{LogFilter, Transaction}
+import scalether.java.implicits._
 
-class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFuture](service)(implicits.completableFutureInstance) {
-  override def web3ClientVersion(): CompletableFuture[String] = super.web3ClientVersion()
+class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFuture](service) {
+  override def web3ClientVersion() = super.web3ClientVersion()
 
-  override def web3Sha3(data: String): CompletableFuture[String] = super.web3Sha3(data)
+  override def web3Sha3(data: String) = super.web3Sha3(data)
 
-  override def netVersion(): CompletableFuture[String] = super.netVersion()
+  override def netVersion() = super.netVersion()
 
-  override def netListening(): CompletableFuture[Boolean] = super.netListening()
+  override def netListening() = super.netListening()
 
-  override def ethCall(transaction: request.Transaction): CompletableFuture[String] = super.ethCall(transaction)
+  override def ethBlockNumber() = super.ethBlockNumber()
 
-  override def ethSendTransaction(transaction: request.Transaction): CompletableFuture[String] = super.ethSendTransaction(transaction)
+  override def ethCall(transaction: Transaction) = super.ethCall(transaction)
 
-  override def ethSendRawTransaction(transaction: String): CompletableFuture[String] = super.ethSendRawTransaction(transaction)
+  override def ethSendTransaction(transaction: Transaction) = super.ethSendTransaction(transaction)
 
-  override def ethGetTransactionReceipt(hash: String): CompletableFuture[TransactionReceipt] = super.ethGetTransactionReceipt(hash)
+  override def ethSendRawTransaction(transaction: String) = super.ethSendRawTransaction(transaction)
 
-  override def ethGetTransactionByHash(hash: String): CompletableFuture[response.Transaction] = super.ethGetTransactionByHash(hash)
+  override def ethGetTransactionReceipt(hash: String) = super.ethGetTransactionReceipt(hash)
 
-  override def netPeerCount(): CompletableFuture[BigInteger] = super.netPeerCount()
+  override def ethGetTransactionByHash(hash: String) = super.ethGetTransactionByHash(hash)
 
-  override def ethGetBalance(address: String, defaultBlockParameter: String): CompletableFuture[BigInteger] = super.ethGetBalance(address, defaultBlockParameter)
+  override def netPeerCount() = super.netPeerCount()
 
-  override def ethGasPrice(): CompletableFuture[BigInteger] = super.ethGasPrice()
+  override def ethGetBalance(address: Address, defaultBlockParameter: String) = super.ethGetBalance(address, defaultBlockParameter)
 
-  override def ethGetLogs(filter: LogFilter): CompletableFuture[List[Log]] = super.ethGetLogs(filter)
+  override def ethGasPrice() = super.ethGasPrice()
 
-  override def ethNewFilter(filter: LogFilter): CompletableFuture[BigInteger] = super.ethNewFilter(filter)
+  override def ethGetLogs(filter: LogFilter) = super.ethGetLogs(filter)
 
-  override def ethGetFilterChanges(id: BigInteger): CompletableFuture[List[Log]] = super.ethGetFilterChanges(id)
+  override def ethNewFilter(filter: LogFilter) = super.ethNewFilter(filter)
 
-  override def ethBlockNumber(): CompletableFuture[BigInteger] = super.ethBlockNumber()
+  override def ethGetFilterChanges(id: BigInteger) = super.ethGetFilterChanges(id)
 }

@@ -15,7 +15,7 @@ import scalether.util.transaction.TransactionPoller
 
 import scala.language.higherKinds
 
-class Events[F[_]](address: String, sender: TransactionSender[F])(implicit f: Functor[F])
+class Events[F[_]](address: Address, sender: TransactionSender[F])(implicit f: Functor[F])
   extends Contract[F](address, sender) {
 
   def callEmitSimpleEvent(topic: String, value: String): F[Unit] =

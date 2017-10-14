@@ -2,13 +2,13 @@ package scalether.test
 
 import cats.implicits._
 import org.scalatest.FlatSpec
-import scalether.core.bigint.implicits._
+import scalether.core.implicits._
 import scalether.core.data.{Address, Hash}
 import scalether.core.request.LogFilter
 import scalether.core.transaction.SimpleTransactionSender
 import scalether.core.{Ethereum, EthereumService}
 import scalether.transport.ScalajHttpTransportService
-import scalether.util.timer.tries.Implicits._
+import scalether.util.timer.tries.implicits._
 import scalether.util.transaction.TransactionPoller
 
 import scala.util.Try
@@ -50,7 +50,7 @@ class TestRpcIntegrationSpec extends FlatSpec {
       fromBlock = "0x0"
     )
     val id = ethereum.ethNewFilter(filter).get
-    val logs = ethereum.ethGetFilterChanges(7)
+    val logs = ethereum.ethGetFilterChanges(id)
     println(logs.get.size)
     println(logs.get)
   }

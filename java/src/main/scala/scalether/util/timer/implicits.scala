@@ -1,6 +1,6 @@
 package scalether.util.timer
 
-object Implicits {
+object implicits {
   implicit val sleeper = new JavaSleeper
   implicit val poller = new JavaPoller
 }
