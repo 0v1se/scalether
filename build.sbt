@@ -1,23 +1,37 @@
+import java.util.Properties
+val nexusProperties = settingKey[Properties]("Nexus properties")
+
 name := "scalether"
 
 version := "0.1-SNAPSHOT"
 
-organization := "org.scalether"
-
 scalaVersion := "2.12.3"
 
-def org(project: Project): Project = project
+def base(project: Project): Project = project
   .settings(organization := "org.scalether")
+  .settings(nexusProperties := {
+    val prop = new Properties()
+    IO.load(prop, Path.userHome / ".ivy2" / ".nexus")
+    prop
+  })
+  .settings(publishTo := {
+    val nexus = nexusProperties.value.getProperty("url")
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "/content/repositories/snapshots/")
+    else
+      Some("releases" at nexus + "/content/repositories/releases/")
+  })
+  .settings(credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"))
 
-def common(project: Project): Project = org(project)
+def common(project: Project): Project = base(project)
   .dependsOn(domain, `test-common` % "test")
 
-lazy val util = org(project)
+lazy val util = base(project)
 
-lazy val domain = org(project)
+lazy val domain = base(project)
   .dependsOn(util)
 
-lazy val `test-common` = org(project)
+lazy val `test-common` = base(project)
   .dependsOn(domain)
 
 lazy val core = common(project)
@@ -44,9 +58,9 @@ lazy val test = common(project)
 lazy val generator = common(project)
   .dependsOn(abi)
 
-lazy val java = common(project)
+lazy val `java-compat` = common(project)
   .dependsOn(abi, extra)
 
-lazy val root = (project in file(".")).
-  aggregate(util, domain, core, abi, contract, extra, `async-http-client`, `scalaj-http`, generator, java)
+lazy val root = base(project in file(".")).
+  aggregate(util, domain, core, abi, contract, extra, `async-http-client`, `scalaj-http`, generator, `java-compat`)
 
