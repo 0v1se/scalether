@@ -138,10 +138,8 @@ import cats.implicits._
 import scalether.abi._
 import scalether.abi.tuple._
 import scalether.contract._
-import scalether.core._
 import scalether.domain._
 import scalether.extra.transaction._
-import scalether.core.request.Transaction
 import scalether.util.Hex
 
 import scala.language.higherKinds
@@ -181,7 +179,7 @@ object ${truffle.name} extends ContractObject {
     bin + Hex.to(encodeArgs<@args_params constructor_args/>)
 
   def deploy<@monad_param/>(sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@><@args constructor_args/>: <@monad/>[String] =
-    sender.sendTransaction(Transaction(data = deployTransactionData<@args_params constructor_args/>))
+    sender.sendTransaction(request.Transaction(data = deployTransactionData<@args_params constructor_args/>))
 
   def deployAndWait<@monad_param/>(sender: <@sender/>, poller: <@poller/>)<@implicit>(implicit m: Monad[<@monad/>])</@> <@args constructor_args/>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
       poller.waitForTransaction(deploy(sender)<@args_params constructor_args/>)
@@ -196,7 +194,7 @@ case class ${item.name}(<#list item.all as arg>${arg.name}: <@event_arg_type arg
 object ${item.name} {
   val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
 
-  def apply(log: Log): ${item.name} = {
+  def apply(log: response.Log): ${item.name} = {
     assert(log.topics.head == event.id)
 
     <#if item.nonIndexed?has_content>val decodedData = event.decode(log.data)</#if>
