@@ -1,4 +1,4 @@
-package scalether.core.request
+package scalether.domain.request
 
 import scalether.domain.{Address, Word}
 

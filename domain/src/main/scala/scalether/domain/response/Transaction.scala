@@ -1,14 +1,16 @@
-package scalether.core.response
+package scalether.domain.response
 
 import java.math.BigInteger
 
-case class Transaction(hash: String,
+import scalether.domain.{Address, Word}
+
+case class Transaction(hash: Word,
                        nonce: BigInteger,
-                       blockHash: String,
+                       blockHash: Word,
                        blockNumber: BigInteger,
                        transactionIndex: BigInteger,
-                       from: String,
-                       to: Option[String],
+                       from: Address,
+                       to: Address,
                        value: BigInteger,
                        gasPrice: BigInteger,
                        gas: BigInteger,

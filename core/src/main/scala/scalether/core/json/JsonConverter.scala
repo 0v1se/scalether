@@ -2,6 +2,7 @@ package scalether.core.json
 
 import java.math.BigInteger
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -15,6 +16,7 @@ class JsonConverter {
   objectMapper.registerModule(DefaultScalaModule)
   objectMapper.registerModule(bigIntModule)
   objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+  objectMapper.setSerializationInclusion(Include.NON_NULL)
 
   private def bigIntModule: SimpleModule = {
     val mod = new SimpleModule()

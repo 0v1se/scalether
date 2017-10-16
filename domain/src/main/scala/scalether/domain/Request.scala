@@ -1,4 +1,4 @@
-package scalether.core
+package scalether.domain
 
 case class Request(id: Long,
                    method: String,

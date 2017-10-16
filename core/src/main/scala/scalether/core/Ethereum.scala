@@ -4,11 +4,14 @@ import java.math.BigInteger
 
 import cats.MonadError
 import cats.implicits._
-import scalether.domain.Address
+import scalether.domain.{Address, Error, Request, response}
+import scalether.domain.request.{LogFilter, Transaction}
+import scalether.domain.response.{Log, TransactionReceipt}
 
 import scala.language.higherKinds
 
-class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Throwable]) {
+class Ethereum[F[_]](service: EthereumService[F])
+                    (implicit me: MonadError[F, Throwable]) {
 
   def web3ClientVersion(): F[String] =
     exec("web3_clientVersion")
@@ -25,17 +28,17 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def ethBlockNumber(): F[BigInteger] =
     exec("eth_blockNumber")
 
-  def ethCall(transaction: request.Transaction): F[String] =
-    exec("eth_call", transaction)
+  def ethCall(transaction: Transaction, defaultBlockParameter: String): F[String] =
+    exec("eth_call", transaction, defaultBlockParameter)
 
-  def ethSendTransaction(transaction: request.Transaction): F[String] =
+  def ethSendTransaction(transaction: Transaction): F[String] =
     exec("eth_sendTransaction", transaction)
 
   def ethSendRawTransaction(transaction: String): F[String] =
     exec("eth_sendRawTransaction", transaction)
 
-  def ethGetTransactionReceipt(hash: String): F[TransactionReceipt] =
-    exec("eth_getTransactionReceipt", hash)
+  def ethGetTransactionReceipt(hash: String): F[Option[TransactionReceipt]] =
+    execOption("eth_getTransactionReceipt", hash)
 
   def ethGetTransactionByHash(hash: String): F[response.Transaction] =
     exec("eth_getTransactionByHash", hash)
@@ -52,21 +55,30 @@ class Ethereum[F[_]](service: EthereumService[F])(implicit me: MonadError[F, Thr
   def ethGasPrice(): F[BigInteger] =
     exec("eth_gasPrice")
 
-  def ethGetLogs(filter: request.LogFilter): F[List[Log]] =
+  def ethGetLogs(filter: LogFilter): F[List[Log]] =
     exec("eth_getLogs", filter)
 
-  def ethNewFilter(filter: request.LogFilter): F[BigInteger] =
+  def ethNewFilter(filter: LogFilter): F[BigInteger] =
     exec("eth_newFilter", filter)
 
   def ethGetFilterChanges(id: BigInteger): F[List[Log]] =
     exec("eth_getFilterChanges", id)
 
-  private def exec[T](method: String, params: Any*)(implicit mf: Manifest[T]): F[T] = {
+  private def exec[T](method: String, params: Any*)
+                           (implicit mf: Manifest[T]): F[T] = {
+    execOption[T](method, params:_*).flatMap {
+      case Some(v) => me.pure(v)
+      case None => me.raiseError(new RpcException(Error.default))
+    }
+  }
+
+  private def execOption[T](method: String, params: Any*)
+                     (implicit mf: Manifest[T]): F[Option[T]] = {
     service.execute[T](Request(1, method, params: _*)).flatMap {
       response =>
-        response.result match {
-          case Some(r) => me.pure(r)
-          case None => me.raiseError(new RpcException(response.error.getOrElse(Error.default)))
+        response.error match {
+          case Some(r) => me.raiseError(new RpcException(r))
+          case None => me.pure(response.result)
         }
     }
   }

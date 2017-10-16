@@ -3,6 +3,7 @@ package scalether.core
 import cats.Functor
 import cats.implicits._
 import scalether.core.json.JsonConverter
+import scalether.domain.{Request, Response}
 
 import scala.language.higherKinds
 import scala.reflect.Manifest

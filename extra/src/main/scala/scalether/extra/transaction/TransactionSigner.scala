@@ -1,12 +1,14 @@
 package scalether.extra.transaction
 
+import java.math.BigInteger
+
 import org.web3j.crypto.Sign
 import org.web3j.crypto.Sign.SignatureData
 import org.web3j.rlp.{RlpEncoder, RlpList, RlpString, RlpType}
-import scalether.core.request.Transaction
 import scalether.domain.Word
 import scalether.util.{Bytes, Hex}
 import TransactionSigner._
+import scalether.domain.request.Transaction
 
 class TransactionSigner(key: Word) {
   private val privateKey = key.toBigInteger
@@ -21,11 +23,11 @@ class TransactionSigner(key: Word) {
 
 object TransactionSigner {
   def asRlp(transaction: Transaction): Array[RlpType] = Array(
-    RlpString.create(transaction.nonce.get),
-    RlpString.create(transaction.gasPrice.get),
-    RlpString.create(transaction.gas.get),
-    transaction.to.map(a => RlpString.create(a.bytes)).getOrElse(RlpString.create("")),
-    RlpString.create(transaction.value),
+    RlpString.create(transaction.nonce),
+    RlpString.create(transaction.gasPrice),
+    RlpString.create(transaction.gas),
+    Option(transaction.to).map(a => RlpString.create(a.bytes)).getOrElse(RlpString.create("")),
+    RlpString.create(Option(transaction.value).getOrElse(BigInteger.ZERO)),
     RlpString.create(Hex.toBytes(transaction.data))
   )
 

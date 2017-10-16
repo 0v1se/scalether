@@ -1,4 +1,4 @@
-package scalether.core
+package scalether.domain.response
 
 import java.math.BigInteger
 

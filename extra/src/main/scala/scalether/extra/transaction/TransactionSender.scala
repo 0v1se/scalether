@@ -1,6 +1,6 @@
 package scalether.extra.transaction
 
-import scalether.core.request.Transaction
+import scalether.domain.request.Transaction
 
 import scala.language.higherKinds
 

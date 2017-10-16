@@ -6,9 +6,9 @@ import cats.implicits._
 import org.scalacheck.Gen
 import org.scalatest.FlatSpec
 import org.scalatest.prop.PropertyChecks
-import scalether.core.request.Transaction
 import scalether.core.{Ethereum, EthereumService}
 import scalether.domain.implicits._
+import scalether.domain.request.Transaction
 import scalether.extra.timer.tries.implicits._
 import scalether.extra.transaction.{SigningTransactionSender, TransactionPoller}
 import scalether.transport.ScalajHttpTransportService
@@ -30,7 +30,7 @@ class TransactionSignerIntegrationSpec extends FlatSpec with PropertyChecks {
   "Signer" should "sign simple ether transaction" in {
     forAll(addressAndValue) {
       case (address, value) =>
-        poller.waitForTransaction(sender.sendTransaction(Transaction(to = Some(address), value = value)))
+        poller.waitForTransaction(sender.sendTransaction(Transaction(to = address, value = value)))
         assert(ethereum.ethGetBalance(address, "latest").get == value)
     }
   }

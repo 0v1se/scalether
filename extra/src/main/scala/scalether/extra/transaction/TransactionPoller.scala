@@ -2,7 +2,8 @@ package scalether.extra.transaction
 
 import cats.Monad
 import cats.implicits._
-import scalether.core.{Ethereum, TransactionReceipt}
+import scalether.core.Ethereum
+import scalether.domain.response.TransactionReceipt
 import scalether.extra.timer.Poller
 
 import scala.language.higherKinds
@@ -16,5 +17,5 @@ class TransactionPoller[F[_]](val ethereum: Ethereum[F])
   } yield result
 
   private def pollForTransaction(txHash: String): F[Option[TransactionReceipt]] =
-    ethereum.ethGetTransactionReceipt(txHash).map(r => Option(r))
+    ethereum.ethGetTransactionReceipt(txHash)
 }

@@ -1,4 +1,4 @@
-package scalether.core
+package scalether.domain
 
 case class Error(code: Int, message: String, data: Option[String] = None)
 

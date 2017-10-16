@@ -3,18 +3,18 @@ package scalether.extra.transaction
 import org.scalatest.FlatSpec
 import org.scalatest.prop.PropertyChecks
 import org.web3j.rlp.RlpString
-import scalether.core.request.Transaction
 import scalether.domain.implicits._
+import scalether.domain.request.Transaction
 import scalether.test.Generators
 
 class TransactionSignerSpec extends FlatSpec with PropertyChecks {
   "TransactionSigner" should "encode rlp for transaction" in {
     forAll(Generators.address) { address =>
       val list = TransactionSigner.asRlp(Transaction(
-        nonce = Some(0),
-        gasPrice = Some(1),
-        gas = Some(10),
-        to = Some(address),
+        nonce = 0,
+        gasPrice = 1,
+        gas = 10,
+        to = address,
         value = Long.MaxValue
       ))
       assert(list.length == 6)

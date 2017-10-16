@@ -3,8 +3,8 @@ package scalether.extra.transaction
 import java.math.BigInteger
 
 import scalether.core.Ethereum
-import scalether.core.request.Transaction
 import scalether.domain.Address
+import scalether.domain.request.Transaction
 
 import scala.language.higherKinds
 

@@ -5,7 +5,7 @@ import java.math.BigInteger
 import cats.Monad
 import cats.implicits._
 import scalether.core.Ethereum
-import scalether.core.request.Transaction
+import scalether.domain.request.Transaction
 import scalether.domain.{Address, Word}
 import scalether.util.Hex
 
@@ -17,11 +17,11 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F], from: Address, key: 
 
   private val signer = new TransactionSigner(key)
 
-  def sendTransaction(transaction: Transaction) = if (transaction.nonce.isDefined) {
+  def sendTransaction(transaction: Transaction) = if (transaction.nonce != null) {
     ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction))))
   } else {
     ethereum.ethGetTransactionCount(from, "pending").flatMap(
-      nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction.copy(nonce = Some(nonce))))))
+      nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction.copy(nonce = nonce)))))
     )
   }
 }

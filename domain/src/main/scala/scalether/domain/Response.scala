@@ -1,4 +1,4 @@
-package scalether.core
+package scalether.domain
 
 case class Response[T](id: Long,
                        result: Option[T],

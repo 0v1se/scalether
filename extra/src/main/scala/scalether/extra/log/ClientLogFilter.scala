@@ -4,8 +4,9 @@ import java.math.BigInteger
 
 import cats.Monad
 import cats.implicits._
-import scalether.core.request.LogFilter
-import scalether.core.{Ethereum, Log}
+import scalether.core.Ethereum
+import scalether.domain.request.LogFilter
+import scalether.domain.response.Log
 import scalether.util.Hex
 
 import scala.language.higherKinds

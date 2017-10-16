@@ -9,8 +9,9 @@ import scalether.abi.tuple._
 import scalether.contract._
 import scalether.core._
 import scalether.domain._
+import scalether.domain.request.Transaction
+import scalether.domain.response.Log
 import scalether.extra.transaction._
-import scalether.core.request.Transaction
 import scalether.util.Hex
 
 import scala.language.higherKinds

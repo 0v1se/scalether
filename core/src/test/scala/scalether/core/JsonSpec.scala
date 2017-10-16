@@ -4,6 +4,7 @@ import java.math.BigInteger
 
 import org.scalatest.{FlatSpec, Matchers}
 import scalether.core.json.JsonConverter
+import scalether.domain.Response
 
 class JsonSpec extends FlatSpec with Matchers {
   val json = new JsonConverter

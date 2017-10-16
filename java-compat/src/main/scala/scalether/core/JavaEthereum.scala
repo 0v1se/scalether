@@ -2,44 +2,61 @@ package scalether.core
 import java.math.BigInteger
 import java.util.concurrent.CompletableFuture
 
-import scalether.core.request.{LogFilter, Transaction}
 import scalether.domain.Address
+import scalether.domain.request.{LogFilter, Transaction}
 import scalether.java.implicits._
 
-class JavaEthereum(service: JavaEthereumService) extends Ethereum[CompletableFuture](service) {
-  override def web3ClientVersion() = super.web3ClientVersion()
+class JavaEthereum(service: JavaEthereumService)
+  extends Ethereum[CompletableFuture](service) {
 
-  override def web3Sha3(data: String) = super.web3Sha3(data)
+  override def web3ClientVersion() =
+    super.web3ClientVersion()
 
-  override def netVersion() = super.netVersion()
+  override def web3Sha3(data: String) =
+    super.web3Sha3(data)
 
-  override def netListening() = super.netListening()
+  override def netVersion() =
+    super.netVersion()
 
-  override def ethBlockNumber() = super.ethBlockNumber()
+  override def netListening() =
+    super.netListening()
 
-  override def ethCall(transaction: Transaction) = super.ethCall(transaction)
+  override def ethBlockNumber() =
+    super.ethBlockNumber()
 
-  override def ethSendTransaction(transaction: Transaction) = super.ethSendTransaction(transaction)
+  override def ethCall(transaction: Transaction, defaultBlockParameter: String) =
+    super.ethCall(transaction, defaultBlockParameter)
 
-  override def ethSendRawTransaction(transaction: String) = super.ethSendRawTransaction(transaction)
+  override def ethSendTransaction(transaction: Transaction) =
+    super.ethSendTransaction(transaction)
 
-  override def ethGetTransactionReceipt(hash: String) = super.ethGetTransactionReceipt(hash)
+  override def ethSendRawTransaction(transaction: String) =
+    super.ethSendRawTransaction(transaction)
 
-  override def ethGetTransactionByHash(hash: String) = super.ethGetTransactionByHash(hash)
+  override def ethGetTransactionReceipt(hash: String) =
+    super.ethGetTransactionReceipt(hash)
+
+  override def ethGetTransactionByHash(hash: String) =
+    super.ethGetTransactionByHash(hash)
 
   override def ethGetTransactionCount(address: Address, defaultBlockParameter: String) =
     super.ethGetTransactionCount(address, defaultBlockParameter)
 
-  override def netPeerCount() = super.netPeerCount()
+  override def netPeerCount() =
+    super.netPeerCount()
 
   override def ethGetBalance(address: Address, defaultBlockParameter: String) =
     super.ethGetBalance(address, defaultBlockParameter)
 
-  override def ethGasPrice() = super.ethGasPrice()
+  override def ethGasPrice() =
+    super.ethGasPrice()
 
-  override def ethGetLogs(filter: LogFilter) = super.ethGetLogs(filter)
+  override def ethGetLogs(filter: LogFilter) =
+    super.ethGetLogs(filter)
 
-  override def ethNewFilter(filter: LogFilter) = super.ethNewFilter(filter)
+  override def ethNewFilter(filter: LogFilter) =
+    super.ethNewFilter(filter)
 
-  override def ethGetFilterChanges(id: BigInteger) = super.ethGetFilterChanges(id)
+  override def ethGetFilterChanges(id: BigInteger) =
+    super.ethGetFilterChanges(id)
 }

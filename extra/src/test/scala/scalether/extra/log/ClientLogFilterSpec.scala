@@ -7,8 +7,8 @@ import org.mockito.Mockito.when
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
-import scalether.core.request.LogFilter
 import scalether.domain.implicits._
+import scalether.domain.request.LogFilter
 
 import scala.util.{Success, Try}
 
