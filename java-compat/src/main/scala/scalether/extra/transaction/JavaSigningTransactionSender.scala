@@ -8,6 +8,6 @@ import scalether.domain.{Address, Word}
 import scalether.java.implicits._
 
 class JavaSigningTransactionSender(ethereum: JavaEthereum, from: Address, key: Word, gas: BigInteger, gasPrice: BigInteger)
-  extends SigningTransactionSender[CompletableFuture](ethereum, from, key, gas, gasPrice) {
+  extends SigningTransactionSender[CompletableFuture](ethereum, from, key, gas, gasPrice) with JavaTransactionSender {
 
 }
