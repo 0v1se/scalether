@@ -9,6 +9,6 @@ import scalether.util.Hex
 
 object BigIntegerHexSerializer extends StdScalarSerializer[BigInteger](classOf[BigInteger]) {
   def serialize(value: BigInteger, gen: JsonGenerator, provider: SerializerProvider) = {
-    gen.writeString(Hex.prefixed(value.toByteArray))
+    gen.writeString(s"0x${value.toString(16)}")
   }
 }

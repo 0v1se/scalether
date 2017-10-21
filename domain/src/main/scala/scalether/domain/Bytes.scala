@@ -15,4 +15,14 @@ trait Bytes {
 
   override def toString =
     Hex.prefixed(bytes)
+
+  override def equals(obj: scala.Any) = {
+    if (!obj.isInstanceOf[Bytes]) {
+      false
+    } else {
+      obj.asInstanceOf[Bytes].bytes.deep == bytes.deep
+    }
+  }
+
+  override def hashCode() = bytes.toSeq.hashCode()
 }

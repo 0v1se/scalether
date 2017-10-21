@@ -7,13 +7,12 @@ import cats.implicits._
 import scalether.core.Ethereum
 import scalether.domain.request.LogFilter
 import scalether.domain.response.Log
-import scalether.util.Hex
 
 import scala.language.higherKinds
 
 class ClientLogFilter[F[_]](ethereum: Ethereum[F], filter: LogFilter, state: LogFilterState[F])(implicit m: Monad[F]) {
   def getChanges: F[List[Log]] = {
-    def block(num: BigInteger) = Hex.prefixed(num.toByteArray)
+    def block(num: BigInteger) = s"0x${num.toString(16)}"
 
     for {
       current <- ethereum.ethBlockNumber()

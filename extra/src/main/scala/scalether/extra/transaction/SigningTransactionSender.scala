@@ -11,7 +11,12 @@ import scalether.util.Hex
 
 import scala.language.higherKinds
 
-class SigningTransactionSender[F[_]](ethereum: Ethereum[F], from: Address, key: Word, gas: BigInteger, gasPrice: BigInteger)
+class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
+                                     nonceProvider: NonceProvider[F],
+                                     from: Address,
+                                     key: Word,
+                                     gas: BigInteger,
+                                     gasPrice: BigInteger)
                                     (implicit f: Monad[F])
   extends AbstractTransactionSender[F](ethereum, from, gas, gasPrice) {
 
@@ -20,7 +25,7 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F], from: Address, key: 
   def sendTransaction(transaction: Transaction) = if (transaction.nonce != null) {
     ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction))))
   } else {
-    ethereum.ethGetTransactionCount(from, "pending").flatMap(
+    nonceProvider.nonce(address = from).flatMap(
       nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction.copy(nonce = nonce)))))
     )
   }
