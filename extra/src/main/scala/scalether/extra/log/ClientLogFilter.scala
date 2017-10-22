@@ -10,15 +10,17 @@ import scalether.domain.response.Log
 
 import scala.language.higherKinds
 
+/**
+  * вначале спрашивать blockNumber, потом сохранять его, и, если поменялся, то запрашивать логи
+  */
 class ClientLogFilter[F[_]](ethereum: Ethereum[F], filter: LogFilter, state: LogFilterState[F])(implicit m: Monad[F]) {
-  def getChanges: F[List[Log]] = {
+  def getChanges(blockNumber: BigInteger): F[List[Log]] = {
     def block(num: BigInteger) = s"0x${num.toString(16)}"
 
     for {
-      current <- ethereum.ethBlockNumber()
       latest <- state.getBlock
-      logs <- ethereum.ethGetLogs(filter.copy(fromBlock = block(latest), toBlock = block(current)))
-      _ <- state.setBlock(current)
+      logs <- ethereum.ethGetLogs(filter.copy(fromBlock = block(latest), toBlock = block(blockNumber)))
+      _ <- state.setBlock(blockNumber)
     } yield logs
   }
 }
