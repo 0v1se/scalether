@@ -40,6 +40,8 @@
         Boolean
     <#elseif abiType?starts_with("bytes")>
         Array[Byte]
+    <#elseif abiType?ends_with("[]")>
+        List[<@single_scala_type abiType?substring(0, abiType?length - 2)/>]
     <#else>
         generic
     </#if>
@@ -66,6 +68,8 @@
         BytesType
     <#elseif abiType?starts_with("bytes")>
         Bytes${abiType?substring(5)}Type
+    <#elseif abiType?ends_with("[]")>
+        VarArrayType(<@single_type abiType?substring(0, abiType?length - 2)/>)
     <#else>
         Type
     </#if>
@@ -135,6 +139,7 @@ import ${monadImport}
 import ${import}
 </#list>
 import scalether.abi._
+import scalether.abi.array._
 import scalether.abi.tuple._
 import scalether.contract._
 import scalether.domain._

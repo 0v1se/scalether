@@ -17,3 +17,7 @@ class VarArrayType[T](`type`: Type[T]) extends ArrayType[T](`type`) {
     decode(length.value.intValue(), bytes, length.offset)
   }
 }
+
+object VarArrayType {
+  def apply[T](`type`: Type[T]): VarArrayType[T] = new VarArrayType[T](`type`)
+}
