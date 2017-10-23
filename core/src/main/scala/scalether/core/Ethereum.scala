@@ -64,8 +64,8 @@ class Ethereum[F[_]](service: EthereumService[F])
   def ethGetFilterChanges(id: BigInteger): F[List[Log]] =
     exec("eth_getFilterChanges", id)
 
-  def ethGetCode(address: Address, defaultBlockParameter: String): F[Option[String]] =
-    execOption("eth_getCode", defaultBlockParameter)
+  def ethGetCode(address: Address, defaultBlockParameter: String): F[String] =
+    exec("eth_getCode", address, defaultBlockParameter)
 
   private def exec[T](method: String, params: Any*)
                            (implicit mf: Manifest[T]): F[T] = {
