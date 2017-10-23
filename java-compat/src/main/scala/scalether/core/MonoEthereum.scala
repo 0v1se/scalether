@@ -60,4 +60,7 @@ class MonoEthereum(service: MonoEthereumService)
 
   override def ethGetFilterChanges(id: BigInteger) =
     super.ethGetFilterChanges(id)
+
+  override def ethGetCode(address: Address, defaultBlockParameter: String) =
+    super.ethGetCode(address, defaultBlockParameter)
 }
