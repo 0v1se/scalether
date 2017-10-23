@@ -43,11 +43,6 @@ class ContractGenerator {
     new String(bytes.toByteArray)
   }
 
-  private def simpleName(fullName: String): String = {
-    val idx = fullName.lastIndexOf(".")
-    fullName.substring(idx + 1)
-  }
-
   private def generate(template: String, model: Map[String, AnyRef], out: Writer): Unit = {
     configuration.getTemplate(template).process(model, out)
   }
