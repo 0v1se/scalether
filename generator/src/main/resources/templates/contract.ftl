@@ -134,7 +134,6 @@ import ${monadImport}
 <#list imports![] as import>
 import ${import}
 </#list>
-import cats.implicits._
 import scalether.abi._
 import scalether.abi.tuple._
 import scalether.contract._

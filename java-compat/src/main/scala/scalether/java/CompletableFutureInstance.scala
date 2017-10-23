@@ -26,7 +26,7 @@ class CompletableFutureInstance extends MonadError[CompletableFuture, Throwable]
   def handleErrorWith[A](fa: CompletableFuture[A])(f: Throwable => CompletableFuture[A]) =
     fa.handle[Try[A]]((a, ex) => if (ex == null) Failure(ex) else Success(a))
       .thenCompose[A] {
-      case Success(a) => CompletableFuture.completedFuture(a)
+      case Success(a) => CompletableFuture.completedFuture[A](a)
       case Failure(ex) => f(ex)
     }
 

@@ -12,7 +12,7 @@ class ContractGeneratorSpec extends FlatSpec {
   def generate(name: String) = {
     val json = Source.fromResource(s"$name.json").mkString
     val truffle = converter.fromJson[TruffleContract](json)
-    generator.generate(truffle, "org.daomao.contract", java = false)
+    generator.generate(truffle, "org.daomao.contract", Type.SCALA)
   }
 
   "Generator" should "generate IssuedToken" in {
