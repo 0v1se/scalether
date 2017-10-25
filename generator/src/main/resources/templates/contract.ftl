@@ -41,7 +41,7 @@
     <#elseif abiType?starts_with("bytes")>
         Array[Byte]
     <#elseif abiType?ends_with("[]")>
-        List[<@single_scala_type abiType?substring(0, abiType?length - 2)/>]
+        Array[<@single_scala_type abiType?substring(0, abiType?length - 2)/>]
     <#else>
         generic
     </#if>
