@@ -30,7 +30,6 @@ class TransactionSignerIntegrationSpec extends FlatSpec with PropertyChecks with
       val test = IntegrationTest.deployAndWait(sender, poller).get
       poller.waitForTransaction(test.setState(value))
       assert(test.state.get == (value: BigInteger))
-      assert(1 == 2)
     }
   }
 }
