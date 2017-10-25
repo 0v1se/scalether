@@ -12,22 +12,22 @@ class VarArraySpec extends FlatSpec {
   "VarArrayType" should "decode empty array" in {
     val result = arr.decode(zero, 0)
     assert(result.offset == 32)
-    assert(result.value == Nil)
+    assert(result.value.isEmpty)
   }
 
   it should "decode non-empty uint256" in {
     val result = arr.decode(Uint256Type.encode(BigInteger.valueOf(2)) ++ ten ++ maxLong, 0)
     assert(result.offset == 96)
-    assert(result.value == List(BigInteger.valueOf(10), BigInteger.valueOf(Long.MaxValue)))
+    assert(result.value sameElements Array(BigInteger.valueOf(10), BigInteger.valueOf(Long.MaxValue)))
   }
 
   it should "encode empty array" in {
-    val result = arr.encode(Nil)
+    val result = arr.encode(Array())
     assert(result sameElements zero)
   }
 
   it should "encode non-empty array" in {
-    val result = arr.encode(List(BigInteger.ZERO))
+    val result = arr.encode(Array(BigInteger.ZERO))
     assert(result sameElements (one ++ zero))
   }
 }

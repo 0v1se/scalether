@@ -2,6 +2,7 @@ package scalether.generator
 
 import org.scalatest.FlatSpec
 import scalether.core.json.JsonConverter
+import scalether.test.ManualTag
 
 import scala.io.Source
 
@@ -15,15 +16,15 @@ class ContractGeneratorSpec extends FlatSpec {
     generator.generate(truffle, "org.daomao.contract", Type.SCALA)
   }
 
-  "Generator" should "generate IssuedToken" in {
+  "Generator" should "generate IssuedToken" taggedAs ManualTag in {
     println(generate("IssuedToken"))
   }
 
-  "Generator" should "generate ERC20" in {
+  "Generator" should "generate ERC20" taggedAs ManualTag in {
     println(generate("ERC20"))
   }
 
-  "Generator" should "generate ERC20Basic" in {
+  "Generator" should "generate ERC20Basic" taggedAs ManualTag in {
     println(generate("ERC20Basic"))
   }
 }

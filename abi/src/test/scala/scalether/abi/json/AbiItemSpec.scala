@@ -15,9 +15,5 @@ class AbiItemSpec extends FlatSpec {
     assert(items.last.isInstanceOf[AbiFunction])
     assert(items(2).asInstanceOf[AbiFunction].getType == AbiFunctionType.CONSTRUCTOR)
     assert(items(3).asInstanceOf[AbiFunction].getType == AbiFunctionType.FUNCTION)
-
-    println(converter.toJson(items(1)))
-    println(converter.toJson(items(3)))
-    println(converter.toJson(items(2)))
   }
 }

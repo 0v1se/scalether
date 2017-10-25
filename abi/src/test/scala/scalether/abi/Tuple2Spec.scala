@@ -11,13 +11,13 @@ import scalether.abi.tuple.Tuple2Type
 class Tuple2Spec extends FlatSpec with PropertyChecks {
   val tuple2Type = Tuple2Type(new FixArrayType(1, Uint256Type), new VarArrayType(Uint256Type))
 
-  val pos = Gen.posNum[Int].map(i => BigInteger.valueOf(i))
-  val list = Gen.listOf(pos)
+  val pos: Gen[BigInteger] = Gen.posNum[Int].map(i => BigInteger.valueOf(i))
+  val array: Gen[Array[BigInteger]] = Gen.listOf(pos).map(_.toArray)
 
   "Tuple2Type" should "encode var and fix arrays" in {
     forAll(for (i1 <- pos; i2 <- pos) yield (i1, i2)) { case (fixVal: BigInteger, varVal: BigInteger) =>
-      val fixArray = List(fixVal)
-      val varArray = List(varVal)
+      val fixArray = Array(fixVal)
+      val varArray = Array(varVal)
 
       val encoded = tuple2Type.encode((fixArray, varArray))
       val test = Uint256Type.encode(fixVal) ++
@@ -28,16 +28,20 @@ class Tuple2Spec extends FlatSpec with PropertyChecks {
     }
   }
 
+  val test: Gen[(BigInteger, Array[BigInteger], Array[BigInteger])] = for (i <- pos; l1 <- array; l2 <- array) yield (i, l1, l2)
+
   it should "encode decoded" in {
-    forAll(for (i <- pos; l1 <- list; l2 <- list) yield (i, l1, l2)) { case (start1: BigInteger, list1: List[BigInteger], list2: List[BigInteger]) =>
-      val fixArray = start1 :: list1
+    forAll(test) { case (start1: BigInteger, list1: Array[BigInteger], list2: Array[BigInteger]) =>
+      val fixArray = Array(start1) ++ list1
       val varArray = list2
-      val typ = Tuple2Type(new FixArrayType(fixArray.size, Uint256Type), new VarArrayType(Uint256Type))
+      val typ = Tuple2Type(new FixArrayType(fixArray.length, Uint256Type), new VarArrayType(Uint256Type))
 
       val encoded = typ.encode((fixArray, varArray))
       val decoded = typ.decode(encoded, 0)
+      val (decodedFix, decodedVar) = decoded.value
       assert(decoded.offset == encoded.length)
-      assert(decoded.value == (fixArray, varArray))
+      assert(decodedFix sameElements fixArray)
+      assert(decodedVar sameElements varArray)
     }
   }
 }

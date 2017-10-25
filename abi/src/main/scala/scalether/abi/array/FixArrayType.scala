@@ -2,7 +2,12 @@ package scalether.abi.array
 
 import scalether.abi.Type
 
-class FixArrayType[T](length: Int, `type`: Type[T]) extends ArrayType[T](`type`) {
+import scala.reflect.ClassTag
+
+class FixArrayType[T](length: Int, `type`: Type[T])
+                     (implicit classTag: ClassTag[T])
+  extends ArrayType[T](`type`) {
+
   assert(length != 0)
   assert(`type`.size.isDefined)
 
@@ -12,4 +17,10 @@ class FixArrayType[T](length: Int, `type`: Type[T]) extends ArrayType[T](`type`)
 
   def decode(bytes: Array[Byte], offset: Int) =
     decode(length, bytes, offset)
+}
+
+object FixArrayType {
+  def apply[T](length: Int, `type`: Type[T])
+              (implicit classTag: ClassTag[T]): FixArrayType[T] =
+    new FixArrayType(length, `type`)
 }

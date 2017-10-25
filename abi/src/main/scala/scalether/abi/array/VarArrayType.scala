@@ -4,13 +4,18 @@ import java.math.BigInteger
 
 import scalether.abi.{Type, Uint256Type}
 
-class VarArrayType[T](`type`: Type[T]) extends ArrayType[T](`type`) {
+import scala.reflect.ClassTag
+
+class VarArrayType[T](`type`: Type[T])
+                     (implicit classTag: ClassTag[T])
+  extends ArrayType[T](`type`) {
+
   override def size = None
 
   def string = s"${`type`.string}[]"
 
-  override def encode(list: List[T]) =
-    Uint256Type.encode(BigInteger.valueOf(list.size)) ++ super.encode(list)
+  override def encode(value: Array[T]) =
+    Uint256Type.encode(BigInteger.valueOf(value.length)) ++ super.encode(value)
 
   def decode(bytes: Array[Byte], offset: Int) = {
     val length = Uint256Type.decode(bytes, offset)
@@ -19,5 +24,7 @@ class VarArrayType[T](`type`: Type[T]) extends ArrayType[T](`type`) {
 }
 
 object VarArrayType {
-  def apply[T](`type`: Type[T]): VarArrayType[T] = new VarArrayType[T](`type`)
+  def apply[T](`type`: Type[T])
+              (implicit classTag: ClassTag[T]): VarArrayType[T] =
+    new VarArrayType[T](`type`)
 }

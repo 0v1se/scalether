@@ -1,10 +1,16 @@
 package scalether.util;
 
+import java.math.BigInteger;
+
 public class Hex {
     private Hex() {
     }
 
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
+
+    public static String prefixed(BigInteger bigInteger) {
+        return "0x" + bigInteger.toString(16);
+    }
 
     public static String prefixed(byte[] bytes) {
         char[] hexChars = new char[2 + bytes.length * 2];

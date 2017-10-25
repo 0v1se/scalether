@@ -16,6 +16,6 @@ class JsonSpec extends FlatSpec with Matchers {
 
   "JsonConverter" should "serialize BigIntegers" in {
     val result = json.toJson(BigInteger.valueOf(0))
-    assert(result == "0x0")
+    assert(result == "\"0x0\"")
   }
 }

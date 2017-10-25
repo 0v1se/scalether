@@ -9,6 +9,7 @@ import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
 import scalether.domain.implicits._
 import scalether.domain.request.LogFilter
+import scalether.util.Hex
 
 import scala.util.{Success, Try}
 
@@ -18,13 +19,13 @@ class ClientLogFilterSpec extends FlatSpec with MockitoSugar {
     val logFilter = LogFilter()
     val state = new TestState
 
-    when(ethereum.ethGetLogs(logFilter.copy(fromBlock = "0x00", toBlock = "0x01"))).thenReturn(Success(List(mock, mock)))
+    when(ethereum.ethGetLogs(logFilter.copy(fromBlock = Hex.prefixed(0), toBlock = Hex.prefixed(1)))).thenReturn(Success(List(mock, mock)))
     val filter = new ClientLogFilter[Try](ethereum, logFilter, state)
     val changes1 = filter.getChanges(1)
     assert(changes1.get.size == 2)
     assert(state.getBlock == Success(1: BigInteger))
 
-    when(ethereum.ethGetLogs(logFilter.copy(fromBlock = "0x01", toBlock = "0x02"))).thenReturn(Success(List(mock, mock, mock)))
+    when(ethereum.ethGetLogs(logFilter.copy(fromBlock = Hex.prefixed(1), toBlock = Hex.prefixed(2)))).thenReturn(Success(List(mock, mock, mock)))
     val changes2 = filter.getChanges(2)
     assert(changes2.get.size == 3)
     assert(state.getBlock == Success(2: BigInteger))
