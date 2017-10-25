@@ -63,4 +63,3 @@ lazy val `java-compat` = common(project)
 
 lazy val root = base(project in file(".")).
   aggregate(util, domain, core, abi, contract, extra, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)
-
