@@ -5,6 +5,8 @@ import java.math.BigInteger
 import scala.language.implicitConversions
 
 object implicits {
+  implicit def byteToBigInteger(i: Byte): BigInteger = BigInteger.valueOf(i)
+
   implicit def intToBigInteger(i: Int): BigInteger = BigInteger.valueOf(i)
 
   implicit def longToBigInteger(i: Long): BigInteger = BigInteger.valueOf(i)
