@@ -3,7 +3,7 @@ package scalether.extra.log
 import java.math.BigInteger
 
 import cats.implicits._
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verifyNoMoreInteractions, when}
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
@@ -29,6 +29,17 @@ class ClientLogFilterSpec extends FlatSpec with MockitoSugar {
     val changes2 = filter.getChanges(2)
     assert(changes2.get.size == 3)
     assert(state.getBlock == Success(2: BigInteger))
+  }
+
+  it should "not check for logs if block is the same" in {
+    val ethereum = mock[Ethereum[Try]]
+    val logFilter = LogFilter()
+    val state = new TestState
+    state.state = 10
+
+    val filter = new ClientLogFilter[Try](ethereum, logFilter, state)
+    val changes1 = filter.getChanges(10)
+    verifyNoMoreInteractions(ethereum)
   }
 
   class TestState extends LogFilterState[Try] {

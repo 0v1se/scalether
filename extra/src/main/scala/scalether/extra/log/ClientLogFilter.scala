@@ -15,7 +15,7 @@ class ClientLogFilter[F[_]](ethereum: Ethereum[F], filter: LogFilter, state: Log
   def getChanges(blockNumber: BigInteger): F[List[Log]] = {
     for {
       latest <- state.getBlock
-      logs <- ethereum.ethGetLogs(filter.copy(fromBlock = Hex.prefixed(latest), toBlock = Hex.prefixed(blockNumber)))
+      logs <- if (latest == blockNumber) m.pure(Nil) else ethereum.ethGetLogs(filter.copy(fromBlock = Hex.prefixed(latest), toBlock = Hex.prefixed(blockNumber)))
       _ <- state.setBlock(blockNumber)
     } yield logs
   }
