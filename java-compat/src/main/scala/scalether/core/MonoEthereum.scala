@@ -5,6 +5,8 @@ import java.math.BigInteger
 import reactor.core.publisher.Mono
 import scalether.domain.Address
 import scalether.domain.request.{LogFilter, Transaction}
+import scalether.domain.response.Log
+import scalether.java.Lists
 import scalether.java.implicits._
 
 class MonoEthereum(service: MonoEthereumService)
@@ -60,6 +62,12 @@ class MonoEthereum(service: MonoEthereumService)
 
   override def ethGetFilterChanges(id: BigInteger) =
     super.ethGetFilterChanges(id)
+
+  def ethGetJavaLogs(filter: LogFilter) =
+    super.ethGetLogs(filter).map[java.util.List[Log]](logs => Lists.toJava(logs))
+
+  def ethGetJavaFilterChanges(id: BigInteger) =
+    super.ethGetFilterChanges(id).map[java.util.List[Log]](logs => Lists.toJava(logs))
 
   override def ethGetCode(address: Address, defaultBlockParameter: String) =
     super.ethGetCode(address, defaultBlockParameter)

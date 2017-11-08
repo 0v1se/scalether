@@ -2,7 +2,8 @@ package scalether.domain
 
 case class Request(id: Long,
                    method: String,
-                   params: List[Any])
+                   params: List[Any],
+                   jsonrpc: String = "2.0")
 
 object Request {
   def apply(id: Long, method: String, params: Any*): Request =

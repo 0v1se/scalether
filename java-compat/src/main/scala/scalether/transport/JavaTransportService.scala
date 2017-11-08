@@ -14,6 +14,7 @@ class JavaTransportService(rpcUrl: String, requestTimeoutMs: Int = 10000, readTi
       .setRequestTimeout(requestTimeoutMs)
       .setUrl(rpcUrl)
       .setBody(request)
+      .addHeader("Content-Type", "application/json")
       .setMethod("POST")
     client.executeRequest(req).toCompletableFuture
       .thenApply(_.getResponseBody)

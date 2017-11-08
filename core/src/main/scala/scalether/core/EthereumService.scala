@@ -16,11 +16,11 @@ class EthereumService[F[_]](service: TransportService[F], log: Boolean = false)(
   def execute[T](request: Request)(implicit mf: Manifest[T]): F[Response[T]] = {
     val requestJson = json.toJson(request)
     if (log) {
-      EthereumService.logger.info(s"request=$requestJson")
+      println(s"request=$requestJson")
     }
     service.execute(requestJson).map(responseJson => {
       if (log) {
-        EthereumService.logger.info(s"response=$responseJson")
+        println(s"response=$responseJson")
       }
       json.fromJson[Response[T]](responseJson)
     })

@@ -16,6 +16,7 @@ class AsyncHttpClientTransportService(rpcUrl: String, requestTimeoutMs: Int = 10
       .setRequestTimeout(requestTimeoutMs)
       .setUrl(rpcUrl)
       .setBody(request)
+      .addHeader("Content-Type", "application/json")
       .setMethod("POST")
     FutureConverters.toScala(client.executeRequest(req).toCompletableFuture)
       .map(_.getResponseBody)
