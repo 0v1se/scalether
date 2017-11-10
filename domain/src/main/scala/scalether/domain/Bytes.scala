@@ -11,7 +11,7 @@ trait Bytes {
     Padding.padLeft(bytes, scalether.util.Bytes.ZERO)
 
   def toBigInteger: BigInteger =
-    new BigInteger(bytes)
+    new BigInteger(Hex.to(bytes), 16)
 
   override def toString =
     Hex.prefixed(bytes)
