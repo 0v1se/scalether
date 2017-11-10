@@ -78,8 +78,8 @@ object ContractGenerator {
   }
 }
 
-case class TruffleContract(@JsonProperty("contract_name") name: String,
+case class TruffleContract(@JsonProperty("contractName") name: String,
                            @JsonProperty("abi") abi: List[AbiItem],
-                           @JsonProperty("unlinked_binary") bin: String) {
+                           @JsonProperty("bytecode") bin: String) {
   def isAbstract: Boolean = Hex.toBytes(bin).length == 0
 }
