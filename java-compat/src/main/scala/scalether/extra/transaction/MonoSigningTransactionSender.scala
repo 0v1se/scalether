@@ -8,8 +8,8 @@ import scalether.domain.request.Transaction
 import scalether.domain.{Address, Word}
 import scalether.java.implicits._
 
-class MonoSigningTransactionSender(ethereum: MonoEthereum, nonceProvider: MonoNonceProvider, from: Address, key: Word, gas: BigInteger, gasPrice: BigInteger)
-  extends SigningTransactionSender[Mono](ethereum, nonceProvider, from, key, gas, gasPrice) with MonoTransactionSender {
+class MonoSigningTransactionSender(ethereum: MonoEthereum, nonceProvider: MonoNonceProvider, privateKey: BigInteger, gas: BigInteger, gasPrice: BigInteger)
+  extends SigningTransactionSender[Mono](ethereum, nonceProvider, privateKey, gas, gasPrice) with MonoTransactionSender {
 
   override def sendTransaction(transaction: Transaction) = super.sendTransaction(transaction)
 

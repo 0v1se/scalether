@@ -5,13 +5,11 @@ import java.math.BigInteger
 import org.web3j.crypto.Sign
 import org.web3j.crypto.Sign.SignatureData
 import org.web3j.rlp.{RlpEncoder, RlpList, RlpString, RlpType}
-import scalether.domain.Word
-import scalether.util.{Bytes, Hex}
-import TransactionSigner._
 import scalether.domain.request.Transaction
+import scalether.extra.transaction.TransactionSigner._
+import scalether.util.{Bytes, Hex}
 
-class TransactionSigner(key: Word) {
-  private val privateKey = key.toBigInteger
+class TransactionSigner(privateKey: BigInteger) {
   private val publicKey = Sign.publicKeyFromPrivate(privateKey)
 
   def sign(transaction: Transaction): Array[Byte] = {

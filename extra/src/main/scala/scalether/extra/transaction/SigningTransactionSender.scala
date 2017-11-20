@@ -4,23 +4,23 @@ import java.math.BigInteger
 
 import cats.Monad
 import cats.implicits._
+import org.web3j.crypto.Keys
 import scalether.core.Ethereum
+import scalether.domain.Address
 import scalether.domain.request.Transaction
-import scalether.domain.{Address, Word}
 import scalether.util.Hex
 
 import scala.language.higherKinds
 
 class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
                                      nonceProvider: NonceProvider[F],
-                                     from: Address,
-                                     key: Word,
+                                     privateKey: BigInteger,
                                      gas: BigInteger,
                                      gasPrice: BigInteger)
                                     (implicit f: Monad[F])
-  extends AbstractTransactionSender[F](ethereum, from, gas, gasPrice) {
+  extends AbstractTransactionSender[F](ethereum, Address.apply(Keys.getAddressFromPrivateKey(privateKey)), gas, gasPrice) {
 
-  private val signer = new TransactionSigner(key)
+  private val signer = new TransactionSigner(privateKey)
 
   def sendTransaction(transaction: Transaction) = if (transaction.nonce != null) {
     ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction))))

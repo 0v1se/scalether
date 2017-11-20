@@ -53,7 +53,7 @@ lazy val `scalaj-http` = common(project)
   .dependsOn(core)
 
 lazy val test = common(project)
-  .dependsOn(contract, `scalaj-http`)
+  .dependsOn(contract, `scalaj-http`, util)
 
 lazy val generator = common(project)
   .dependsOn(abi)
