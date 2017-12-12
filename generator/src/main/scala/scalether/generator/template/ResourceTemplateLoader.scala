@@ -11,10 +11,10 @@ class ResourceTemplateLoader(basePath: String) extends TemplateLoader {
   override def getReader(templateSource: scala.Any, encoding: String) =
     new InputStreamReader(templateSource.asInstanceOf[InputStream], encoding)
 
-  override def closeTemplateSource(templateSource: scala.Any) = {
+  override def closeTemplateSource(templateSource: scala.Any): Unit = {
     templateSource.asInstanceOf[InputStream].close()
   }
 
-  override def findTemplateSource(name: String) =
+  override def findTemplateSource(name: String): InputStream =
     getClass.getClassLoader.getResourceAsStream(basePath + "/" + name + ".ftl")
 }

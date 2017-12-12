@@ -21,7 +21,7 @@ case class AbiFunction(name: String,
                        outputs: List[AbiComponent] = Nil,
                        payable: Boolean = false,
                        constant: Boolean = false) extends AbiItem {
-  def getType = Option(`type`).getOrElse(AbiFunctionType.FUNCTION)
+  def getType: AbiFunctionType = Option(`type`).getOrElse(AbiFunctionType.FUNCTION)
 }
 
 case class AbiEvent(name: String,
@@ -29,11 +29,11 @@ case class AbiEvent(name: String,
                     anonymous: Boolean = false) extends AbiItem {
   val `type` = "event"
 
-  def indexed = inputs.filter(_.indexed)
+  def indexed: List[AbiEventParam] = inputs.filter(_.indexed)
 
-  def nonIndexed = inputs.filterNot(_.indexed)
+  def nonIndexed: List[AbiEventParam] = inputs.filterNot(_.indexed)
 
-  def all = indexed ++ nonIndexed
+  def all: List[AbiEventParam] = indexed ++ nonIndexed
 }
 
 case class AbiEventParam(name: String,

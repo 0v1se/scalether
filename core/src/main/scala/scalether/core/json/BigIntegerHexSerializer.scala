@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer
 import scalether.util.Hex
 
 object BigIntegerHexSerializer extends StdScalarSerializer[BigInteger](classOf[BigInteger]) {
-  def serialize(value: BigInteger, gen: JsonGenerator, provider: SerializerProvider) = {
+  def serialize(value: BigInteger, gen: JsonGenerator, provider: SerializerProvider): Unit = {
     gen.writeString(s"0x${value.toString(16)}")
   }
 }

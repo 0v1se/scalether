@@ -8,10 +8,10 @@ import scalether.util.Bytes
 class UintType(bits: Int) extends Type[BigInteger] {
   def string = s"uint$bits"
 
-  def encode(t: BigInteger) =
+  def encode(t: BigInteger): Array[Byte] =
     padLeft(t.toByteArray, Bytes.ZERO)
 
-  def decode(bytes: Array[Byte], offset: Int) = {
+  def decode(bytes: Array[Byte], offset: Int): Decoded[BigInteger] = {
     Decoded(new BigInteger(bytes.slice(offset, offset + 32)), offset + 32)
   }
 }

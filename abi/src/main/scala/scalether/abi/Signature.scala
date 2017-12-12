@@ -6,7 +6,7 @@ import scalether.abi.tuple.TupleType
 import scalether.util.{Hash, Hex}
 
 case class Signature[I, O](name: String, in: TupleType[I], out: TupleType[O]) {
-  def id = {
+  def id: String = {
     val bytes = toString.getBytes(StandardCharsets.US_ASCII)
     Hex.prefixed(Hash.sha3(bytes).slice(0, 4))
   }

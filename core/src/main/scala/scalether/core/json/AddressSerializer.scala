@@ -7,6 +7,6 @@ import scalether.domain.Address
 import scalether.util.Hex
 
 object AddressSerializer extends StdScalarSerializer[Address](classOf[Address]) {
-  def serialize(value: Address, gen: JsonGenerator, provider: SerializerProvider) =
+  def serialize(value: Address, gen: JsonGenerator, provider: SerializerProvider): Unit =
     gen.writeString(Hex.prefixed(value.bytes))
 }

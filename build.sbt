@@ -5,7 +5,7 @@ name := "scalether"
 
 version := "0.1-SNAPSHOT"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 
 def base(project: Project): Project = project
   .settings(organization := "org.scalether")

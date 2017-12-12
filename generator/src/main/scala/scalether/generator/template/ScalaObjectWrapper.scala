@@ -31,29 +31,29 @@ class ScalaObjectWrapper extends ObjectWrapper {
 
 class ScalaDateWrapper(val date: Date, wrapper: ObjectWrapper)
   extends ScalaBaseWrapper(date, wrapper) with TemplateDateModel {
-  def getDateType = TemplateDateModel.UNKNOWN
+  def getDateType: Int = TemplateDateModel.UNKNOWN
 
-  def getAsDate = date
+  def getAsDate: Date = date
 }
 
 class ScalaSeqWrapper[T](val seq: Seq[T], wrapper: ObjectWrapper)
   extends ScalaBaseWrapper(seq, wrapper) with TemplateSequenceModel {
-  def get(index: Int) = wrapper.wrap(seq(index))
+  def get(index: Int): TemplateModel = wrapper.wrap(seq(index))
 
-  def size = seq.size
+  def size: Int = seq.size
 }
 
 class ScalaMapWrapper(val map: collection.Map[String, _], wrapper: ObjectWrapper)
   extends ScalaBaseWrapper(map, wrapper) with TemplateHashModelEx {
   override def get(key: String): TemplateModel = wrapper.wrap(map.get(key).orElse(Some(super.get(key))))
 
-  override def isEmpty = map.isEmpty
+  override def isEmpty: Boolean = map.isEmpty
 
   def values = new ScalaIterableWrapper(map.values, wrapper)
 
   val keys = new ScalaIterableWrapper(map.keys, wrapper)
 
-  def size = map.size
+  def size: Int = map.size
 }
 
 class ScalaIterableWrapper[T](val it: Iterable[T], wrapper: ObjectWrapper)
@@ -63,6 +63,7 @@ class ScalaIterableWrapper[T](val it: Iterable[T], wrapper: ObjectWrapper)
 
 class ScalaIteratorWrapper[T](val it: Iterator[T], wrapper: ObjectWrapper)
   extends ScalaBaseWrapper(it, wrapper) with TemplateModelIterator with TemplateCollectionModel {
+
   def next = wrapper.wrap(it.next())
 
   def hasNext = it.hasNext

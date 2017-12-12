@@ -11,7 +11,7 @@ class Tuple3Type[T1, T2, T3](val type1: Type[T1], val type2: Type[T2], val type3
 
   def types = List(type1, type2, type3)
 
-  def encode(value: (T1, T2, T3)) = {
+  def encode(value: (T1, T2, T3)): Array[Byte] = {
     val head = ListBuffer[Byte]()
     val tail = ListBuffer[Byte]()
     if (type1.dynamic) {
@@ -35,7 +35,7 @@ class Tuple3Type[T1, T2, T3](val type1: Type[T1], val type2: Type[T2], val type3
     (head ++ tail).toArray
   }
 
-  def decode(bytes: Array[Byte], offset: Int) = {
+  def decode(bytes: Array[Byte], offset: Int): Decoded[(T1, T2, T3)] = {
     val v1 = if (type1.dynamic) {
       val bytesOffset = Uint256Type.decode(bytes, offset + headOffset(0)).value.intValue()
       type1.decode(bytes, offset + bytesOffset)

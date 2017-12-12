@@ -13,10 +13,10 @@ trait Bytes {
   def toBigInteger: BigInteger =
     new BigInteger(Hex.to(bytes), 16)
 
-  override def toString =
+  override def toString: String =
     Hex.prefixed(bytes)
 
-  override def equals(obj: scala.Any) = {
+  override def equals(obj: scala.Any): Boolean = {
     if (!obj.isInstanceOf[Bytes]) {
       false
     } else {
@@ -24,5 +24,5 @@ trait Bytes {
     }
   }
 
-  override def hashCode() = bytes.toSeq.hashCode()
+  override def hashCode(): Int = bytes.toSeq.hashCode()
 }

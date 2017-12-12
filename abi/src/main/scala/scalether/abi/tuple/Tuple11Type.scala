@@ -11,7 +11,7 @@ class Tuple11Type[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11](val type1: Type[
 
   def types = List(type1, type2, type3, type4, type5, type6, type7, type8, type9, type10, type11)
 
-  def encode(value: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)) = {
+  def encode(value: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)): Array[Byte] = {
     val head = ListBuffer[Byte]()
     val tail = ListBuffer[Byte]()
     if (type1.dynamic) {
@@ -83,7 +83,7 @@ class Tuple11Type[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11](val type1: Type[
     (head ++ tail).toArray
   }
 
-  def decode(bytes: Array[Byte], offset: Int) = {
+  def decode(bytes: Array[Byte], offset: Int): Decoded[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)] = {
     val v1 = if (type1.dynamic) {
       val bytesOffset = Uint256Type.decode(bytes, offset + headOffset(0)).value.intValue()
       type1.decode(bytes, offset + bytesOffset)

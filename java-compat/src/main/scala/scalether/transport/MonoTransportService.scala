@@ -9,7 +9,7 @@ class MonoTransportService(rpcUrl: String, requestTimeoutMs: Int = 10000, readTi
 
   private val client = new DefaultAsyncHttpClient()
 
-  override def execute(request: String) = {
+  override def execute(request: String): Mono[String] = {
     val req = new RequestBuilder()
       .setReadTimeout(readTimeoutMs)
       .setRequestTimeout(requestTimeoutMs)
@@ -17,7 +17,7 @@ class MonoTransportService(rpcUrl: String, requestTimeoutMs: Int = 10000, readTi
       .setBody(request)
       .addHeader("Content-Type", "application/json")
       .setMethod("POST")
-    Mono.fromFuture(client.executeRequest(req).toCompletableFuture
-      .thenApply(_.getResponseBody))
+    Mono.defer(() => Mono.fromFuture(client.executeRequest(req).toCompletableFuture
+      .thenApply(_.getResponseBody)))
   }
 }

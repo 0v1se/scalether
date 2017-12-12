@@ -5,7 +5,7 @@ trait Type[T] {
 
   def size: Option[Int] = Some(32)
 
-  def dynamic = size.isEmpty
+  def dynamic: Boolean = size.isEmpty
 
   def encode(value: T): Array[Byte]
 

@@ -13,7 +13,7 @@ case class Event[IT <: TupleType[_], NI](name: String, types: List[Type[_]], ind
 
   override def toString = s"$name(${types.map(_.string).mkString(",")})"
 
-  def id = {
+  def id: String = {
     val bytes = toString.getBytes(StandardCharsets.US_ASCII)
     Hex.prefixed(Hash.sha3(bytes))
   }

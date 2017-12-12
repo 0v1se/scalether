@@ -2,7 +2,7 @@ package scalether.core
 
 import cats.Functor
 import cats.implicits._
-import org.slf4j.LoggerFactory
+import org.slf4j.{Logger, LoggerFactory}
 import scalether.core.json.JsonConverter
 import scalether.domain.{Request, Response}
 
@@ -25,8 +25,4 @@ class EthereumService[F[_]](service: TransportService[F], log: Boolean = false)(
       json.fromJson[Response[T]](responseJson)
     })
   }
-}
-
-object EthereumService {
-  val logger = LoggerFactory.getLogger(classOf[EthereumService[Try]])
 }

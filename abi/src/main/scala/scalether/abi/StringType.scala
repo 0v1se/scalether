@@ -7,12 +7,12 @@ object StringType extends Type[String] {
 
   override def size = None
 
-  def encode(value: String) = {
+  def encode(value: String): Array[Byte] = {
     val bytes = value.getBytes(StandardCharsets.UTF_8)
     BytesType.encode(bytes)
   }
 
-  def decode(bytes: Array[Byte], offset: Int) = {
+  def decode(bytes: Array[Byte], offset: Int): Decoded[String] = {
     val decoded = BytesType.decode(bytes, offset)
     Decoded(new String(decoded.value, StandardCharsets.UTF_8), decoded.offset)
   }

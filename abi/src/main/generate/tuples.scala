@@ -17,7 +17,7 @@ def generate(arity: Int, writer: PrintWriter): Unit = {
   writer.println()
   writer.println(s"  def types = List(${range.map(i => "type" + i).mkString(", ")})")
   writer.println()
-  writer.println(s"  def encode(value: ($ts)) = {")
+  writer.println(s"  def encode(value: ($ts)): Array[Byte] = {")
   writer.println(s"    val head = ListBuffer[Byte]()")
   writer.println(s"    val tail = ListBuffer[Byte]()")
   for (i <- range) {
@@ -31,7 +31,7 @@ def generate(arity: Int, writer: PrintWriter): Unit = {
   writer.println(s"    (head ++ tail).toArray")
   writer.println(s"  }")
   writer.println()
-  writer.println(s"  def decode(bytes: Array[Byte], offset: Int) = {")
+  writer.println(s"  def decode(bytes: Array[Byte], offset: Int): Decoded[($ts)] = {")
   for (i <- range) {
     writer.println(s"    val v$i = if (type$i.dynamic) {")
     writer.println(s"      val bytesOffset = Uint256Type.decode(bytes, offset + headOffset(${i - 1})).value.intValue()")

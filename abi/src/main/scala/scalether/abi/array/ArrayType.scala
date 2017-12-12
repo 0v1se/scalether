@@ -8,7 +8,7 @@ abstract class ArrayType[T](`type`: Type[T])
                            (implicit classTag: ClassTag[T])
   extends Type[Array[T]] {
 
-  def encode(value: Array[T]) =
+  def encode(value: Array[T]): Array[Byte] =
     value.flatMap(t => `type`.encode(t))
 
   protected def decode(length: Int, bytes: Array[Byte], offset: Int): Decoded[Array[T]] = {

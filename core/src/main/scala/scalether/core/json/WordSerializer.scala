@@ -7,6 +7,6 @@ import scalether.domain.Word
 import scalether.util.Hex
 
 object WordSerializer extends StdScalarSerializer[Word](classOf[Word]) {
-  def serialize(value: Word, gen: JsonGenerator, provider: SerializerProvider) =
+  def serialize(value: Word, gen: JsonGenerator, provider: SerializerProvider): Unit =
     gen.writeString(Hex.prefixed(value.bytes))
 }

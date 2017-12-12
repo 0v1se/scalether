@@ -1,6 +1,6 @@
 package scalether.abi.array
 
-import scalether.abi.Type
+import scalether.abi.{Decoded, Type}
 
 import scala.reflect.ClassTag
 
@@ -15,7 +15,7 @@ class FixArrayType[T](length: Int, `type`: Type[T])
 
   def string = s"${`type`.string}[$length]"
 
-  def decode(bytes: Array[Byte], offset: Int) =
+  def decode(bytes: Array[Byte], offset: Int): Decoded[Array[T]] =
     decode(length, bytes, offset)
 }
 

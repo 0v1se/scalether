@@ -11,9 +11,9 @@ import scalether.java.implicits._
 class MonoSigningTransactionSender(ethereum: MonoEthereum, nonceProvider: MonoNonceProvider, privateKey: BigInteger, gas: BigInteger, gasPrice: BigInteger)
   extends SigningTransactionSender[Mono](ethereum, nonceProvider, privateKey, gas, gasPrice) with MonoTransactionSender {
 
-  override def sendTransaction(transaction: Transaction) = super.sendTransaction(transaction)
+  override def sendTransaction(transaction: Transaction): Mono[String] = super.sendTransaction(transaction)
 
-  override def call(transaction: Transaction) = super.call(transaction)
+  override def call(transaction: Transaction): Mono[String] = super.call(transaction)
 
-  override protected def fill(transaction: Transaction) = super.fill(transaction)
+  override protected def fill(transaction: Transaction): Transaction = super.fill(transaction)
 }
