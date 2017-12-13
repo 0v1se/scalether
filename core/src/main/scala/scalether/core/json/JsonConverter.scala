@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import scalether.domain.request.TopicFilter
 import scalether.domain.{Address, Word}
 
 import scala.reflect.Manifest
@@ -26,6 +27,7 @@ class JsonConverter {
     mod.addSerializer(classOf[Address], AddressSerializer)
     mod.addDeserializer(classOf[Word], WordDeserializer)
     mod.addSerializer(classOf[Word], WordSerializer)
+    mod.addSerializer(classOf[TopicFilter], TopicFilterSerializer)
     mod
   }
 
