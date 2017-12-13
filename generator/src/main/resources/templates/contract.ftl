@@ -193,13 +193,13 @@ object ${truffle.name} extends ContractObject {
 
 <#assign map={}/>
 <#list truffle.abi as item>
-  <#if (map[item.name]??)>
-    <#assign itemName="${item.name}_${map[item.name]}"/>
-  <#else>
-    <#assign map=map + {item.name: 1}/>
-    <#assign itemName=item.name/>
-  </#if>
   <#if item.type == "event">
+    <#if (map[item.name]??)>
+      <#assign itemName="${item.name}_${map[item.name]}"/>
+    <#else>
+      <#assign map=map + {item.name: 1}/>
+      <#assign itemName=item.name/>
+    </#if>
 case class ${itemName}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
 
 object ${itemName} {
