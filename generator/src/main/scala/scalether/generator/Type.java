@@ -2,7 +2,6 @@ package scalether.generator;
 
 public enum Type {
     SCALA("", "", "", "", "", "cats.{Functor, Monad}", "cats.implicits._"),
-    FUTURE("CompletableFuture", "java.util.concurrent.CompletableFuture", "scalether.java.implicits._", "JavaTransactionSender", "JavaTransactionPoller"),
     MONO("Mono", "reactor.core.publisher.Mono", "scalether.java.implicits._", "MonoTransactionSender", "MonoTransactionPoller");
 
     private final String f;

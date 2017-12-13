@@ -14,8 +14,8 @@ import scalether.util.Hex
 import scala.io.Source
 
 class ContractGenerator {
-  private val converter = new JsonConverter
-  private val configuration = new Configuration(Configuration.VERSION_2_3_23)
+  val converter = new JsonConverter
+  val configuration = new Configuration(Configuration.VERSION_2_3_23)
   configuration.setTemplateLoader(new ResourceTemplateLoader("templates"))
   configuration.setDefaultEncoding(StandardCharsets.UTF_8.displayName())
   configuration.setObjectWrapper(new ScalaObjectWrapper)
@@ -71,6 +71,23 @@ object ContractGenerator {
 
   def generate(jsonPath: String, sourcePath: String, packageName: String, `type`: Type): Unit = {
     val truffle = generator.converter.fromJson[TruffleContract](Source.fromFile(jsonPath).mkString)
+    val source = generator.generate(truffle, packageName, `type`)
+    val resultPath = sourcePath + "/" + packageName.replace(".", "/")
+    new File(resultPath).mkdirs()
+    Files.write(Paths.get(resultPath + "/" + truffle.name + ".scala"), source.getBytes())
+  }
+}
+
+object ContractByAbiGenerator {
+  private val generator = new ContractGenerator
+
+  def main(args: Array[String]): Unit = {
+    generate(args(0), args(1), args(2), args(3), if (args.length > 4) Type.valueOf(args(4)) else Type.SCALA)
+  }
+
+  def generate(name: String, jsonPath: String, sourcePath: String, packageName: String, `type`: Type): Unit = {
+    val abi = generator.converter.fromJson[List[AbiItem]](Source.fromFile(jsonPath).mkString)
+    val truffle = TruffleContract(name, abi, "0x")
     val source = generator.generate(truffle, packageName, `type`)
     val resultPath = sourcePath + "/" + packageName.replace(".", "/")
     new File(resultPath).mkdirs()

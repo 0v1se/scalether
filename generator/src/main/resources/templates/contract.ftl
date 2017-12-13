@@ -191,14 +191,21 @@ object ${truffle.name} extends ContractObject {
   </#if>
 }
 
+<#assign map={}/>
 <#list truffle.abi as item>
+  <#if (map[item.name]??)>
+    <#assign itemName="${item.name}_${map[item.name]}"/>
+  <#else>
+    <#assign map=map + {item.name: 1}/>
+    <#assign itemName=item.name/>
+  </#if>
   <#if item.type == "event">
-case class ${item.name}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
+case class ${itemName}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
 
-object ${item.name} {
+object ${itemName} {
   val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
 
-  def apply(log: response.Log): ${item.name} = {
+  def apply(log: response.Log): ${itemName} = {
     assert(log.topics.head == event.id)
 
     <#if item.nonIndexed?has_content>val decodedData = event.decode(log.data)</#if>
@@ -214,7 +221,7 @@ object ${item.name} {
     val ${arg.name} = <@event_non_indexed_arg arg arg?index/>
       </#list>
     </#if>
-    ${item.name}(<#list item.all as arg>${arg.name}<#if arg?has_next>, </#if></#list>)
+    ${itemName}(<#list item.all as arg>${arg.name}<#if arg?has_next>, </#if></#list>)
   }
 }
 
