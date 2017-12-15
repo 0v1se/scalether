@@ -16,17 +16,20 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
                                      nonceProvider: NonceProvider[F],
                                      privateKey: BigInteger,
                                      gas: BigInteger,
-                                     gasPrice: BigInteger)
+                                     gasPrice: GasPriceProvider[F])
                                     (implicit f: Monad[F])
   extends AbstractTransactionSender[F](ethereum, Address.apply(Keys.getAddressFromPrivateKey(privateKey)), gas, gasPrice) {
 
   private val signer = new TransactionSigner(privateKey)
 
-  def sendTransaction(transaction: Transaction) = if (transaction.nonce != null) {
-    ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction))))
-  } else {
-    nonceProvider.nonce(address = from).flatMap(
-      nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(fill(transaction.copy(nonce = nonce)))))
-    )
+  def sendTransaction(transaction: Transaction): F[String] = fill(transaction).flatMap {
+    transaction =>
+      if (transaction.nonce != null) {
+        ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction)))
+      } else {
+        nonceProvider.nonce(address = from).flatMap(
+          nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce))))
+        )
+      }
   }
 }
