@@ -5,7 +5,6 @@ import java.math.BigInteger
 import reactor.core.publisher.Mono
 import scalether.core.MonoEthereum
 import scalether.domain.request.Transaction
-import scalether.domain.{Address, Word}
 import scalether.java.implicits._
 
 class MonoSigningTransactionSender(ethereum: MonoEthereum, nonceProvider: MonoNonceProvider, privateKey: BigInteger, gas: BigInteger, gasPrice: GasPriceProvider[Mono])

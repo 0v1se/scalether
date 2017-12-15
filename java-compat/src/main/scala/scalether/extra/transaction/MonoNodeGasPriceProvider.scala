@@ -1,0 +1,6 @@
+package scalether.extra.transaction
+
+import reactor.core.publisher.Mono
+import scalether.core.MonoEthereum
+
+class MonoNodeGasPriceProvider(monoEthereum: MonoEthereum) extends NodeGasPriceProvider[Mono](monoEthereum)
