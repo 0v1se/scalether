@@ -32,4 +32,8 @@ class TransactionSignerIntegrationSpec extends FlatSpec with PropertyChecks with
       assert(test.state.get == (value: BigInteger))
     }
   }
+
+  it should "get block by number" in {
+    println(ethereum.ethGetBlockByNumber(BigInteger.valueOf(15), false).get)
+  }
 }

@@ -28,11 +28,11 @@ class Ethereum[F[_]](service: EthereumService[F])
   def ethBlockNumber(): F[BigInteger] =
     exec("eth_blockNumber")
 
-  def ethGetBlockByHash(hash: String): F[Block] =
-    exec("eth_getBlockByHash", hash)
+  def ethGetBlockByHash(hash: String, fullTransactions: Boolean): F[Block] =
+    exec("eth_getBlockByHash", hash, fullTransactions)
 
-  def ethGetBlockByNumber(number: BigInteger): F[Block] =
-    exec("eth_getBlockByNumber", number)
+  def ethGetBlockByNumber(number: BigInteger, fullTransactions: Boolean): F[Block] =
+    exec("eth_getBlockByNumber", number, fullTransactions)
 
   def ethCall(transaction: Transaction, defaultBlockParameter: String): F[String] =
     exec("eth_call", transaction, defaultBlockParameter)
