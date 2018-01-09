@@ -6,7 +6,7 @@ import java.util
 import reactor.core.publisher.Mono
 import scalether.domain.{Address, response}
 import scalether.domain.request.{LogFilter, Transaction}
-import scalether.domain.response.{Log, TransactionReceipt}
+import scalether.domain.response.{Block, Log, TransactionReceipt}
 import scalether.java.Lists
 import scalether.java.implicits._
 
@@ -27,6 +27,12 @@ class MonoEthereum(service: MonoEthereumService)
 
   override def ethBlockNumber(): Mono[BigInteger] =
     super.ethBlockNumber()
+
+  override def ethGetBlockByHash(hash: String): Mono[Block] =
+    super.ethGetBlockByHash(hash)
+
+  override def ethGetBlockByNumber(number: BigInteger): Mono[Block] =
+    super.ethGetBlockByNumber(number)
 
   override def ethCall(transaction: Transaction, defaultBlockParameter: String): Mono[String] =
     super.ethCall(transaction, defaultBlockParameter)
