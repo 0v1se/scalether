@@ -112,7 +112,7 @@
 <#macro event_non_indexed_arg arg index><#compress>
     decodedData._${index + 1}
 </#compress></#macro>
-<#macro args inputs><#if inputs?has_content>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
+<#macro args inputs payable=false><#if inputs?has_content || payable>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next || payable>, </#if></#list><#if payable>msgValue: BigInteger</#if>)</#if></#macro>
 <#macro args_values inputs><#list inputs as inp>${inp.name}<#if inp?has_next>, </#if></#list></#macro>
 <#macro args_params inputs><#if inputs?size != 0>(</#if><@args_values inputs/><#if inputs?size != 0>)</#if></#macro>
 <#macro args_tuple inputs><#if inputs?size != 1>(</#if><@args_values inputs/><#if inputs?size != 1>)</#if></#macro>
@@ -160,8 +160,8 @@ class ${truffle.name}<@monad_param/>(address: Address, sender: <@sender/>)<@impl
   def call${item.name?cap_first}<@args item.inputs/>: <@monad/>[<@output_type item.outputs/>] =
     call(<@signature item/>, <@args_tuple item.inputs/>)
 
-  def ${item.name}<@args item.inputs/>: <@monad/>[String] =
-    sendTransaction(<@signature item/>, <@args_tuple item.inputs/>)
+  def ${item.name}<@args item.inputs item.payable/>: <@monad/>[String] =
+    sendTransaction(<@signature item/>, <@args_tuple item.inputs/><#if item.payable>, msgValue</#if>)
             </#if>
 
         </#if>

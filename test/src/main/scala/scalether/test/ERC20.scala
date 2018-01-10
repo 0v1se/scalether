@@ -2,16 +2,13 @@ package scalether.test
 
 import java.math.BigInteger
 
-import cats.{Functor, Monad}
-import cats.implicits._
+import cats.Functor
 import scalether.abi._
 import scalether.abi.tuple._
 import scalether.contract._
-import scalether.core._
 import scalether.domain._
-import scalether.domain.request.Transaction
 import scalether.domain.response.Log
-import scalether.extra.transaction.{TransactionSender, _}
+import scalether.extra.transaction.TransactionSender
 import scalether.util.Hex
 
 import scala.language.higherKinds
