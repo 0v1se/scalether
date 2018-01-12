@@ -37,6 +37,9 @@ class Ethereum[F[_]](service: EthereumService[F])
   def ethCall(transaction: Transaction, defaultBlockParameter: String): F[String] =
     exec("eth_call", transaction, defaultBlockParameter)
 
+  def ethEstimateGas(transaction: Transaction, defaultBlockParameter: String): F[BigInteger] =
+    exec("eth_estimateGas", transaction, defaultBlockParameter)
+
   def ethSendTransaction(transaction: Transaction): F[String] =
     exec("eth_sendTransaction", transaction)
 

@@ -59,7 +59,7 @@ lazy val generator = common(project)
   .dependsOn(abi)
 
 lazy val `java-compat` = common(project)
-  .dependsOn(abi, extra)
+  .dependsOn(abi, extra, contract)
 
 lazy val root = base(project in file(".")).
   aggregate(util, domain, core, abi, contract, extra, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)

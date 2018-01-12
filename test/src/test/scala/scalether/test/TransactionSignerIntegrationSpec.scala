@@ -28,7 +28,7 @@ class TransactionSignerIntegrationSpec extends FlatSpec with PropertyChecks with
   it should "sign contract deployments and calls" in {
     forAll(Gen.posNum[Long]) { value =>
       val test = IntegrationTest.deployAndWait(sender, poller).get
-      poller.waitForTransaction(test.setState(value))
+      poller.waitForTransaction(test.setState(value).execute())
       assert(test.state.get == (value: BigInteger))
     }
   }

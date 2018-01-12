@@ -10,7 +10,7 @@ class ContractGeneratorSpec extends FlatSpec {
   val converter = new JsonConverter
   val generator = new ContractGenerator
 
-  def generate(name: String) = {
+  def generate(name: String): String = {
     val json = Source.fromResource(s"$name.json").mkString
     val truffle = converter.fromJson[TruffleContract](json)
     generator.generate(truffle, "org.daomao.contract", Type.SCALA)
@@ -20,11 +20,7 @@ class ContractGeneratorSpec extends FlatSpec {
     println(generate("IssuedToken"))
   }
 
-  "Generator" should "generate ERC20" taggedAs ManualTag in {
-    println(generate("ERC20"))
-  }
-
-  "Generator" should "generate ERC20Basic" taggedAs ManualTag in {
-    println(generate("ERC20Basic"))
+  it should "generate Token" taggedAs ManualTag in {
+    println(generate("Token"))
   }
 }

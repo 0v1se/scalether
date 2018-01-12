@@ -85,7 +85,7 @@
     </#if>
 </#compress></#macro>
 <#macro signature item>Signature("${item.name}", <@type item.inputs/>, <@type item.outputs/>)</#macro>
-<#macro output_type types=[]><#compress>
+<#macro tuple_type types=[]><#compress>
     <#if types?size == 1 || types?size == 0>
         <@scala_type types/>
     <#else>
@@ -154,14 +154,11 @@ class ${truffle.name}<@monad_param/>(address: Address, sender: <@sender/>)<@impl
   <#list truffle.abi as item>
         <#if item.type != 'event' && item.name??>
             <#if item.constant>
-  def ${item.name}<@args item.inputs/>: <@monad/>[<@output_type item.outputs/>] =
-    call(<@signature item/>, <@args_tuple item.inputs/>)
+  def ${item.name}<@args item.inputs/>: <@monad/>[<@tuple_type item.outputs/>] =
+    new <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>(address, <@signature item/>, <@args_tuple item.inputs/>, sender<#if item.payable>, msgValue</#if>).call()
             <#else>
-  def call${item.name?cap_first}<@args item.inputs/>: <@monad/>[<@output_type item.outputs/>] =
-    call(<@signature item/>, <@args_tuple item.inputs/>)
-
-  def ${item.name}<@args item.inputs item.payable/>: <@monad/>[String] =
-    sendTransaction(<@signature item/>, <@args_tuple item.inputs/><#if item.payable>, msgValue</#if>)
+  def ${item.name}<@args item.inputs item.payable/>: <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>[<#if !(preparedTransaction?has_content)><@monad/>, </#if><@tuple_type item.inputs/>, <@tuple_type item.outputs/>] =
+    new <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>(address, <@signature item/>, <@args_tuple item.inputs/>, sender<#if item.payable>, msgValue</#if>)
             </#if>
 
         </#if>

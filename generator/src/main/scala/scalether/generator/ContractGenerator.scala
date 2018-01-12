@@ -31,6 +31,7 @@ class ContractGenerator {
           "transactionSender" -> `type`.getTransactionSender,
           "transactionPoller" -> `type`.getTransactionPoller,
           "imports" -> `type`.getImports.toList,
+          "preparedTransaction" -> `type`.getPreparedTransaction,
           "truffle" -> contract,
           "package" -> packageName,
           "abi" -> escape(converter.toJson(contract.abi))

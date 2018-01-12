@@ -14,9 +14,11 @@ abstract class AbstractTransactionSender[F[_]](val ethereum: Ethereum[F], val fr
                                               (implicit m: Monad[F])
   extends TransactionSender[F] {
 
-  def call(transaction: Transaction): F[String] = ethereum.ethCall(
-    transaction.copy(from = from), "latest"
-  )
+  def call(transaction: Transaction): F[String] =
+    ethereum.ethCall(transaction.copy(from = from), "latest")
+
+  override def estimate(transaction: Transaction): F[BigInteger] =
+    ethereum.ethEstimateGas(transaction.copy(from = from), "latest")
 
   protected def fill(transaction: Transaction): F[Transaction] = gasPrice.gasPrice.map {
     gasPrice =>

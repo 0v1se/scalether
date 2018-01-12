@@ -14,5 +14,7 @@ class MonoSigningTransactionSender(ethereum: MonoEthereum, nonceProvider: MonoNo
 
   override def call(transaction: Transaction): Mono[String] = super.call(transaction)
 
+  override def estimate(transaction: Transaction): Mono[BigInteger] = super.estimate(transaction)
+
   override protected def fill(transaction: Transaction): Mono[Transaction] = super.fill(transaction)
 }
