@@ -12,8 +12,12 @@ class MonoPreparedTransaction[I, O](address: Address,
                                     signature: Signature[I, O],
                                     in: I,
                                     sender: MonoTransactionSender,
-                                    value: BigInteger = null)
-  extends PreparedTransaction[Mono, I, O](address, signature, in, sender, value) {
+                                    value: BigInteger = null,
+                                    gas: BigInteger = null)
+  extends PreparedTransaction[Mono, I, O](address, signature, in, sender, value, gas) {
+
+  override def withGas(newGas: BigInteger): MonoPreparedTransaction[I, O] =
+    new MonoPreparedTransaction[I, O](address, signature, in, sender, value, newGas)
 
   override def call(): Mono[O] = super.call()
 
