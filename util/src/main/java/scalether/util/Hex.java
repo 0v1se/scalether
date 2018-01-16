@@ -38,6 +38,9 @@ public class Hex {
         if (s.startsWith("0x")) {
             s = s.substring(2);
         }
+        if (s.equals("0")) {
+            return new byte[0];
+        }
         int len = s.length();
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
