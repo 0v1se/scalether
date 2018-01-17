@@ -14,7 +14,7 @@ class AddressSpec extends FlatSpec with PropertyChecks {
     assert("0x" + BigInt(bytes).toString(16) == address)
   }
 
-  val address = Gen.listOfN(20, arbitrary[Byte])
+  val address: Gen[List[Byte]] = Gen.listOfN(20, arbitrary[Byte])
 
   it should "decode encoded" in {
     forAll(address) { list =>

@@ -3,7 +3,7 @@ package scalether.abi.tuple
 import scalether.abi.Type
 
 abstract class TupleType[T] extends Type[T] {
-  override def size = None
+  override def size: Option[Int] = None
 
   def types: List[Type[_]]
 

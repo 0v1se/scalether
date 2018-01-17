@@ -7,7 +7,7 @@ import scalether.util.{Bytes, Padding}
 object BytesType extends Type[Array[Byte]] {
   def string = "bytes"
 
-  override def size = None
+  override def size: Option[Int] = None
 
   def encode(bytes: Array[Byte]): Array[Byte] =
     Uint256Type.encode(BigInteger.valueOf(bytes.length)) ++ Padding.padRight(bytes, Bytes.ZERO)

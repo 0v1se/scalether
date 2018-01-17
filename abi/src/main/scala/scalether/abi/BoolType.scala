@@ -3,8 +3,8 @@ package scalether.abi
 import scalether.util.{Bytes, Padding}
 
 object BoolType extends Type[Boolean] {
-  val FALSE = Bytes.filled(32, Bytes.ZERO)
-  val TRUE = Padding.padLeft(Array(Bytes.ONE), Bytes.ZERO)
+  val FALSE: Array[Byte] = Bytes.filled(32, Bytes.ZERO)
+  val TRUE: Array[Byte] = Padding.padLeft(Array(Bytes.ONE), Bytes.ZERO)
 
   def string = "bool"
 
