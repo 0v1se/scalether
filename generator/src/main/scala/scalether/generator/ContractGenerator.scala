@@ -4,12 +4,10 @@ import java.io._
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import freemarker.template.Configuration
-import scalether.abi.json.AbiItem
+import scalether.abi.json.{AbiItem, TruffleContract}
 import scalether.core.json.JsonConverter
 import scalether.generator.template.{ResourceTemplateLoader, ScalaObjectWrapper}
-import scalether.util.Hex
 
 import scala.io.Source
 
@@ -94,10 +92,4 @@ object ContractByAbiGenerator {
     new File(resultPath).mkdirs()
     Files.write(Paths.get(resultPath + "/" + truffle.name + ".scala"), source.getBytes())
   }
-}
-
-case class TruffleContract(@JsonProperty("contractName") name: String,
-                           @JsonProperty("abi") abi: List[AbiItem],
-                           @JsonProperty("bytecode") bin: String) {
-  def isAbstract: Boolean = Hex.toBytes(bin).length == 0
 }
