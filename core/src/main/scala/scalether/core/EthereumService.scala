@@ -2,13 +2,11 @@ package scalether.core
 
 import cats.Functor
 import cats.implicits._
-import org.slf4j.{Logger, LoggerFactory}
 import scalether.core.json.JsonConverter
 import scalether.domain.{Request, Response}
 
 import scala.language.higherKinds
 import scala.reflect.Manifest
-import scala.util.Try
 
 class EthereumService[F[_]](service: TransportService[F], log: Boolean = false)(implicit f: Functor[F]) {
   val json = new JsonConverter

@@ -10,8 +10,7 @@ import scalether.domain.request.Transaction
 
 import scala.language.higherKinds
 
-abstract class AbstractTransactionSender[F[_]](val ethereum: Ethereum[F], val from: Address, val gas: BigInteger, val gasPrice: GasPriceProvider[F])
-                                              (implicit m: Monad[F])
+abstract class AbstractTransactionSender[F[_]: Monad](val ethereum: Ethereum[F], val from: Address, val gas: BigInteger, val gasPrice: GasPriceProvider[F])
   extends TransactionSender[F] {
 
   def call(transaction: Transaction): F[String] =
