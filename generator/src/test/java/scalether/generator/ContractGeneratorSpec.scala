@@ -1,6 +1,7 @@
 package scalether.generator
 
 import org.scalatest.FlatSpec
+import scalether.abi.json.TruffleContract
 import scalether.core.json.JsonConverter
 import scalether.test.ManualTag
 
