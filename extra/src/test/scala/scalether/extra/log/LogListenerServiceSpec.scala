@@ -28,6 +28,7 @@ class LogListenerServiceSpec extends FlatSpec with MockitoSugar {
     verifyNoMoreInteractions(ethereum, listener)
   }
 
+/*
   it should "load logs from ZERO block" in {
     val state = new SimpleState[BigInteger, Try](None)
     val ethereum = mock[Ethereum[Try]]
@@ -50,4 +51,5 @@ class LogListenerServiceSpec extends FlatSpec with MockitoSugar {
     verify(listener).onLog(log, confirmed = true)
     verifyNoMoreInteractions(ethereum, listener)
   }
+*/
 }
