@@ -202,6 +202,9 @@ case class ${itemName}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/
 object ${itemName} {
   val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
 
+  @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
+    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
+
   def apply(log: response.Log): ${itemName} = {
     assert(log.topics.head == event.id)
 
