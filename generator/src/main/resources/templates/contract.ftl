@@ -143,6 +143,7 @@ import scalether.abi.array._
 import scalether.abi.tuple._
 import scalether.contract._
 import scalether.domain._
+import scalether.domain.request._
 import scalether.extra.transaction._
 import scalether.util.Hex
 
