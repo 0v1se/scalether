@@ -4,7 +4,7 @@ import cats.Monad
 import cats.implicits._
 import scalether.core.Ethereum
 import scalether.domain.response.TransactionReceipt
-import scalether.extra.timer.Poller
+import scalether.poller.Poller
 
 import scala.language.higherKinds
 

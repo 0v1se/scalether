@@ -1,4 +1,4 @@
-package scalether.extra.timer
+package scalether.poller.mono
 
 import reactor.core.publisher.MonoSink
 

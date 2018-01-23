@@ -3,7 +3,7 @@ package scalether.test
 import cats.implicits._
 import scalether.core.{Ethereum, EthereumService}
 import scalether.domain.implicits._
-import scalether.extra.timer.tries.implicits._
+import scalether.poller.tries.implicits._
 import scalether.extra.transaction.{SigningTransactionSender, SimpleNonceProvider, TransactionPoller, ValGasPriceProvider}
 import scalether.transport.ScalajHttpTransportService
 
@@ -18,5 +18,5 @@ trait IntegrationSpec {
     2000000,
     new ValGasPriceProvider[Try](10)
   )
-  val poller = new TransactionPoller[Try](ethereum)
+  val poller:TransactionPoller[Try] = new TransactionPoller(ethereum)
 }

@@ -1,8 +1,8 @@
-package scalether.extra.timer.future
+package scalether.poller.futures
 
 import java.util.concurrent.{Executors, TimeUnit}
 
-import scalether.extra.timer.Sleeper
+import scalether.poller.Sleeper
 
 import scala.concurrent.{Future, Promise}
 

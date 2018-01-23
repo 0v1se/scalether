@@ -40,8 +40,14 @@ lazy val core = common(project)
 lazy val abi = common(project)
   .dependsOn(core)
 
-lazy val extra = common(project)
+lazy val poller = common(project)
   .dependsOn(core)
+
+lazy val transaction = common(project)
+  .dependsOn(core, poller)
+
+lazy val extra = common(project)
+  .dependsOn(core, transaction)
 
 lazy val contract = common(project)
   .dependsOn(abi, extra)

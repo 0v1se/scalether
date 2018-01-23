@@ -1,8 +1,9 @@
-package scalether.extra.timer
+package scalether.poller.mono
 
 import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit}
 
 import reactor.core.publisher.Mono
+import scalether.poller.Sleeper
 
 class MonoSleeper extends Sleeper[Mono] {
   val executor: ScheduledExecutorService = Executors.newScheduledThreadPool(1)

@@ -1,6 +1,6 @@
-package scalether.extra.timer.tries
+package scalether.poller.tries
 
-import scalether.extra.timer.Sleeper
+import scalether.poller.Sleeper
 
 import scala.util.Try
 

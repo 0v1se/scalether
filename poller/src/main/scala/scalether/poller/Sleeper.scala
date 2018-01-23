@@ -1,4 +1,4 @@
-package scalether.extra.timer
+package scalether.poller
 
 import scala.language.higherKinds
 

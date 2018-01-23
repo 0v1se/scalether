@@ -17,6 +17,7 @@ class ContractGeneratorSpec extends FlatSpec {
     generator.generate(truffle, "org.daomao.contract", Type.SCALA)
   }
 
+/*
   "Generator" should "generate IssuedToken" taggedAs ManualTag in {
     println(generate("IssuedToken"))
   }
@@ -24,4 +25,5 @@ class ContractGeneratorSpec extends FlatSpec {
   it should "generate Token" taggedAs ManualTag in {
     println(generate("Token"))
   }
+*/
 }
