@@ -9,5 +9,7 @@ class MonoLogListenerAdapter(listener: MonoLogListener) extends LogListener[Mono
     listener.createFilter(fromBlock, toBlock)
 
   override def onLog(log: Log, confirmed: Boolean): Mono[Unit] =
-    listener.onLog(log, confirmed).map(_ => ())
+    listener.onLog(log, confirmed)
+      .map(_ => ())
+      .switchIfEmpty(Mono.just())
 }

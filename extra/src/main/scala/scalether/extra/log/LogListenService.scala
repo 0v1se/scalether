@@ -20,6 +20,8 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
     blockNumber <- ethereum.ethBlockNumber()
     savedBlockNumber <- knownBlockState.get
     logs <- fetchLogs(blockNumber, savedBlockNumber)
+    _ <- notifyListeners(blockNumber, logs)
+    _ <- knownBlockState.set(blockNumber)
   } yield logs
 
   private def fetchLogs(blockNumber: BigInteger, savedBlockNumber: Option[BigInteger]): F[List[Log]] = {
@@ -33,8 +35,6 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
       for {
         filter <- listener.createFilter(Hex.prefixed(fromBlock), Hex.prefixed(blockNumber))
         logs <- ethereum.ethGetLogs(filter)
-        _ <- notifyListeners(blockNumber, logs)
-        _ <- knownBlockState.set(blockNumber)
       } yield logs
     }
   }
