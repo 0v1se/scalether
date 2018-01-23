@@ -3,15 +3,15 @@ package scalether.core
 import java.math.BigInteger
 
 import cats.MonadError
-import cats.implicits._
 import scalether.domain.request.{LogFilter, Transaction}
 import scalether.domain.response.{Block, Log, TransactionReceipt}
-import scalether.domain.{Address, Error, Request, response}
+import scalether.domain.{Address, response}
 
 import scala.language.higherKinds
 
 class Ethereum[F[_]](service: EthereumService[F])
-                    (implicit me: MonadError[F, Throwable]) {
+                    (implicit me: MonadError[F, Throwable])
+  extends RpcHttpClient[F](service) {
 
   def web3ClientVersion(): F[String] =
     exec("web3_clientVersion")
@@ -73,26 +73,6 @@ class Ethereum[F[_]](service: EthereumService[F])
   def ethGetFilterChanges(id: BigInteger): F[List[Log]] =
     exec("eth_getFilterChanges", id)
 
-
   def ethGetCode(address: Address, defaultBlockParameter: String): F[String] =
     exec("eth_getCode", address, defaultBlockParameter)
-
-  private def exec[T](method: String, params: Any*)
-                           (implicit mf: Manifest[T]): F[T] = {
-    execOption[T](method, params:_*).flatMap {
-      case Some(v) => me.pure(v)
-      case None => me.raiseError(new RpcException(Error.default))
-    }
-  }
-
-  private def execOption[T](method: String, params: Any*)
-                     (implicit mf: Manifest[T]): F[Option[T]] = {
-    service.execute[T](Request(1, method, params: _*)).flatMap {
-      response =>
-        response.error match {
-          case Some(r) => me.raiseError(new RpcException(r))
-          case None => me.pure(response.result)
-        }
-    }
-  }
 }

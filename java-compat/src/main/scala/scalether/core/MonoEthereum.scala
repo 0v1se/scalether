@@ -4,11 +4,12 @@ import java.math.BigInteger
 import java.util
 
 import reactor.core.publisher.Mono
-import scalether.domain.{Address, response}
 import scalether.domain.request.{LogFilter, Transaction}
 import scalether.domain.response.{Block, Log, TransactionReceipt}
-import scalether.java.Lists
+import scalether.domain.{Address, response}
 import scalether.java.implicits._
+
+import scala.collection.JavaConverters._
 
 class MonoEthereum(service: MonoEthereumService)
   extends Ethereum[Mono](service) {
@@ -71,10 +72,10 @@ class MonoEthereum(service: MonoEthereumService)
     super.ethGetFilterChanges(id)
 
   def ethGetJavaLogs(filter: LogFilter): Mono[util.List[Log]] =
-    super.ethGetLogs(filter).map[java.util.List[Log]](logs => Lists.toJava(logs))
+    super.ethGetLogs(filter).map(_.asJava)
 
   def ethGetJavaFilterChanges(id: BigInteger): Mono[util.List[Log]] =
-    super.ethGetFilterChanges(id).map[java.util.List[Log]](logs => Lists.toJava(logs))
+    super.ethGetFilterChanges(id).map(_.asJava)
 
   override def ethGetCode(address: Address, defaultBlockParameter: String): Mono[String] =
     super.ethGetCode(address, defaultBlockParameter)
