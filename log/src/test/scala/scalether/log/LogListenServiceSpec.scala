@@ -1,4 +1,4 @@
-package scalether.extra.log
+package scalether.log
 
 import java.math.BigInteger
 
@@ -7,9 +7,6 @@ import org.mockito.Mockito._
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
-import scalether.domain.request.LogFilter
-import scalether.domain.response.Log
-import scalether.util.Hex
 
 import scala.util.{Success, Try}
 

@@ -1,4 +1,4 @@
-package scalether.extra.log
+package scalether.log
 
 import scalether.domain.request.LogFilter
 import scalether.domain.response.Log

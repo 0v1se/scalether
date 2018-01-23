@@ -7,6 +7,7 @@ import java.util
 import reactor.core.publisher.Mono
 import scalether.core.MonoEthereum
 import scalether.domain.response.Log
+import scalether.log.LogListenService
 
 import scala.collection.JavaConverters._
 

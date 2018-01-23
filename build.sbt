@@ -41,16 +41,15 @@ lazy val abi = common(project)
   .dependsOn(core)
 
 lazy val poller = common(project)
-  .dependsOn(core)
 
 lazy val transaction = common(project)
   .dependsOn(core, poller)
 
-lazy val extra = common(project)
-  .dependsOn(core, transaction)
+lazy val log = common(project)
+  .dependsOn(core)
 
 lazy val contract = common(project)
-  .dependsOn(abi, extra)
+  .dependsOn(abi, transaction)
 
 lazy val `async-http-client` = common(project)
   .dependsOn(core)
@@ -65,7 +64,7 @@ lazy val generator = common(project)
   .dependsOn(abi)
 
 lazy val `java-compat` = common(project)
-  .dependsOn(abi, extra, contract)
+  .dependsOn(abi, contract, log)
 
 lazy val root = base(project in file(".")).
-  aggregate(util, domain, core, abi, contract, extra, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)
+  aggregate(util, domain, core, abi, contract, poller, transaction, log, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)
