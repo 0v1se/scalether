@@ -1,13 +1,13 @@
-package scalether.extra.log
+package scalether.log
 
-import scalether.java.implicits._
 import java.math.BigInteger
 import java.util
 
 import reactor.core.publisher.Mono
 import scalether.core.MonoEthereum
 import scalether.domain.response.Log
-import scalether.log.LogListenService
+import scalether.extra.log.{MonoLogListener, MonoState}
+import scalether.java.implicits._
 
 import scala.collection.JavaConverters._
 

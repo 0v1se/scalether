@@ -1,10 +1,9 @@
-package scalether.extra.transaction
+package scalether.transaction
 
 import java.math.BigInteger
 
 import reactor.core.publisher.Mono
 import scalether.domain.request.Transaction
-import scalether.transaction.TransactionSender
 
 trait MonoTransactionSender extends TransactionSender[Mono] {
   def call(transaction: Transaction): Mono[String]

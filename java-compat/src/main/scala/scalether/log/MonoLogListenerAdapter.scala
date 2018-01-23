@@ -1,9 +1,9 @@
-package scalether.extra.log
+package scalether.log
 
 import reactor.core.publisher.Mono
 import scalether.domain.request.LogFilter
 import scalether.domain.response.Log
-import scalether.log.LogListener
+import scalether.extra.log.MonoLogListener
 
 class MonoLogListenerAdapter(listener: MonoLogListener) extends LogListener[Mono] {
   override def createFilter(fromBlock: String, toBlock: String): Mono[LogFilter] =
