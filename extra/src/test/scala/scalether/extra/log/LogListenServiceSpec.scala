@@ -13,7 +13,7 @@ import scalether.util.Hex
 
 import scala.util.{Success, Try}
 
-class LogListenerServiceSpec extends FlatSpec with MockitoSugar {
+class LogListenServiceSpec extends FlatSpec with MockitoSugar {
   "LogListenerService" should "not do anything if no new block added" in {
     val state = new SimpleState[BigInteger, Try](Some(BigInteger.TEN))
     val ethereum = mock[Ethereum[Try]]
@@ -21,7 +21,7 @@ class LogListenerServiceSpec extends FlatSpec with MockitoSugar {
 
     when(ethereum.ethBlockNumber()).thenReturn(Success(BigInteger.TEN))
 
-    val testing = new LogListenerService(ethereum, 5, listener, state)
+    val testing = new LogListenService(ethereum, 5, listener, state)
     testing.check().get
 
     verify(ethereum).ethBlockNumber()

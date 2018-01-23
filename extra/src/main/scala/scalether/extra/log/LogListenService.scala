@@ -10,27 +10,32 @@ import scalether.util.Hex
 
 import scala.language.higherKinds
 
-class LogListenerService[F[_]](ethereum: Ethereum[F],
-                               confidence: Int,
-                               listener: LogListener[F],
-                               knownBlockState: State[BigInteger, F])
-                              (implicit m: Monad[F]) {
+class LogListenService[F[_]](ethereum: Ethereum[F],
+                             confidence: Int,
+                             listener: LogListener[F],
+                             knownBlockState: State[BigInteger, F])
+                            (implicit m: Monad[F]) {
 
-  def check(): F[Unit] = for {
+  def check(): F[List[Log]] = for {
     blockNumber <- ethereum.ethBlockNumber()
     savedBlockNumber <- knownBlockState.get
-  } yield {
+    logs <- fetchLogs(blockNumber, savedBlockNumber)
+  } yield logs
+
+  private def fetchLogs(blockNumber: BigInteger, savedBlockNumber: Option[BigInteger]): F[List[Log]] = {
     if (savedBlockNumber.contains(blockNumber)) {
-      m.unit
+      m.pure(Nil)
     } else {
       val fromBlock = savedBlockNumber match {
         case Some(value) => value.subtract(BigInteger.valueOf(confidence))
         case None => BigInteger.ZERO
       }
-      listener.createFilter(Hex.prefixed(fromBlock), Hex.prefixed(blockNumber))
-        .flatMap(ethereum.ethGetLogs)
-        .flatMap(logs => notifyListeners(blockNumber, logs))
-        .flatMap(_ => knownBlockState.set(blockNumber))
+      for {
+        filter <- listener.createFilter(Hex.prefixed(fromBlock), Hex.prefixed(blockNumber))
+        logs <- ethereum.ethGetLogs(filter)
+        _ <- notifyListeners(blockNumber, logs)
+        _ <- knownBlockState.set(blockNumber)
+      } yield logs
     }
   }
 
