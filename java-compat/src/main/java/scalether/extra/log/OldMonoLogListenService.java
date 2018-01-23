@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class MonoLogListenService {
+public class OldMonoLogListenService {
     private final MonoEthereum ethereum;
     private final int confidence;
     private final MonoLogListener listener;
     private final MonoState<BigInteger> blockState;
 
-    public MonoLogListenService(MonoEthereum ethereum, int confidence, MonoLogListener listener, MonoState<BigInteger> blockState) {
+    public OldMonoLogListenService(MonoEthereum ethereum, int confidence, MonoLogListener listener, MonoState<BigInteger> blockState) {
         this.ethereum = ethereum;
         this.confidence = confidence;
         this.listener = listener;
