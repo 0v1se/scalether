@@ -8,6 +8,6 @@ class MonoStateAdapter[T](monoState: MonoState[T]) extends State[T, Mono] {
 
   override def set(value: T): Mono[Unit] =
     monoState.set(value)
-      .map(_ => ())
+      .map[Unit](_ => ())
       .switchIfEmpty(Mono.just())
 }
