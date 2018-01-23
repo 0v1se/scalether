@@ -33,11 +33,14 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
         case None => BigInteger.ZERO
       }
       for {
-        filter <- listener.createFilter(Hex.prefixed(fromBlock), Hex.prefixed(blockNumber))
+        filter <- listener.createFilter(Hex.prefixed(checkForZero(fromBlock)), Hex.prefixed(blockNumber))
         logs <- ethereum.ethGetLogs(filter)
       } yield logs
     }
   }
+
+  private def checkForZero(value: BigInteger): BigInteger =
+    if (value.compareTo(BigInteger.ZERO) < 0) BigInteger.ZERO else value
 
   private def notifyListeners(blockNumber: BigInteger, logs: List[Log]): F[Unit] =
     logs.foldRight(m.unit)((log, monad) => monad.flatMap(_ => notifyListener(blockNumber, log)))
