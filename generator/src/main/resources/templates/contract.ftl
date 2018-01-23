@@ -193,20 +193,23 @@ object ${truffle.name} extends ContractObject {
 <#list truffle.abi as item>
   <#if item.type == "event">
     <#if (map[item.name]??)>
-      <#assign itemName="${item.name}_${map[item.name]}"/>
+      <#assign eventName="${item.name}${map[item.name]}"/>
     <#else>
       <#assign map=map + {item.name: 1}/>
-      <#assign itemName=item.name/>
+      <#assign eventName=item.name/>
     </#if>
-case class ${itemName}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
+    <#if !(eventName?ends_with('Event'))>
+        <#assign eventName="${eventName}Event"/>
+    </#if>
+case class ${eventName}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
 
-object ${itemName} {
+object ${eventName} {
   val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
 
   @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
     LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
 
-  def apply(log: response.Log): ${itemName} = {
+  def apply(log: response.Log): ${eventName} = {
     assert(log.topics.head == event.id)
 
     <#if item.nonIndexed?has_content>val decodedData = event.decode(log.data)</#if>
@@ -222,7 +225,7 @@ object ${itemName} {
     val ${arg.name} = <@event_non_indexed_arg arg arg?index/>
       </#list>
     </#if>
-    ${itemName}(<#list item.all as arg>${arg.name}<#if arg?has_next>, </#if></#list>)
+    ${eventName}(<#list item.all as arg>${arg.name}<#if arg?has_next>, </#if></#list>)
   }
 }
 
