@@ -4,7 +4,7 @@ import cats.implicits._
 import scalether.core.{Ethereum, EthereumService}
 import scalether.domain.implicits._
 import scalether.poller.tries.implicits._
-import scalether.extra.transaction.{SigningTransactionSender, SimpleNonceProvider, TransactionPoller, ValGasPriceProvider}
+import scalether.transaction._
 import scalether.transport.ScalajHttpTransportService
 
 import scala.util.Try

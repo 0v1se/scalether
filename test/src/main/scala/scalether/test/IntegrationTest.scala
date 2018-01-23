@@ -9,7 +9,7 @@ import scalether.abi.array._
 import scalether.abi.tuple._
 import scalether.contract._
 import scalether.domain._
-import scalether.extra.transaction._
+import scalether.transaction._
 import scalether.util.Hex
 
 import scala.language.higherKinds

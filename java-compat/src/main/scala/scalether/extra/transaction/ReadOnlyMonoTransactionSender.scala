@@ -4,6 +4,7 @@ import reactor.core.publisher.Mono
 import scalether.core.MonoEthereum
 import scalether.domain.Address
 import scalether.java.implicits._
+import scalether.transaction.ReadOnlyTransactionSender
 
 import scala.language.higherKinds
 

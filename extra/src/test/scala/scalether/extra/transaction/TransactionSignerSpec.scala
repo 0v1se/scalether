@@ -6,6 +6,7 @@ import org.web3j.rlp.RlpString
 import scalether.domain.implicits._
 import scalether.domain.request.Transaction
 import scalether.test.Generators
+import scalether.transaction.TransactionSigner
 
 class TransactionSignerSpec extends FlatSpec with PropertyChecks {
   "TransactionSigner" should "encode rlp for transaction" in {

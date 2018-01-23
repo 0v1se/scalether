@@ -1,4 +1,4 @@
-package scalether.extra.transaction
+package scalether.transaction
 
 import cats.Monad
 import cats.implicits._

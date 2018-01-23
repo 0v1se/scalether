@@ -6,7 +6,7 @@ import cats.Functor
 import scalether.abi.{Call, Signature}
 import scalether.domain.Address
 import scalether.domain.request.Transaction
-import scalether.extra.transaction.TransactionSender
+import scalether.transaction.TransactionSender
 
 import scala.language.higherKinds
 
