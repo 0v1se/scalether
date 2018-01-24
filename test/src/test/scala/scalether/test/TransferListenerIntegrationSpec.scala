@@ -16,7 +16,7 @@ class TransferListenerIntegrationSpec extends FlatSpec {
   val ethereum = new Ethereum[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether-dev:8545"), log = false))
   val parity = new Parity[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether-dev:8545"), log = false))
 
-  "TranferListenService" should "listen for transfers" in {
+  "TranferListenService" should "listen for transfers" taggedAs ManualTag in {
 
     val transferListenService = new TransferListenService[Try](ethereum, parity, 2, TestTransferListener, new VarState[BigInteger, Try](None))
     val blockListenService = new BlockListenService[Try](ethereum, new TestBlockListener(transferListenService), new VarState[BigInteger, Try](None))
@@ -30,7 +30,7 @@ class TransferListenerIntegrationSpec extends FlatSpec {
     }
   }
 
-  it should "notify about transfers in selected block" in {
+  it should "notify about transfers in selected block" taggedAs ManualTag in {
     val transferListenService = new TransferListenService[Try](ethereum, parity, 1, TestTransferListener, new VarState[BigInteger, Try](None))
 
     val start = System.currentTimeMillis()
