@@ -18,7 +18,7 @@ class TransferListenerIntegrationSpec extends FlatSpec {
 
   "TranferListenService" should "listen for transfers" in {
 
-    val transferListenService = new TransferListenService[Try](ethereum, parity, 12, TestTransferListener, new VarState[BigInteger, Try](None))
+    val transferListenService = new TransferListenService[Try](ethereum, parity, 2, TestTransferListener, new VarState[BigInteger, Try](None))
     val blockListenService = new BlockListenService[Try](ethereum, new TestBlockListener(transferListenService), new VarState[BigInteger, Try](None))
 
     for (_ <- 1 to 100) {
@@ -31,7 +31,7 @@ class TransferListenerIntegrationSpec extends FlatSpec {
   }
 
   it should "notify about transfers in selected block" in {
-    val transferListenService = new TransferListenService[Try](ethereum, parity, 12, TestTransferListener, new VarState[BigInteger, Try](None))
+    val transferListenService = new TransferListenService[Try](ethereum, parity, 1, TestTransferListener, new VarState[BigInteger, Try](None))
 
     val start = System.currentTimeMillis()
     transferListenService.fetchAndNotify(BigInteger.valueOf(4424611))(BigInteger.valueOf(4424611))

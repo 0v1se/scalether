@@ -5,7 +5,6 @@ import java.math.BigInteger
 import cats.Monad
 import cats.implicits._
 import scalether.core.{Ethereum, Parity}
-import scalether.domain.Address
 import scalether.domain.response.parity.Trace
 import scalether.listener.common.{Notify, State}
 
@@ -29,7 +28,7 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
 
   private def fetchAndNotify(blockNumber: BigInteger, saved: Option[BigInteger]): F[Unit] = saved match {
     case None => m.pure(Nil)
-    case Some(savedBlockNumber) => Notify.every(blockNumbers(savedBlockNumber, blockNumber))(fetchAndNotify(blockNumber))
+    case Some(savedBlockNumber) => Notify.every(blockNumbers(savedBlockNumber.subtract(BigInteger.valueOf(confidence - 1)), blockNumber))(fetchAndNotify(blockNumber))
   }
 
   private def blockNumbers(from: BigInteger, to: BigInteger): List[BigInteger] = {
@@ -47,12 +46,10 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
 
   private def notifyListener(latestBlock: BigInteger)(trace: Trace): F[Unit] = {
     val confirmations = latestBlock.subtract(trace.blockNumber).intValue() + 1
-    if (trace.`type` == "reward") {
-      listener.onTransfer(Transfer(Address.apply(new Array[Byte](20)), trace.action.author, trace.action.value, null), confirmations, confirmations >= confidence)
-    } else if (trace.action.value != BigInteger.ZERO) {
-      listener.onTransfer(Transfer(trace.action.from, trace.action.to, trace.action.value, trace.transactionHash.toString), confirmations, confirmations >= confidence)
-    } else {
+    if (trace.action.value == BigInteger.ZERO || trace.error != null || trace.`type` == "reward") {
       m.unit
+    } else {
+      listener.onTransfer(Transfer(trace.action.from, trace.action.to, trace.action.value, trace.transactionHash.toString), confirmations, confirmations >= confidence)
     }
   }
 }
