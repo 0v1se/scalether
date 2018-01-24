@@ -1,5 +1,7 @@
 package scalether.core
 
+import java.math.BigInteger
+
 import cats.MonadError
 import scalether.domain.response.parity.Trace
 
@@ -12,4 +14,9 @@ class Parity[F[_]](service: EthereumService[F])
   def traceTransaction(txHash: String): F[List[Trace]] = {
     exec("trace_transaction", txHash)
   }
+
+  def traceBlock(blockNumber: BigInteger): F[List[Trace]] = {
+    exec("trace_block", blockNumber)
+  }
+
 }

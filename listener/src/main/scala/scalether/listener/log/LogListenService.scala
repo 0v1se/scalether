@@ -52,7 +52,7 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
     logs.foldLeft(m.unit)((monad, log) => monad.flatMap(_ => notifyListener(blockNumber, log)))
 
   private def notifyListener(blockNumber: BigInteger, log: Log): F[Unit] = {
-    val confirmations = blockNumber.subtract(log.blockNumber).intValue()
+    val confirmations = blockNumber.subtract(log.blockNumber).intValue() + 1
     listener.onLog(log, confirmations, confirmations >= confidence)
   }
 }

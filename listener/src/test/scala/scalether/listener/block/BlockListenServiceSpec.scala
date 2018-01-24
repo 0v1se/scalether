@@ -3,6 +3,7 @@ package scalether.listener.block
 import java.math.BigInteger
 
 import cats.implicits._
+import org.mockito.Matchers
 import org.mockito.Mockito._
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
@@ -51,6 +52,7 @@ class BlockListenServiceSpec extends FlatSpec with MockitoSugar {
     val listener = mock[BlockListener[Try]]
     when(listener.enabled).thenReturn(true)
     val state = mock[State[BigInteger, Try]]
+    when(state.set(Matchers.any[BigInteger]())).thenReturn(Success())
     when(state.get).thenReturn(Success(stateValue))
     (state, ethereum, listener)
   }

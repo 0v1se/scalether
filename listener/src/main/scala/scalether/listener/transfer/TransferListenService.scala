@@ -5,12 +5,13 @@ import java.math.BigInteger
 import cats.Monad
 import cats.implicits._
 import scalether.core.{Ethereum, Parity}
+import scalether.domain.Address
 import scalether.domain.response.parity.Trace
 import scalether.listener.common.{Notify, State}
 
 import scala.language.higherKinds
 
-class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], listener: TransferListener[F], state: State[BigInteger, F])
+class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], confidence: Int, listener: TransferListener[F], state: State[BigInteger, F])
                                  (implicit m: Monad[F]) {
 
   def check(blockNumber: BigInteger): F[Unit] =
@@ -28,7 +29,7 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], list
 
   private def fetchAndNotify(blockNumber: BigInteger, saved: Option[BigInteger]): F[Unit] = saved match {
     case None => m.pure(Nil)
-    case Some(savedBlockNumber) => Notify.every(blockNumbers(savedBlockNumber, blockNumber))(fetchAndNotify)
+    case Some(savedBlockNumber) => Notify.every(blockNumbers(savedBlockNumber, blockNumber))(fetchAndNotify(blockNumber))
   }
 
   private def blockNumbers(from: BigInteger, to: BigInteger): List[BigInteger] = {
@@ -38,26 +39,20 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], list
       from.add(BigInteger.ONE) :: blockNumbers(from.add(BigInteger.ONE), to)
   }
 
-  private def fetchAndNotify(block: BigInteger): F[Unit] = for {
-    block <- ethereum.ethGetBlockByNumber(block)
-    _ <- checkTransactions(block.transactions)
-  } yield ()
+  def fetchAndNotify(latestBlock: BigInteger)(block: BigInteger): F[Unit] =
+    parity.traceBlock(block).flatMap(notifyListenerAboutTraces(latestBlock))
 
-  private def checkTransactions(hashes: List[String]): F[Unit] =
-    Notify.every(hashes)(checkTransaction)
+  private def notifyListenerAboutTraces(latestBlock: BigInteger)(traces: List[Trace]): F[Unit] =
+    Notify.every(traces)(notifyListener(latestBlock))
 
-  private def checkTransaction(hash: String): F[Unit] = {
-    parity.traceTransaction(hash)
-        .flatMap(notifyListener)
-  }
-
-  private def notifyListener(traces: List[Trace]): F[Unit] =
-    Notify.every(traces)(notifyListener)
-
-  private def notifyListener(trace: Trace): F[Unit] =
-    if (trace.action.value != BigInteger.ZERO) {
-      listener.onTransfer(Transfer(trace.action.from, trace.action.to, trace.action.value, trace.transactionHash.toString), 0, confirmed = true)
+  private def notifyListener(latestBlock: BigInteger)(trace: Trace): F[Unit] = {
+    val confirmations = latestBlock.subtract(trace.blockNumber).intValue() + 1
+    if (trace.`type` == "reward") {
+      listener.onTransfer(Transfer(Address.apply(new Array[Byte](20)), trace.action.author, trace.action.value, null), confirmations, confirmations >= confidence)
+    } else if (trace.action.value != BigInteger.ZERO) {
+      listener.onTransfer(Transfer(trace.action.from, trace.action.to, trace.action.value, trace.transactionHash.toString), confirmations, confirmations >= confidence)
     } else {
       m.unit
     }
+  }
 }

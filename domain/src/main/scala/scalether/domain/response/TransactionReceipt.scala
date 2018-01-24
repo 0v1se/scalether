@@ -11,6 +11,9 @@ case class TransactionReceipt(transactionHash: String,
                               cumulativeGasUsed: BigInteger,
                               gasUsed: BigInteger,
                               contractAddress: Address,
+                              status: BigInteger,
                               from: String,
                               to: String,
-                              logs: List[Log])
+                              logs: List[Log]) {
+  def success: Boolean = status == BigInteger.ONE
+}

@@ -71,10 +71,10 @@ class MonoEthereum(service: MonoEthereumService)
   override def ethGetFilterChanges(id: BigInteger): Mono[List[Log]] =
     super.ethGetFilterChanges(id)
 
-  def ethGetJavaLogs(filter: LogFilter): Mono[util.List[Log]] =
+  def ethGetLogsJava(filter: LogFilter): Mono[util.List[Log]] =
     super.ethGetLogs(filter).map(_.asJava)
 
-  def ethGetJavaFilterChanges(id: BigInteger): Mono[util.List[Log]] =
+  def ethGetFilterChangesJava(id: BigInteger): Mono[util.List[Log]] =
     super.ethGetFilterChanges(id).map(_.asJava)
 
   override def ethGetCode(address: Address, defaultBlockParameter: String): Mono[String] =
