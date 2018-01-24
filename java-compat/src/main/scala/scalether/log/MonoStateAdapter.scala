@@ -1,6 +1,7 @@
 package scalether.log
 
 import reactor.core.publisher.Mono
+import scalether.core.state.State
 import scalether.extra.log.MonoState
 
 class MonoStateAdapter[T](monoState: MonoState[T]) extends State[T, Mono] {

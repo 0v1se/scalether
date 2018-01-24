@@ -5,6 +5,7 @@ import java.math.BigInteger
 import cats.Monad
 import cats.implicits._
 import scalether.core.Ethereum
+import scalether.core.state.State
 import scalether.domain.response.Log
 import scalether.util.Hex
 

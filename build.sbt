@@ -45,8 +45,14 @@ lazy val poller = common(project)
 lazy val transaction = common(project)
   .dependsOn(core, poller)
 
+lazy val transfer = common(project)
+  .dependsOn(core)
+
 lazy val log = common(project)
   .dependsOn(core)
+
+lazy val listener = common(project)
+  .dependsOn(core, log, transfer)
 
 lazy val contract = common(project)
   .dependsOn(abi, transaction)
@@ -67,4 +73,4 @@ lazy val `java-compat` = common(project)
   .dependsOn(abi, contract, log)
 
 lazy val root = base(project in file(".")).
-  aggregate(util, domain, core, abi, contract, poller, transaction, log, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)
+  aggregate(util, domain, core, abi, contract, poller, transaction, log, transfer, listener, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)

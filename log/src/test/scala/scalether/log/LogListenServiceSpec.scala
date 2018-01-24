@@ -7,6 +7,7 @@ import org.mockito.Mockito._
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
+import scalether.core.state.SimpleState
 
 import scala.util.{Success, Try}
 

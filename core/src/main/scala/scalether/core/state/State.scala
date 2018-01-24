@@ -1,4 +1,4 @@
-package scalether.log
+package scalether.core.state
 
 import scala.language.higherKinds
 
