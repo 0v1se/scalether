@@ -5,8 +5,8 @@ import java.math.BigInteger
 import cats.Monad
 import cats.implicits._
 import scalether.core.Ethereum
-import scalether.core.state.State
 import scalether.domain.response.Log
+import scalether.listener.common.State
 import scalether.util.Hex
 
 import scala.language.higherKinds
@@ -17,10 +17,15 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
                              knownBlockState: State[BigInteger, F])
                             (implicit m: Monad[F]) {
 
-  def check(): F[List[Log]] = for {
-    blockNumber <- ethereum.ethBlockNumber()
-    savedBlockNumber <- knownBlockState.get
-    logs <- fetchLogs(blockNumber, savedBlockNumber)
+  def check(blockNumber: BigInteger): F[List[Log]] = if (listener.enabled) {
+    checkInternal(blockNumber)
+  } else {
+    m.pure(Nil)
+  }
+
+  private def checkInternal(blockNumber: BigInteger): F[List[Log]] = for {
+    saved <- knownBlockState.get
+    logs <- fetchLogs(blockNumber, saved)
     _ <- notifyListeners(blockNumber, logs)
     _ <- knownBlockState.set(blockNumber)
   } yield logs
@@ -44,8 +49,10 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
     if (value.compareTo(BigInteger.ZERO) < 0) BigInteger.ZERO else value
 
   private def notifyListeners(blockNumber: BigInteger, logs: List[Log]): F[Unit] =
-    logs.foldRight(m.unit)((log, monad) => monad.flatMap(_ => notifyListener(blockNumber, log)))
+    logs.foldLeft(m.unit)((monad, log) => monad.flatMap(_ => notifyListener(blockNumber, log)))
 
-  private def notifyListener(blockNumber: BigInteger, log: Log): F[Unit] =
-    listener.onLog(log, blockNumber.subtract(log.blockNumber).compareTo(BigInteger.valueOf(confidence)) >= 0)
+  private def notifyListener(blockNumber: BigInteger, log: Log): F[Unit] = {
+    val confirmations = blockNumber.subtract(log.blockNumber).intValue()
+    listener.onLog(log, confirmations, confirmations >= confidence)
+  }
 }

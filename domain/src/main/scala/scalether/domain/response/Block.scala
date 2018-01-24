@@ -17,4 +17,5 @@ case class Block(number: BigInteger,
                  size: BigInteger,
                  gasLimit: BigInteger,
                  gasUsed: BigInteger,
+                 transactions: List[String],
                  timestamp: BigInteger)

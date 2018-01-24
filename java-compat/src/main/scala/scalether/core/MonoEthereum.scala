@@ -29,11 +29,11 @@ class MonoEthereum(service: MonoEthereumService)
   override def ethBlockNumber(): Mono[BigInteger] =
     super.ethBlockNumber()
 
-  override def ethGetBlockByHash(hash: String, fullTransactions: Boolean): Mono[Block] =
-    super.ethGetBlockByHash(hash, fullTransactions)
+  override def ethGetBlockByHash(hash: String): Mono[Block] =
+    super.ethGetBlockByHash(hash)
 
-  override def ethGetBlockByNumber(number: BigInteger, fullTransactions: Boolean): Mono[Block] =
-    super.ethGetBlockByNumber(number, fullTransactions)
+  override def ethGetBlockByNumber(number: BigInteger): Mono[Block] =
+    super.ethGetBlockByNumber(number)
 
   override def ethCall(transaction: Transaction, defaultBlockParameter: String): Mono[String] =
     super.ethCall(transaction, defaultBlockParameter)

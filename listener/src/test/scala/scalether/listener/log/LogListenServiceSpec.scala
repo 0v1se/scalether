@@ -7,22 +7,21 @@ import org.mockito.Mockito._
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
-import scalether.core.state.SimpleState
+import scalether.listener.common.VarState
 
 import scala.util.{Success, Try}
 
 class LogListenServiceSpec extends FlatSpec with MockitoSugar {
   "LogListenerService" should "not do anything if no new block added" in {
-    val state = new SimpleState[BigInteger, Try](Some(BigInteger.TEN))
+    val state = new VarState[BigInteger, Try](Some(BigInteger.TEN))
     val ethereum = mock[Ethereum[Try]]
     val listener = mock[LogListener[Try]]
-
-    when(ethereum.ethBlockNumber()).thenReturn(Success(BigInteger.TEN))
+    when(listener.enabled).thenReturn(true)
 
     val testing = new LogListenService(ethereum, 5, listener, state)
-    testing.check().get
+    testing.check(BigInteger.TEN).get
 
-    verify(ethereum).ethBlockNumber()
+    verify(listener).enabled
     verifyNoMoreInteractions(ethereum, listener)
   }
 

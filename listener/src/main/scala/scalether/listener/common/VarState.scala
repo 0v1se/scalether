@@ -1,11 +1,11 @@
-package scalether.core.state
+package scalether.listener.common
 
 import cats.Monad
 
 import scala.language.higherKinds
 
-class SimpleState[T, F[_]](initial: Option[T])
-                          (implicit m: Monad[F]) extends State[T, F] {
+class VarState[T, F[_]](initial: Option[T])
+                       (implicit m: Monad[F]) extends State[T, F] {
 
   var value: Option[T] = initial
 

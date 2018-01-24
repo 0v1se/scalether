@@ -5,6 +5,7 @@ import scalether.domain.request.LogFilter;
 import scalether.domain.response.Log;
 
 public interface MonoLogListener {
+    boolean isEnabled();
     Mono<LogFilter> createFilter(String fromBlock, String toBlock);
-    Mono<Void> onLog(Log log, boolean confirmed);
+    Mono<Void> onLog(Log log, int confirmations, boolean confirmed);
 }

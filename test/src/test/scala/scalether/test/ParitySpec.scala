@@ -2,7 +2,7 @@ package scalether.test
 
 import cats.implicits._
 import org.scalatest.FlatSpec
-import scalether.core.{EthereumService, Parity}
+import scalether.core.{Ethereum, EthereumService, Parity}
 import scalether.transport.ScalajHttpTransportService
 
 import scala.util.Try

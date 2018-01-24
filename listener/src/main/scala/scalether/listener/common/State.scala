@@ -1,4 +1,4 @@
-package scalether.core.state
+package scalether.listener.common
 
 import scala.language.higherKinds
 
