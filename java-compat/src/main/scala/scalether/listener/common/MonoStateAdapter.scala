@@ -1,8 +1,6 @@
-package scalether.log
+package scalether.listener.common
 
 import reactor.core.publisher.Mono
-import scalether.extra.log.MonoState
-import scalether.listener.common.State
 
 class MonoStateAdapter[T](monoState: MonoState[T]) extends State[T, Mono] {
   override def get: Mono[Option[T]] =

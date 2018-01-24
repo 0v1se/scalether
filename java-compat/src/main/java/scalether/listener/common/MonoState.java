@@ -1,4 +1,4 @@
-package scalether.extra.log;
+package scalether.listener.common;
 
 import reactor.core.publisher.Mono;
 
