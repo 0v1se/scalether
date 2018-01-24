@@ -8,6 +8,7 @@ import scalether.core.MonoEthereum
 import scalether.domain.response.Log
 import scalether.extra.log.{MonoLogListener, MonoState}
 import scalether.java.implicits._
+import scalether.listener.log.LogListenService
 
 import scala.collection.JavaConverters._
 

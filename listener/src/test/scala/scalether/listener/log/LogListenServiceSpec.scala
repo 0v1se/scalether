@@ -1,4 +1,4 @@
-package scalether.log
+package scalether.listener.log
 
 import java.math.BigInteger
 

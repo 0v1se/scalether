@@ -1,4 +1,4 @@
-package scalether.transfer
+package scalether.listener.transfer
 
 import java.math.BigInteger
 
