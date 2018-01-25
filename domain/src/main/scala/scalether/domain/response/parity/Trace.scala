@@ -17,4 +17,4 @@ case class Trace(action: Action,
 
 case class Action(callType: String, from: Address, gas: BigInteger, input: String, to: Address, value: BigInteger)
 
-case class ActionResult(gasUsed: BigInteger, output: String)
+case class ActionResult(gasUsed: BigInteger, output: String, address: Address)
