@@ -35,6 +35,9 @@ public class Hex {
     }
 
     public static byte[] toBytes(String s) {
+        if (s == null) {
+            return new byte[0];
+        }
         if (s.startsWith("0x")) {
             s = s.substring(2);
         }
