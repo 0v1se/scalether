@@ -48,6 +48,8 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
     val confirmations = latestBlock.subtract(trace.blockNumber).intValue() + 1
     if (trace.action.value == BigInteger.ZERO || trace.error != null || trace.`type` == "reward") {
       m.unit
+    } else if (trace.action.to == null) {
+      listener.onTransfer(Transfer(trace.action.from, trace.result.address, trace.action.value, trace.transactionHash.toString), confirmations, confirmations >= confidence)
     } else {
       listener.onTransfer(Transfer(trace.action.from, trace.action.to, trace.action.value, trace.transactionHash.toString), confirmations, confirmations >= confidence)
     }
