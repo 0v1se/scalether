@@ -21,7 +21,7 @@ class JsonSpec extends FlatSpec with Matchers {
   }
 
   it should "serialize simple LogFilter" in {
-    val result = json.toJson(LogFilter(topics = List(Word("0x5742ce6d6b60075574d7aca76464bc56ccc67f0edcab8ab1b0caa30cbf79056d"))))
+    val result = json.toJson(LogFilter(Word("0x5742ce6d6b60075574d7aca76464bc56ccc67f0edcab8ab1b0caa30cbf79056d")))
     assert(result == "{\"topics\":[\"0x5742ce6d6b60075574d7aca76464bc56ccc67f0edcab8ab1b0caa30cbf79056d\"],\"address\":[],\"fromBlock\":\"latest\",\"toBlock\":\"latest\"}")
   }
 
