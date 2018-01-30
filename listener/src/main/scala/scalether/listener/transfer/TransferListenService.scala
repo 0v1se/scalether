@@ -4,6 +4,7 @@ import java.math.BigInteger
 
 import cats.Monad
 import cats.implicits._
+import org.slf4j.{Logger, LoggerFactory}
 import scalether.core.{Ethereum, Parity}
 import scalether.domain.response.parity.Trace
 import scalether.listener.common.{Notify, State}
@@ -12,6 +13,8 @@ import scala.language.higherKinds
 
 class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], confidence: Int, listener: TransferListener[F], state: State[BigInteger, F])
                                  (implicit m: Monad[F]) {
+
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   def check(blockNumber: BigInteger): F[Unit] =
     if (listener.enabled) {
@@ -41,8 +44,10 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
   def fetchAndNotify(latestBlock: BigInteger)(block: BigInteger): F[Unit] =
     parity.traceBlock(block).flatMap(notifyListenerAboutTraces(latestBlock))
 
-  private def notifyListenerAboutTraces(latestBlock: BigInteger)(traces: List[Trace]): F[Unit] =
+  private def notifyListenerAboutTraces(latestBlock: BigInteger)(traces: List[Trace]): F[Unit] = {
+    logger.info("will process traces: {}", traces.size)
     Notify.every(traces)(notifyListener(latestBlock))
+  }
 
   private def notifyListener(latestBlock: BigInteger)(trace: Trace): F[Unit] = {
     val confirmations = latestBlock.subtract(trace.blockNumber).intValue() + 1

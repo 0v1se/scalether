@@ -13,12 +13,12 @@ import scalether.transport.ScalajHttpTransportService
 import scala.util.{Failure, Try}
 
 class TransferListenerIntegrationSpec extends FlatSpec {
-  val ethereum = new Ethereum[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether-dev:8545"), log = false))
-  val parity = new Parity[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether-dev:8545"), log = false))
+  val ethereum = new Ethereum[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether:8545"), log = false))
+  val parity = new Parity[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether:8545"), log = false))
 
   "TranferListenService" should "listen for transfers" taggedAs ManualTag in {
 
-    val transferListenService = new TransferListenService[Try](ethereum, parity, 2, TestTransferListener, new VarState[BigInteger, Try](None))
+    val transferListenService = new TransferListenService[Try](ethereum, parity, 2, TestTransferListener, new VarState[BigInteger, Try](Some(BigInteger.valueOf(5000099))))
     val blockListenService = new BlockListenService[Try](ethereum, new TestBlockListener(transferListenService), new VarState[BigInteger, Try](None))
 
     for (_ <- 1 to 100) {
@@ -34,7 +34,7 @@ class TransferListenerIntegrationSpec extends FlatSpec {
     val transferListenService = new TransferListenService[Try](ethereum, parity, 1, TestTransferListener, new VarState[BigInteger, Try](None))
 
     val start = System.currentTimeMillis()
-    transferListenService.fetchAndNotify(BigInteger.valueOf(4424611))(BigInteger.valueOf(4424611))
+    transferListenService.fetchAndNotify(BigInteger.valueOf(5000099))(BigInteger.valueOf(5000099))
     println(s"took: ${System.currentTimeMillis() - start}ms")
   }
 }
