@@ -42,10 +42,10 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
   }
 
   def fetchAndNotify(latestBlock: BigInteger)(block: BigInteger): F[Unit] =
-    parity.traceBlock(block).flatMap(notifyListenerAboutTraces(latestBlock))
+    parity.traceBlock(block).flatMap(notifyListenerAboutTraces(latestBlock, block))
 
-  private def notifyListenerAboutTraces(latestBlock: BigInteger)(traces: List[Trace]): F[Unit] = {
-    logger.info("will process traces: {}", traces.size)
+  private def notifyListenerAboutTraces(latestBlock: BigInteger, block: BigInteger)(traces: List[Trace]): F[Unit] = {
+    logger.info("will process for block {}: {} traces", block, traces.size)
     Notify.every(traces)(notifyListener(latestBlock))
   }
 
