@@ -8,4 +8,5 @@ import scala.language.higherKinds
 
 trait NonceProvider[F[_]] {
   def nonce(address: Address): F[BigInteger]
+  def recover(address: Address): F[Unit]
 }

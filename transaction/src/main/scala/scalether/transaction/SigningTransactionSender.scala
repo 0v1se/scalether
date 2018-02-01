@@ -2,7 +2,7 @@ package scalether.transaction
 
 import java.math.BigInteger
 
-import cats.Monad
+import cats.{Monad, MonadError}
 import cats.implicits._
 import org.web3j.crypto.Keys
 import scalether.core.Ethereum
@@ -17,7 +17,7 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
                                      privateKey: BigInteger,
                                      gas: BigInteger,
                                      gasPrice: GasPriceProvider[F])
-                                    (implicit f: Monad[F])
+                                    (implicit m: MonadError[F, Throwable])
   extends AbstractTransactionSender[F](ethereum, Address.apply(Keys.getAddressFromPrivateKey(privateKey)), gas, gasPrice) {
 
   private val signer = new TransactionSigner(privateKey)
@@ -28,7 +28,9 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
         ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction)))
       } else {
         nonceProvider.nonce(address = from).flatMap(
-          nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce))))
+          nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce)))).recoverWith {
+            case e => nonceProvider.recover(from).flatMap(_ => m.raiseError(e))
+          }
         )
       }
   }
