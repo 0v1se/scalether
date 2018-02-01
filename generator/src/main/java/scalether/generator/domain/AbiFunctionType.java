@@ -1,4 +1,4 @@
-package scalether.abi.json;
+package scalether.generator.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

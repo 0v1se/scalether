@@ -118,7 +118,7 @@
 <#macro args_tuple inputs><#if inputs?size != 1>(</#if><@args_values inputs/><#if inputs?size != 1>)</#if></#macro>
 <#function find_constructor_args>
     <#list truffle.abi as item>
-        <#if item.type != "event" && item.type?? && item.type.getId == 'constructor'>
+        <#if item.type != "event" && item.type?? && item.type.id == 'constructor'>
             <#return item.inputs/>
         </#if>
     </#list>
@@ -170,7 +170,7 @@ object ${truffle.name} extends ContractObject {
   val name = "${truffle.name}"
   val abi = ${abi}
   val bin = "${truffle.bin}"
-  <#if !truffle.isAbstract>
+  <#if !truffle.abstract>
 
   val constructor = <@type constructor_args/>
 

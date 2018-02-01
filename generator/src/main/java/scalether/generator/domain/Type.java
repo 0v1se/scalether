@@ -1,4 +1,4 @@
-package scalether.generator;
+package scalether.generator.domain;
 
 public enum Type {
     SCALA("", "", "", "", "", "", "cats.{Functor, Monad, MonadError}", "cats.implicits._"),

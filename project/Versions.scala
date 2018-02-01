@@ -1,4 +1,5 @@
 object Versions {
+  val scala = "2.12.4"
   val slf4j = "1.7.25"
   val asyncHttpClient = "2.2.0"
   val reactor = "3.1.3.RELEASE"

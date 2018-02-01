@@ -5,7 +5,7 @@ name := "scalether"
 
 version := "0.1.0-SNAPSHOT"
 
-scalaVersion := "2.12.4"
+scalaVersion := Versions.scala
 
 def base(project: Project): Project = project
   .settings(organization := "org.scalether")
@@ -60,8 +60,8 @@ lazy val `scalaj-http` = common(project)
 lazy val test = common(project)
   .dependsOn(contract, `scalaj-http`, util, listener)
 
-lazy val generator = common(project)
-  .dependsOn(abi)
+lazy val generator = base(project)
+  .dependsOn(`test-common` % "test")
 
 lazy val `java-compat` = common(project)
   .dependsOn(abi, contract, listener)
