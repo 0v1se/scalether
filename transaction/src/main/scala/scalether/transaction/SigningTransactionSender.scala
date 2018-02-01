@@ -28,9 +28,8 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
         ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction)))
       } else {
         nonceProvider.nonce(address = from).flatMap(
-          nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce)))).recoverWith {
-            case e => nonceProvider.recover(from).flatMap(_ => m.raiseError(e))
-          }
+          nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce))))
+            .handleErrorWith(e => nonceProvider.recover(from).flatMap(_ => m.raiseError(e)))
         )
       }
   }

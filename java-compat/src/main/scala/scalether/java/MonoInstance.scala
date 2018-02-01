@@ -14,7 +14,7 @@ class MonoInstance extends MonadError[Mono, Throwable] {
     Mono.error(e)
 
   def handleErrorWith[A](fa: Mono[A])(f: Throwable => Mono[A]): Mono[A] =
-    fa.doOnError(e => f(e))
+    fa.onErrorResume(e => f(e))
 
   def pure[A](x: A): Mono[A] =
     Mono.just(x)
