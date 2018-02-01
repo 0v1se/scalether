@@ -28,4 +28,8 @@ class MonoPreparedTransaction[I, O](address: Address,
   override def execute(): Mono[String] = super.execute()
 
   override def estimate(): Mono[BigInteger] = super.estimate()
+
+  override def estimateAndExecute(): Mono[String] = super.estimateAndExecute()
+
+  override def estimateAndExecute(maxGas: BigInteger): Mono[String] = super.estimateAndExecute(maxGas)
 }

@@ -2,7 +2,7 @@ package scalether.test
 
 import java.math.BigInteger
 
-import cats.{Functor, Monad}
+import cats.{Functor, Monad, MonadError}
 import cats.implicits._
 import scalether.abi._
 import scalether.abi.array._
@@ -14,7 +14,7 @@ import scalether.util.Hex
 
 import scala.language.higherKinds
 
-class Token[F[_]](address: Address, sender: TransactionSender[F])(implicit f: Functor[F])
+class Token[F[_]](address: Address, sender: TransactionSender[F])(implicit m: MonadError[F, Throwable])
   extends Contract[F](address, sender) {
 
   def approve(spender: Address, value: BigInteger): PreparedTransaction[F, (Address, BigInteger), Boolean] =

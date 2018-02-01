@@ -2,7 +2,7 @@ package scalether.test
 
 import java.math.BigInteger
 
-import cats.{Functor, Monad}
+import cats.{Functor, Monad, MonadError}
 import cats.implicits._
 import scalether.abi._
 import scalether.abi.array._
@@ -14,7 +14,7 @@ import scalether.util.Hex
 
 import scala.language.higherKinds
 
-class IntegrationTest[F[_]](address: Address, sender: TransactionSender[F])(implicit f: Functor[F])
+class IntegrationTest[F[_]](address: Address, sender: TransactionSender[F])(implicit f: MonadError[F, Throwable])
   extends Contract[F](address, sender) {
 
   def emitSimpleEvent(topic: String, value: String): PreparedTransaction[F, (String, String), Unit] =
@@ -50,7 +50,7 @@ object IntegrationTest extends ContractObject {
   def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData))
 
-  def deployAndWait[F[_]](sender: TransactionSender[F], poller: TransactionPoller[F])(implicit m: Monad[F]): F[IntegrationTest[F]] =
+  def deployAndWait[F[_]](sender: TransactionSender[F], poller: TransactionPoller[F])(implicit m: MonadError[F, Throwable]): F[IntegrationTest[F]] =
       poller.waitForTransaction(deploy(sender))
       .map(receipt => new IntegrationTest[F](receipt.contractAddress, sender))
 }
