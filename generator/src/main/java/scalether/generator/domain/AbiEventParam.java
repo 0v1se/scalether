@@ -1,13 +1,12 @@
 package scalether.generator.domain;
 
-import java.util.Collections;
 import java.util.List;
 
 public class AbiEventParam {
     private String name;
     private String type;
     private boolean indexed = false;
-    private List<AbiComponent> components = Collections.emptyList();
+    private List<AbiComponent> components;
 
     public String getName() {
         return name;

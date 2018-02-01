@@ -1,5 +1,7 @@
 package scalether.generator.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,14 +40,17 @@ public class AbiEvent implements AbiItem {
         return "event";
     }
 
+    @JsonIgnore
     public List<AbiEventParam> getIndexed() {
         return inputs.stream().filter(AbiEventParam::isIndexed).collect(Collectors.toList());
     }
 
+    @JsonIgnore
     public List<AbiEventParam> getNonIndexed() {
         return inputs.stream().filter(e -> !e.isIndexed()).collect(Collectors.toList());
     }
 
+    @JsonIgnore
     public List<AbiEventParam> getAll() {
         ArrayList<AbiEventParam> result = new ArrayList<>();
         result.addAll(getIndexed());

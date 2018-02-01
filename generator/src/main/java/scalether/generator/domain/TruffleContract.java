@@ -12,6 +12,15 @@ public class TruffleContract {
     @JsonProperty("bytecode")
     private String bin;
 
+    public TruffleContract(String name, List<AbiItem> abi, String bin) {
+        this.name = name;
+        this.abi = abi;
+        this.bin = bin;
+    }
+
+    public TruffleContract() {
+    }
+
     public boolean isAbstract() {
         return bin == null || bin.length() <= 2;
     }

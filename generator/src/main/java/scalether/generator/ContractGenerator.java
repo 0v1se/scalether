@@ -9,17 +9,14 @@ import scalether.generator.domain.TruffleContract;
 import scalether.generator.domain.Type;
 import scalether.generator.templates.ResourceTemplateLoader;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ContractGenerator {
-    private final ObjectMapper mapper = new ObjectMapper();
+    public final ObjectMapper mapper = createMapper();
     private final Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
 
     public ContractGenerator() {
@@ -35,7 +32,15 @@ public class ContractGenerator {
     }
 
     public String generate(TruffleContract contract, String packageName, Type type) throws IOException, TemplateException {
-        try (ByteArrayOutputStream bytes = new ByteArrayOutputStream(); Writer writer = new OutputStreamWriter(bytes)) {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            generate(out, contract, packageName, type);
+            out.flush();
+            return out.toString();
+        }
+    }
+
+    void generate(OutputStream out, TruffleContract contract, String packageName, Type type) throws IOException, TemplateException {
+        try (Writer writer = new OutputStreamWriter(out)) {
             HashMap<String, Object> model = new HashMap<>();
             model.put("F", type.getF());
             model.put("monadType", type.getMonadType());
@@ -47,63 +52,34 @@ public class ContractGenerator {
             model.put("truffle", contract);
             model.put("package", packageName);
             model.put("abi", escape(mapper.writeValueAsString(contract.getAbi())));
-            generate("contract", model, writer);
+            generate(model, writer);
             writer.flush();
-            bytes.flush();
-            return new String(bytes.toByteArray());
         }
     }
 
-    private void generate(String template, Map<String, Object> model, Writer writer) throws IOException, TemplateException {
-        configuration.getTemplate(template).process(model, writer);
+    private void generate(Map<String, Object> model, Writer writer) throws IOException, TemplateException {
+        configuration.getTemplate("contract").process(model, writer);
     }
 
     private String escape(String raw) {
         return "\"" + raw.replace("\"", "\\\"") + "\"";
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException, TemplateException {
+        generate(args[0], args[1], args[2], (args.length > 3) ? Type.valueOf(args[3]) : Type.SCALA);
     }
 
-    public static void generate(String jsonPath, String sourcePath, String packageName, Type type) {
-
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private static void generate(String jsonPath, String sourcePath, String packageName, Type type) throws IOException, TemplateException {
+        ContractGenerator generator = new ContractGenerator();
+        TruffleContract truffle;
+        try (InputStream in = new FileInputStream(jsonPath)) {
+            truffle = generator.mapper.readValue(in, TruffleContract.class);
+        }
+        String resultPath = sourcePath + "/" + packageName.replace(".", "/");
+        new File(resultPath).mkdirs();
+        try (OutputStream out = new FileOutputStream(new File(resultPath + "/" + truffle.getName() + ".scala"))) {
+            generator.generate(out, truffle, packageName, type);
+        }
     }
-
-    /*
-
-    object ContractGenerator {
-  private val generator = new ContractGenerator
-
-  def main(args: Array[String]): Unit = {
-    generate(args(0), args(1), args(2), if (args.length > 3) Type.valueOf(args(3)) else Type.SCALA)
-  }
-
-  def generate(jsonPath: String, sourcePath: String, packageName: String, `type`: Type): Unit = {
-    val truffle = generator.converter.fromJson[TruffleContract](Source.fromFile(jsonPath).mkString)
-    val source = generator.generate(truffle, packageName, `type`)
-    val resultPath = sourcePath + "/" + packageName.replace(".", "/")
-    new File(resultPath).mkdirs()
-    Files.write(Paths.get(resultPath + "/" + truffle.name + ".scala"), source.getBytes())
-  }
-}
-
-object ContractByAbiGenerator {
-  private val generator = new ContractGenerator
-
-  def main(args: Array[String]): Unit = {
-    generate(args(0), args(1), args(2), args(3), if (args.length > 4) Type.valueOf(args(4)) else Type.SCALA)
-  }
-
-  def generate(name: String, jsonPath: String, sourcePath: String, packageName: String, `type`: Type): Unit = {
-    val abi = generator.converter.fromJson[List[AbiItem]](Source.fromFile(jsonPath).mkString)
-    val truffle = TruffleContract(name, abi, "0x")
-    val source = generator.generate(truffle, packageName, `type`)
-    val resultPath = sourcePath + "/" + packageName.replace(".", "/")
-    new File(resultPath).mkdirs()
-    Files.write(Paths.get(resultPath + "/" + truffle.name + ".scala"), source.getBytes())
-  }
-}
-
-    */
 }
