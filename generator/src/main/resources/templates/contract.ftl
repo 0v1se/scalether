@@ -209,6 +209,9 @@ object ${eventName} {
   @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
     LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
 
+  @annotation.varargs def filter(addresses: Address*): LogFilter =
+    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList)
+
   def apply(log: response.Log): ${eventName} = {
     assert(log.topics.head == event.id)
 
