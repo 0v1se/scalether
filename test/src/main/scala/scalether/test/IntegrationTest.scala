@@ -17,20 +17,20 @@ import scala.language.higherKinds
 class IntegrationTest[F[_]](address: Address, sender: TransactionSender[F])(implicit f: MonadError[F, Throwable])
   extends Contract[F](address, sender) {
 
-  def emitSimpleEvent(topic: String, value: String): PreparedTransaction[F, (String, String), Unit] =
-    new PreparedTransaction(address, Signature("emitSimpleEvent", Tuple2Type(StringType, StringType), UnitType), (topic, value), sender)
+  def emitSimpleEvent(topic: String, value: String): PreparedTransaction[F, Unit] =
+    PreparedTransaction(address, Signature("emitSimpleEvent", Tuple2Type(StringType, StringType), UnitType), (topic, value), sender)
 
-  def emitMixedEvent(topic: Address, value: String, test: Address): PreparedTransaction[F, (Address, String, Address), Unit] =
-    new PreparedTransaction(address, Signature("emitMixedEvent", Tuple3Type(AddressType, StringType, AddressType), UnitType), (topic, value, test), sender)
+  def emitMixedEvent(topic: Address, value: String, test: Address): PreparedTransaction[F, Unit] =
+    PreparedTransaction(address, Signature("emitMixedEvent", Tuple3Type(AddressType, StringType, AddressType), UnitType), (topic, value, test), sender)
 
-  def setState(_state: BigInteger): PreparedTransaction[F, BigInteger, Unit] =
-    new PreparedTransaction(address, Signature("setState", Tuple1Type(Uint256Type), UnitType), _state, sender)
+  def setState(_state: BigInteger): PreparedTransaction[F, Unit] =
+    PreparedTransaction(address, Signature("setState", Tuple1Type(Uint256Type), UnitType), _state, sender)
 
   def state: F[BigInteger] =
-    new PreparedTransaction(address, Signature("state", UnitType, Tuple1Type(Uint256Type)), (), sender).call()
+    PreparedTransaction(address, Signature("state", UnitType, Tuple1Type(Uint256Type)), (), sender).call()
 
-  def emitAddressEvent(topic: Address, value: String): PreparedTransaction[F, (Address, String), Unit] =
-    new PreparedTransaction(address, Signature("emitAddressEvent", Tuple2Type(AddressType, StringType), UnitType), (topic, value), sender)
+  def emitAddressEvent(topic: Address, value: String): PreparedTransaction[F, Unit] =
+    PreparedTransaction(address, Signature("emitAddressEvent", Tuple2Type(AddressType, StringType), UnitType), (topic, value), sender)
 
 }
 
@@ -44,8 +44,8 @@ object IntegrationTest extends ContractObject {
   def encodeArgs: Array[Byte] =
     constructor.encode()
 
-  def deployTransactionData: String =
-    bin + Hex.to(encodeArgs)
+  def deployTransactionData: Array[Byte] =
+    Hex.toBytes(bin) ++ encodeArgs
 
   def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData))

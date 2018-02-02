@@ -9,5 +9,7 @@ case class Transaction(to: Address = null,
                        gas: BigInteger = null,
                        gasPrice: BigInteger = null,
                        value: BigInteger = null,
-                       data: String = "",
-                       nonce: BigInteger = null)
+                       data: Array[Byte] = Array(),
+                       nonce: BigInteger = null) {
+  assert(data != null)
+}

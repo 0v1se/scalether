@@ -112,7 +112,7 @@
 <#macro event_non_indexed_arg arg index><#compress>
     decodedData._${index + 1}
 </#compress></#macro>
-<#macro args inputs payable=false><#if inputs?has_content || payable>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next || payable>, </#if></#list><#if payable>msgValue: BigInteger</#if>)</#if></#macro>
+<#macro args inputs><#if inputs?has_content>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
 <#macro args_values inputs><#list inputs as inp>${inp.name}<#if inp?has_next>, </#if></#list></#macro>
 <#macro args_params inputs><#if inputs?size != 0>(</#if><@args_values inputs/><#if inputs?size != 0>)</#if></#macro>
 <#macro args_tuple inputs><#if inputs?size != 1>(</#if><@args_values inputs/><#if inputs?size != 1>)</#if></#macro>
@@ -156,10 +156,10 @@ class ${truffle.name}<@monad_param/>(address: Address, sender: <@sender/>)<@impl
         <#if item.type != 'event' && item.name??>
             <#if item.constant>
   def ${item.name}<@args item.inputs/>: <@monad/>[<@tuple_type item.outputs/>] =
-    new <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>(address, <@signature item/>, <@args_tuple item.inputs/>, sender<#if item.payable>, msgValue</#if>).call()
+    <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>(address, <@signature item/>, <@args_tuple item.inputs/>, sender).call()
             <#else>
-  def ${item.name}<@args item.inputs item.payable/>: <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>[<#if !(preparedTransaction?has_content)><@monad/>, </#if><@tuple_type item.inputs/>, <@tuple_type item.outputs/>] =
-    new <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>(address, <@signature item/>, <@args_tuple item.inputs/>, sender<#if item.payable>, msgValue</#if>)
+  def ${item.name}<@args item.inputs/>: <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>[<#if !(preparedTransaction?has_content)><@monad/>, </#if><@tuple_type item.outputs/>] =
+    <#if preparedTransaction?has_content>${preparedTransaction}<#else>PreparedTransaction</#if>(address, <@signature item/>, <@args_tuple item.inputs/>, sender)
             </#if>
 
         </#if>
@@ -177,8 +177,8 @@ object ${truffle.name} extends ContractObject {
   def encodeArgs<@args constructor_args/>: Array[Byte] =
     constructor.encode(<@args_values constructor_args/>)
 
-  def deployTransactionData<@args constructor_args/>: String =
-    bin + Hex.to(encodeArgs<@args_params constructor_args/>)
+  def deployTransactionData<@args constructor_args/>: Array[Byte] =
+    Hex.toBytes(bin) ++ encodeArgs<@args_params constructor_args/>
 
   def deploy<@monad_param/>(sender: <@sender/>)<@args constructor_args/><@implicit>(implicit f: Functor[<@monad/>])</@>: <@monad/>[String] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData<@args_params constructor_args/>))

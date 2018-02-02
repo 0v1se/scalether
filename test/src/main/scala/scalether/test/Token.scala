@@ -17,23 +17,23 @@ import scala.language.higherKinds
 class Token[F[_]](address: Address, sender: TransactionSender[F])(implicit m: MonadError[F, Throwable])
   extends Contract[F](address, sender) {
 
-  def approve(spender: Address, value: BigInteger): PreparedTransaction[F, (Address, BigInteger), Boolean] =
-    new PreparedTransaction(address, Signature("approve", Tuple2Type(AddressType, Uint256Type), Tuple1Type(BoolType)), (spender, value), sender)
+  def approve(spender: Address, value: BigInteger): PreparedTransaction[F, Boolean] =
+    PreparedTransaction(address, Signature("approve", Tuple2Type(AddressType, Uint256Type), Tuple1Type(BoolType)), (spender, value), sender)
 
   def totalSupply: F[BigInteger] =
-    new PreparedTransaction(address, Signature("totalSupply", UnitType, Tuple1Type(Uint256Type)), (), sender).call()
+    PreparedTransaction(address, Signature("totalSupply", UnitType, Tuple1Type(Uint256Type)), (), sender).call()
 
-  def transferFrom(from: Address, to: Address, value: BigInteger): PreparedTransaction[F, (Address, Address, BigInteger), Boolean] =
-    new PreparedTransaction(address, Signature("transferFrom", Tuple3Type(AddressType, AddressType, Uint256Type), Tuple1Type(BoolType)), (from, to, value), sender)
+  def transferFrom(from: Address, to: Address, value: BigInteger): PreparedTransaction[F, Boolean] =
+    PreparedTransaction(address, Signature("transferFrom", Tuple3Type(AddressType, AddressType, Uint256Type), Tuple1Type(BoolType)), (from, to, value), sender)
 
   def balanceOf(who: Address): F[BigInteger] =
-    new PreparedTransaction(address, Signature("balanceOf", Tuple1Type(AddressType), Tuple1Type(Uint256Type)), who, sender).call()
+    PreparedTransaction(address, Signature("balanceOf", Tuple1Type(AddressType), Tuple1Type(Uint256Type)), who, sender).call()
 
-  def transfer(to: Address, value: BigInteger): PreparedTransaction[F, (Address, BigInteger), Boolean] =
-    new PreparedTransaction(address, Signature("transfer", Tuple2Type(AddressType, Uint256Type), Tuple1Type(BoolType)), (to, value), sender)
+  def transfer(to: Address, value: BigInteger): PreparedTransaction[F, Boolean] =
+    PreparedTransaction(address, Signature("transfer", Tuple2Type(AddressType, Uint256Type), Tuple1Type(BoolType)), (to, value), sender)
 
   def allowance(owner: Address, spender: Address): F[BigInteger] =
-    new PreparedTransaction(address, Signature("allowance", Tuple2Type(AddressType, AddressType), Tuple1Type(Uint256Type)), (owner, spender), sender).call()
+    PreparedTransaction(address, Signature("allowance", Tuple2Type(AddressType, AddressType), Tuple1Type(Uint256Type)), (owner, spender), sender).call()
 
 }
 

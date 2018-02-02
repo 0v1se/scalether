@@ -6,10 +6,19 @@ import scalether.abi.tuple.TupleType
 import scalether.util.{Hash, Hex}
 
 case class Signature[I, O](name: String, in: TupleType[I], out: TupleType[O]) {
-  def id: String = {
+  def id: Array[Byte] = {
     val bytes = toString.getBytes(StandardCharsets.US_ASCII)
-    Hex.prefixed(Hash.sha3(bytes).slice(0, 4))
+    Hash.sha3(bytes).slice(0, 4)
   }
+
+  def encode(in: I): Array[Byte] =
+    id ++ this.in.encode(in)
+
+  def decode(out: String): O =
+    this.out.decode(Hex.toBytes(out), 0).value
+
+  def decode(out: Array[Byte]): O =
+    this.out.decode(out, 0).value
 
   override def toString: String = name + in.string
 }
