@@ -24,13 +24,14 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
 
   def sendTransaction(transaction: Transaction): F[String] = fill(transaction).flatMap {
     transaction =>
-      if (transaction.nonce != null) {
-        ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction)))
-      } else {
-        nonceProvider.nonce(address = from).flatMap(
-          nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce))))
-            .handleErrorWith(e => nonceProvider.recover(from).flatMap(_ => m.raiseError(e)))
-        )
+      ethereum.ethCall(transaction, "latest").flatMap { _ =>
+        if (transaction.nonce != null) {
+          ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction)))
+        } else {
+          nonceProvider.nonce(address = from).flatMap(
+            nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce))))
+          )
+        }
       }
   }
 }
