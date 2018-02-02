@@ -13,7 +13,7 @@ class ReadOnlyTransactionSender[F[_]](val ethereum: Ethereum[F], val from: Addre
                                      (implicit m: MonadError[F, Throwable])
   extends TransactionSender[F] {
 
-  override def call(transaction: Transaction): F[String] =
+  override def call(transaction: Transaction): F[Array[Byte]] =
     ethereum.ethCall(transaction.copy(from = from), "latest")
 
   override def estimate(transaction: Transaction): F[BigInteger] =

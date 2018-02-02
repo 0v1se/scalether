@@ -34,7 +34,7 @@ class Ethereum[F[_]](service: EthereumService[F])
   def ethGetBlockByNumber(number: BigInteger): F[Block] =
     exec("eth_getBlockByNumber", number, false)
 
-  def ethCall(transaction: Transaction, defaultBlockParameter: String): F[String] =
+  def ethCall(transaction: Transaction, defaultBlockParameter: String): F[Array[Byte]] =
     exec("eth_call", transaction, defaultBlockParameter)
 
   def ethEstimateGas(transaction: Transaction, defaultBlockParameter: String): F[BigInteger] =

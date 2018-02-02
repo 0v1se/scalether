@@ -27,6 +27,8 @@ class JsonConverter {
     mod.addSerializer(classOf[Address], AddressSerializer)
     mod.addDeserializer(classOf[Word], WordDeserializer)
     mod.addSerializer(classOf[Word], WordSerializer)
+    mod.addDeserializer(classOf[Array[Byte]], BytesDeserializer)
+    mod.addSerializer(classOf[Array[Byte]], BytesSerializer)
     mod.addSerializer(classOf[TopicFilter], TopicFilterSerializer)
     mod
   }

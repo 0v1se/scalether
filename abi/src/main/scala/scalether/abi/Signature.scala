@@ -14,9 +14,6 @@ case class Signature[I, O](name: String, in: TupleType[I], out: TupleType[O]) {
   def encode(in: I): Array[Byte] =
     id ++ this.in.encode(in)
 
-  def decode(out: String): O =
-    this.out.decode(Hex.toBytes(out), 0).value
-
   def decode(out: Array[Byte]): O =
     this.out.decode(out, 0).value
 

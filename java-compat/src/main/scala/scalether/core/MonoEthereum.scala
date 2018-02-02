@@ -35,7 +35,7 @@ class MonoEthereum(service: MonoEthereumService)
   override def ethGetBlockByNumber(number: BigInteger): Mono[Block] =
     super.ethGetBlockByNumber(number)
 
-  override def ethCall(transaction: Transaction, defaultBlockParameter: String): Mono[String] =
+  override def ethCall(transaction: Transaction, defaultBlockParameter: String): Mono[Array[Byte]] =
     super.ethCall(transaction, defaultBlockParameter)
 
   override def ethSendTransaction(transaction: Transaction): Mono[String] =

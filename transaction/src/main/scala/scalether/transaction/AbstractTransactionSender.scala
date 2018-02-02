@@ -13,7 +13,7 @@ import scala.language.higherKinds
 abstract class AbstractTransactionSender[F[_]: Monad](val ethereum: Ethereum[F], val from: Address, val gas: BigInteger, val gasPrice: GasPriceProvider[F])
   extends TransactionSender[F] {
 
-  def call(transaction: Transaction): F[String] =
+  def call(transaction: Transaction): F[Array[Byte]] =
     ethereum.ethCall(transaction.copy(from = from), "latest")
 
   override def estimate(transaction: Transaction): F[BigInteger] =
