@@ -39,7 +39,7 @@ public class ContractGenerator {
         }
     }
 
-    void generate(OutputStream out, TruffleContract contract, String packageName, Type type) throws IOException, TemplateException {
+    public void generate(OutputStream out, TruffleContract contract, String packageName, Type type) throws IOException, TemplateException {
         try (Writer writer = new OutputStreamWriter(out)) {
             HashMap<String, Object> model = new HashMap<>();
             model.put("F", type.getF());
