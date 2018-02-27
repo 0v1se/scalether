@@ -112,8 +112,9 @@
 <#macro event_non_indexed_arg arg index><#compress>
     decodedData._${index + 1}
 </#compress></#macro>
-<#macro args inputs><#if inputs?has_content>(<#list inputs as inp>${inp.name}: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
-<#macro args_values inputs><#list inputs as inp>${inp.name}<#if inp?has_next>, </#if></#list></#macro>
+<#macro if_empty name default_name><#if name?has_content>${name}<#else>${default_name}</#if></#macro>
+<#macro args inputs><#if inputs?has_content>(<#list inputs as inp><#local c=inp?counter/><@if_empty inp.name "arg${c}"/>: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
+<#macro args_values inputs><#list inputs as inp><#local c=inp?counter/><@if_empty inp.name "arg${c}"/><#if inp?has_next>, </#if></#list></#macro>
 <#macro args_params inputs><#if inputs?size != 0>(</#if><@args_values inputs/><#if inputs?size != 0>)</#if></#macro>
 <#macro args_tuple inputs><#if inputs?size != 1>(</#if><@args_values inputs/><#if inputs?size != 1>)</#if></#macro>
 <#function find_constructor_args>
