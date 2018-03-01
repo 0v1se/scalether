@@ -33,8 +33,6 @@ class MonoPreparedTransaction[O](address: Address,
   override def estimate(): Mono[BigInteger] = super.estimate()
 
   override def estimateAndExecute(): Mono[String] = super.estimateAndExecute()
-
-  override def estimateAndExecute(maxGas: BigInteger): Mono[String] = super.estimateAndExecute(maxGas)
 }
 
 object MonoPreparedTransaction {

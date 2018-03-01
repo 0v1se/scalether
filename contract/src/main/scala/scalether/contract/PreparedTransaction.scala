@@ -41,12 +41,6 @@ class PreparedTransaction[F[_], O](address: Address,
 
   def estimateAndExecute(): F[String] =
     estimate().flatMap(estimated => this.withGas(estimated).execute())
-
-  def estimateAndExecute(maxGas: BigInteger): F[String] =
-    estimate().flatMap {
-      case estimated if estimated.compareTo(maxGas) <= 0 => withGas(estimated).execute()
-      case estimated => m.raiseError(new RuntimeException(s"transaction required more than $maxGas gas: $estimated"))
-    }
 }
 
 object PreparedTransaction {
