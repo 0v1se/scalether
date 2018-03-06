@@ -29,14 +29,16 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
     _ <- state.set(blockNumber)
   } yield ()
 
-  private def fetchAndNotify(blockNumber: BigInteger, saved: Option[BigInteger]): F[Unit] = saved match {
-    case None => m.pure(Nil)
-    case Some(savedBlockNumber) => Notify.every(blockNumbers(savedBlockNumber.subtract(BigInteger.valueOf(confidence - 1)), blockNumber))(fetchAndNotify(blockNumber))
+  private def fetchAndNotify(blockNumber: BigInteger, saved: Option[BigInteger]): F[Unit] = {
+    val from = saved.getOrElse(blockNumber.subtract(BigInteger.ONE))
+    Notify.every(blockNumbers(from.subtract(BigInteger.valueOf(confidence - 1)), blockNumber))(fetchAndNotify(blockNumber))
   }
 
   private def blockNumbers(from: BigInteger, to: BigInteger): List[BigInteger] = {
     if (from.compareTo(to) >= 0)
       Nil
+    else if (from.compareTo(BigInteger.ZERO) < 0)
+      blockNumbers(from.add(BigInteger.ONE), to)
     else
       from.add(BigInteger.ONE) :: blockNumbers(from.add(BigInteger.ONE), to)
   }
