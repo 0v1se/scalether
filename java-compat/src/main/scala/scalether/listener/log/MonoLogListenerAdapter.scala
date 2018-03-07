@@ -10,8 +10,7 @@ class MonoLogListenerAdapter(listener: MonoLogListener) extends LogListener[Mono
 
   override def onLog(log: Log, confirmations: Int, confirmed: Boolean): Mono[Unit] =
     listener.onLog(log, confirmations, confirmed)
-      .map[Unit](_ => ())
-      .switchIfEmpty(Mono.just())
+        .`then`(Mono.just())
 
   override def enabled: Boolean = listener.isEnabled
 }

@@ -9,6 +9,5 @@ class MonoBlockListenerAdapter(listener: MonoBlockListener) extends BlockListene
 
   override def onBlock(block: BigInteger): Mono[Unit] =
     listener.onBlock(block)
-      .map[Unit](_ => ())
-      .switchIfEmpty(Mono.just())
+        .`then`(Mono.just())
 }
