@@ -8,6 +8,5 @@ class MonoTransferListenerAdapter(listener: MonoTransferListener) extends Transf
 
   override def onTransfer(transfer: Transfer, confirmations: Int, confirmed: Boolean): Mono[Unit] =
     listener.onTransfer(transfer, confirmations, confirmed)
-      .map[Unit](_ => ())
-      .switchIfEmpty(Mono.just())
+      .`then`(Mono.just())
 }
