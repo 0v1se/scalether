@@ -14,8 +14,6 @@ import scala.language.higherKinds
 class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], confidence: Int, listener: TransferListener[F], state: State[BigInteger, F])
                                  (implicit m: Monad[F]) {
 
-  private val logger: Logger = LoggerFactory.getLogger(getClass)
-
   def check(blockNumber: BigInteger): F[Unit] =
     if (listener.enabled) {
       checkInternal(blockNumber)
@@ -47,7 +45,6 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
     parity.traceBlock(block).flatMap(notifyListenerAboutTraces(latestBlock, block))
 
   private def notifyListenerAboutTraces(latestBlock: BigInteger, block: BigInteger)(traces: List[Trace]): F[Unit] = {
-    logger.info("will process for block {}: {} traces", block, traces.size)
     Notify.every(traces)(notifyListener(latestBlock))
   }
 
