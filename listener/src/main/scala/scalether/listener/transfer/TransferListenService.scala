@@ -2,7 +2,7 @@ package scalether.listener.transfer
 
 import java.math.BigInteger
 
-import cats.Monad
+import cats.MonadError
 import cats.implicits._
 import org.slf4j.{Logger, LoggerFactory}
 import scalether.core.{Ethereum, Parity}
@@ -12,7 +12,9 @@ import scalether.listener.common.{Notify, State}
 import scala.language.higherKinds
 
 class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], confidence: Int, listener: TransferListener[F], state: State[BigInteger, F])
-                                 (implicit m: Monad[F]) {
+                                 (implicit m: MonadError[F, Throwable]) {
+
+  val logger: Logger = LoggerFactory.getLogger(getClass)
 
   def check(blockNumber: BigInteger): F[Unit] =
     if (listener.enabled) {
@@ -29,12 +31,16 @@ class TransferListenService[F[_]](ethereum: Ethereum[F], parity: Parity[F], conf
 
   private def fetchAndNotify(blockNumber: BigInteger, saved: Option[BigInteger]): F[Unit] = {
     val from = saved.getOrElse(blockNumber.subtract(BigInteger.ONE))
-    Notify.every(blockNumbers(from.subtract(BigInteger.valueOf(confidence - 1)), blockNumber))(fetchAndNotify(blockNumber))
+    val start = from.subtract(BigInteger.valueOf(confidence - 1))
+    val numbers = blockNumbers(start, blockNumber)
+    Notify.every(numbers)(fetchAndNotify(blockNumber))
   }
 
   private def blockNumbers(from: BigInteger, to: BigInteger): List[BigInteger] = {
     if (from.compareTo(to) >= 0)
       Nil
+    else if (to.subtract(from).compareTo(BigInteger.TEN.pow(3)) >= 0)
+      throw new IllegalArgumentException("unable to process more than 1000 blocks")
     else if (from.compareTo(BigInteger.ZERO) < 0)
       blockNumbers(from.add(BigInteger.ONE), to)
     else

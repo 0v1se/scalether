@@ -7,6 +7,9 @@ class MonoInstance extends MonadError[Mono, Throwable] {
   def flatMap[A, B](fa: Mono[A])(f: A => Mono[B]): Mono[B] =
     fa.flatMap(a => f(a))
 
+  override def map[A, B](fa: Mono[A])(f: A => B): Mono[B] =
+    fa.map(a => f(a))
+
   def tailRecM[A, B](a: A)(f: A => Mono[Either[A, B]]): Mono[B] =
     ???
 
