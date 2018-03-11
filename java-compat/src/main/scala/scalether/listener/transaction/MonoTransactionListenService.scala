@@ -4,6 +4,7 @@ import java.math.BigInteger
 
 import reactor.core.publisher.Mono
 import scalether.core.MonoEthereum
+import scalether.java.implicits._
 import scalether.listener.common.{MonoState, MonoStateAdapter}
 
 class MonoTransactionListenService(ethereum: MonoEthereum, confidence: Int, listener: MonoTransactionListener, state: MonoState[BigInteger]) {
