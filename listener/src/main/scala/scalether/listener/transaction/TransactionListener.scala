@@ -1,8 +1,10 @@
 package scalether.listener.transaction
 
+import java.math.BigInteger
+
 import scala.language.higherKinds
 
 trait TransactionListener[F[_]] {
   def enabled: Boolean
-  def onTransaction(txHash: String, confirmations: Int, confirmed: Boolean): F[Unit]
+  def onTransaction(transactionHash: String, blockHash: String, blockNumber: BigInteger, confirmations: Int, confirmed: Boolean): F[Unit]
 }

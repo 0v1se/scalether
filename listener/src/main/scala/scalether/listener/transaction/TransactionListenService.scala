@@ -51,11 +51,11 @@ class TransactionListenService[F[_]](ethereum: Ethereum[F], confidence: Int, lis
     ethereum.ethGetBlockByNumber(block).flatMap(notifyListenerAboutTransactions(latestBlock, block))
 
   private def notifyListenerAboutTransactions(latestBlock: BigInteger, block: BigInteger)(fetched: Block): F[Unit] = {
-    Notify.every(fetched.transactions)(notifyListener(latestBlock, fetched.number))
+    Notify.every(fetched.transactions)(notifyListener(latestBlock, fetched.number, fetched.hash))
   }
 
-  private def notifyListener(latestBlock: BigInteger, block: BigInteger)(txHash: String): F[Unit] = {
+  private def notifyListener(latestBlock: BigInteger, block: BigInteger, blockHash: String)(transactionHash: String): F[Unit] = {
     val confirmations = latestBlock.subtract(block).intValue() + 1
-    listener.onTransaction(txHash, confirmations, confirmations >= confidence)
+    listener.onTransaction(transactionHash, blockHash, block, confirmations, confirmations >= confidence)
   }
 }
