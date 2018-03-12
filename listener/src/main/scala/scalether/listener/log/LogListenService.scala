@@ -35,7 +35,7 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
       m.pure(Nil)
     } else {
       val fromBlock = savedBlockNumber match {
-        case Some(value) => value.subtract(BigInteger.valueOf(confidence - 1))
+        case Some(value) => value.subtract(BigInteger.valueOf(confidence - 2))
         case None => BigInteger.ZERO
       }
       for {
