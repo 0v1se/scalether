@@ -1,7 +1,7 @@
-package scalether.listener.common
+package io.daonomic.blockchain
 
-import cats.implicits._
 import cats.Monad
+import cats.implicits._
 
 import scala.language.higherKinds
 

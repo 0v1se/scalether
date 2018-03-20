@@ -4,9 +4,9 @@ import java.math.BigInteger
 
 import cats.Monad
 import cats.implicits._
+import io.daonomic.blockchain.state.State
 import scalether.core.Ethereum
 import scalether.domain.response.Log
-import scalether.listener.common.State
 import scalether.util.Hex
 
 import scala.language.higherKinds
@@ -14,7 +14,7 @@ import scala.language.higherKinds
 class LogListenService[F[_]](ethereum: Ethereum[F],
                              confidence: Int,
                              listener: LogListener[F],
-                             knownBlockState: State[BigInteger, F])
+                             state: State[BigInteger, F])
                             (implicit m: Monad[F]) {
 
   def check(blockNumber: BigInteger): F[List[Log]] = if (listener.enabled) {
@@ -24,10 +24,10 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
   }
 
   private def checkInternal(blockNumber: BigInteger): F[List[Log]] = for {
-    saved <- knownBlockState.get
+    saved <- state.get
     logs <- fetchLogs(blockNumber, saved)
     _ <- notifyListeners(blockNumber, logs)
-    _ <- knownBlockState.set(blockNumber)
+    _ <- state.set(blockNumber)
   } yield logs
 
   private def fetchLogs(blockNumber: BigInteger, savedBlockNumber: Option[BigInteger]): F[List[Log]] = {

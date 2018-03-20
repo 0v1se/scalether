@@ -1,4 +1,4 @@
-package scalether.listener.common
+package io.daonomic.blockchain.state
 
 import cats.Monad
 

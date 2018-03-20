@@ -3,13 +3,13 @@ package scalether.listener.log
 import java.math.BigInteger
 
 import cats.implicits._
+import io.daonomic.blockchain.state.VarState
 import org.mockito.Mockito._
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import scalether.core.Ethereum
-import scalether.listener.common.VarState
 
-import scala.util.{Success, Try}
+import scala.util.Try
 
 class LogListenServiceSpec extends FlatSpec with MockitoSugar {
   "LogListenerService" should "not do anything if no new block added" in {

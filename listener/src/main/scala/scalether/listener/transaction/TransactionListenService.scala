@@ -4,10 +4,11 @@ import java.math.BigInteger
 
 import cats.MonadError
 import cats.implicits._
+import io.daonomic.blockchain.Notify
+import io.daonomic.blockchain.state.State
 import org.slf4j.{Logger, LoggerFactory}
 import scalether.core.Ethereum
 import scalether.domain.response.Block
-import scalether.listener.common.{Notify, State}
 
 import scala.language.higherKinds
 

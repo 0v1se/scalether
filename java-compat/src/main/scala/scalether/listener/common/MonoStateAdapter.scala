@@ -1,5 +1,6 @@
 package scalether.listener.common
 
+import io.daonomic.blockchain.state.State
 import reactor.core.publisher.Mono
 
 class MonoStateAdapter[T](monoState: MonoState[T]) extends State[T, Mono] {

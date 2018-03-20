@@ -28,6 +28,8 @@ def common(project: Project): Project = base(project)
 
 lazy val util = base(project)
 
+lazy val `blockchain-common` = base(project)
+
 lazy val domain = base(project)
   .dependsOn(util)
 
@@ -46,7 +48,7 @@ lazy val transaction = common(project)
   .dependsOn(core, poller)
 
 lazy val listener = common(project)
-  .dependsOn(core)
+  .dependsOn(core, `blockchain-common`)
 
 lazy val contract = common(project)
   .dependsOn(abi, transaction)
