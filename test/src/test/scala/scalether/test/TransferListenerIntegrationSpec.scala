@@ -7,16 +7,17 @@ import io.daonomic.blockchain.block.{BlockListenService, BlockListener}
 import io.daonomic.blockchain.state.VarState
 import io.daonomic.blockchain.transfer
 import io.daonomic.blockchain.transfer.{TransferListenService, TransferListener}
+import io.daonomic.rpc.tries.ScalajHttpTransport
 import org.scalatest.FlatSpec
-import scalether.core.{Ethereum, EthereumService, Parity}
+import scalether.core.{Ethereum, Parity}
 import scalether.listener.EthereumBlockchain
-import scalether.transport.ScalajHttpTransportService
 
 import scala.util.{Failure, Try}
 
 class TransferListenerIntegrationSpec extends FlatSpec {
-  val ethereum = new Ethereum[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether:8545"), log = false))
-  val parity = new Parity[Try](new EthereumService[Try](new ScalajHttpTransportService("http://ether:8545"), log = false))
+  val transport = new ScalajHttpTransport("http://ether-dev:8545")
+  val ethereum = new Ethereum[Try](transport)
+  val parity = new Parity[Try](transport)
   val blockchain = new EthereumBlockchain(ethereum, parity)
 
   "TranferListenService" should "listen for transfers" taggedAs ManualTag in {

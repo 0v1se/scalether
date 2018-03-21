@@ -1,5 +1,5 @@
 object Versions {
-  val scala = "2.12.4"
+  val scala = "2.12.5"
   val slf4j = "1.7.25"
   val asyncHttpClient = "2.4.2"
   val reactor = "3.1.5.RELEASE"
@@ -12,4 +12,7 @@ object Versions {
   val scalajhttp = "2.3.0"
   val mockito = "1.10.19"
   val boncycastle = "1.58"
+  val scalaRpc = "0.1.2"
+  val catsMono = "0.1.0"
+  val blockchainCommon = "0.1.1"
 }

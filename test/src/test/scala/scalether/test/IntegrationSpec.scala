@@ -1,16 +1,16 @@
 package scalether.test
 
 import cats.implicits._
-import scalether.core.{Ethereum, EthereumService}
+import io.daonomic.rpc.tries.ScalajHttpTransport
+import scalether.core.Ethereum
 import scalether.domain.implicits._
 import scalether.poller.tries.implicits._
 import scalether.transaction._
-import scalether.transport.ScalajHttpTransportService
 
 import scala.util.Try
 
 trait IntegrationSpec {
-  val ethereum = new Ethereum[Try](new EthereumService[Try](new ScalajHttpTransportService("http://localhost:8545"), log = true))
+  val ethereum = new Ethereum[Try](new ScalajHttpTransport("http://localhost:8545"))
   val sender = new SigningTransactionSender[Try](
     ethereum,
     new SimpleNonceProvider[Try](ethereum),

@@ -2,13 +2,13 @@ package scalether.core
 
 import java.math.BigInteger
 
+import io.daonomic.rpc.json.JsonConverter
 import org.scalatest.{FlatSpec, Matchers}
-import scalether.core.json.JsonConverter
 import scalether.domain.request.{LogFilter, TopicFilter}
 import scalether.domain.{Response, Word}
 
 class JsonSpec extends FlatSpec with Matchers {
-  val json = new JsonConverter
+  val json:JsonConverter = EthereumRpcClient.jsonConverter
 
   "JsonConverter" should "deserialize responses with BigInteger" in {
     val result = json.fromJson[Response[BigInteger]]("{\"id\":1,\"result\":\"0x4A817C800\"}")
