@@ -1,6 +1,4 @@
-
 name := "scalether"
-version := "0.1.0-SNAPSHOT"
 
 def base(project: Project): Project = project.settings(
   organization := "io.daonomic.scalether",
