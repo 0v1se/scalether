@@ -2,7 +2,7 @@ package scalether.listener.block
 
 import java.math.BigInteger
 
-import io.daonomic.blockchain.newblock.BlockListener
+import io.daonomic.blockchain.block.BlockListener
 import reactor.core.publisher.Mono
 
 class MonoBlockListenerAdapter(listener: MonoBlockListener) extends BlockListener[Mono] {

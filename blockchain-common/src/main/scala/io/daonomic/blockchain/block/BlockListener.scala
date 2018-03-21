@@ -1,4 +1,4 @@
-package io.daonomic.blockchain.newblock
+package io.daonomic.blockchain.block
 
 import java.math.BigInteger
 

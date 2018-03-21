@@ -3,7 +3,7 @@ package scalether.test
 import java.math.BigInteger
 
 import cats.implicits._
-import io.daonomic.blockchain.newblock.{BlockListenService, BlockListener}
+import io.daonomic.blockchain.block.{BlockListenService, BlockListener}
 import io.daonomic.blockchain.state.VarState
 import io.daonomic.blockchain.transfer
 import io.daonomic.blockchain.transfer.{TransferListenService, TransferListener}

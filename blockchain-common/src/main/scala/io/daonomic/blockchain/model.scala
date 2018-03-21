@@ -13,7 +13,6 @@ trait Blockchain[F[_]] {
 trait Transaction {
   def id: String
   def blockNumber: BigInteger
-  def inputs: List[BalanceChange]
   def outputs: List[BalanceChange]
 }
 

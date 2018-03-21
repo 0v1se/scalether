@@ -3,7 +3,7 @@ package scalether.listener.block
 import java.math.BigInteger
 
 import io.daonomic.blockchain.Blockchain
-import io.daonomic.blockchain.newblock.BlockListenService
+import io.daonomic.blockchain.block.BlockListenService
 import reactor.core.publisher.Mono
 import scalether.java.implicits._
 import scalether.listener.common.{MonoState, MonoStateAdapter}

@@ -7,6 +7,11 @@ version := "0.1.0-SNAPSHOT"
 
 scalaVersion := Versions.scala
 
+def tests(project: Project): Project = project
+  .settings(libraryDependencies += "org.scalatest" %% "scalatest" % Versions.scalatest % "test")
+  .settings(libraryDependencies += "org.scalacheck" %% "scalacheck" % Versions.scalacheck % "test")
+  .settings(libraryDependencies += "org.mockito" % "mockito-all" % Versions.mockito)
+
 def base(project: Project): Project = project
   .settings(organization := "org.scalether")
   .settings(nexusProperties := {
@@ -23,15 +28,15 @@ def base(project: Project): Project = project
   })
   .settings(credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"))
 
+lazy val util = tests(base(project))
+
+lazy val `blockchain-common` = tests(base(project))
+
+lazy val domain = tests(base(project))
+  .dependsOn(util)
+
 def common(project: Project): Project = base(project)
   .dependsOn(domain, `test-common` % "test")
-
-lazy val util = base(project)
-
-lazy val `blockchain-common` = base(project)
-
-lazy val domain = base(project)
-  .dependsOn(util)
 
 lazy val `test-common` = base(project)
   .dependsOn(domain)
