@@ -2,10 +2,11 @@ package scalether.core
 
 import java.math.BigInteger
 
+import io.daonomic.rpc.domain.Response
 import io.daonomic.rpc.json.JsonConverter
 import org.scalatest.{FlatSpec, Matchers}
+import scalether.domain.Word
 import scalether.domain.request.{LogFilter, TopicFilter}
-import scalether.domain.{Response, Word}
 
 class JsonSpec extends FlatSpec with Matchers {
   val json:JsonConverter = EthereumRpcClient.jsonConverter
