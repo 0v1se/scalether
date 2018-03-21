@@ -23,7 +23,7 @@ class TransferListenService[F[_]](blockchain: Blockchain[F], confidence: Int, li
 
   private def notifyTransaction(latestBlock: BigInteger)(tx: Transaction): F[Unit] = {
     val confirmations = latestBlock.subtract(tx.blockNumber).intValue() + 1
-    Notify.every(tx.outputs.zipWithIndex)(notifyTransactionOutput(tx, confirmations, TransferDirection.OUT))
+    Notify.every(tx.outputs.zipWithIndex)(notifyTransactionOutput(tx, confirmations, TransferDirection.IN))
   }
 
   private def notifyTransactionOutput(transaction: Transaction, confirmations: Int, direction: TransferDirection)(pair: (BalanceChange, Int)): F[Unit] = {

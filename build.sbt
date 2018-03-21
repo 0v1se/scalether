@@ -7,13 +7,8 @@ version := "0.1.0-SNAPSHOT"
 
 scalaVersion := Versions.scala
 
-def tests(project: Project): Project = project
-  .settings(libraryDependencies += "org.scalatest" %% "scalatest" % Versions.scalatest % "test")
-  .settings(libraryDependencies += "org.scalacheck" %% "scalacheck" % Versions.scalacheck % "test")
-  .settings(libraryDependencies += "org.mockito" % "mockito-all" % Versions.mockito)
-
 def base(project: Project): Project = project
-  .settings(organization := "org.scalether")
+  .settings(organization := "io.daonomic.scalether")
   .settings(nexusProperties := {
     val prop = new Properties()
     IO.load(prop, Path.userHome / ".ivy2" / ".nexus")
@@ -27,6 +22,11 @@ def base(project: Project): Project = project
       Some("releases" at nexus + "/content/repositories/releases/")
   })
   .settings(credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"))
+
+def tests(project: Project): Project = project
+  .settings(libraryDependencies += "org.scalatest" %% "scalatest" % Versions.scalatest % "test")
+  .settings(libraryDependencies += "org.scalacheck" %% "scalacheck" % Versions.scalacheck % "test")
+  .settings(libraryDependencies += "org.mockito" % "mockito-all" % Versions.mockito)
 
 lazy val util = tests(base(project))
 
@@ -74,4 +74,4 @@ lazy val `java-compat` = common(project)
   .dependsOn(abi, contract, listener)
 
 lazy val root = base(project in file(".")).
-  aggregate(util, domain, core, abi, contract, poller, transaction, listener, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)
+  aggregate(util, domain, `blockchain-common`, core, abi, contract, poller, transaction, listener, `async-http-client`, `scalaj-http`, generator, `java-compat`, test)
