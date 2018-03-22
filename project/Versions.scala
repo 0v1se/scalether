@@ -12,7 +12,7 @@ object Versions {
   val scalajhttp = "2.3.0"
   val mockito = "1.10.19"
   val boncycastle = "1.58"
-  val scalaRpc = "0.1.2"
+  val scalaRpc = "0.1.3"
   val catsMono = "0.1.0"
-  val blockchainCommon = "0.1.2"
+  val blockchainCommon = "0.1.3"
 }

@@ -36,7 +36,7 @@ class EthereumBlockchain[F[_]](ethereum: Ethereum[F], parity: Parity[F])
     .map(_.transactions)
 }
 
-class EthereumTransaction(val id: String, val blockNumber: BigInteger, traces: List[Trace]) extends Transaction {
+class EthereumTransaction(val id: String, traces: List[Trace]) extends Transaction {
   lazy val outputs: List[BalanceChange] = traces
     .map(t => BalanceChange(t.action.to.toString, t.action.value))
 }
