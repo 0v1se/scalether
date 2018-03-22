@@ -26,7 +26,7 @@ class EthereumBlockchain[F[_]](ethereum: Ethereum[F], parity: Parity[F])
   override def getTransactionsByBlock(block: BigInteger): F[List[Transaction]] =
     parity.traceBlock(block)
       .map(traces => filterTraces(traces).groupBy(_.transactionHash.toString))
-      .map(_.toList.map { case (hash, traces) => new EthereumTransaction(hash, block, traces) })
+      .map(_.toList.map { case (hash, traces) => new EthereumTransaction(hash, traces) })
 
   override def blockNumber: F[BigInteger] =
     ethereum.ethBlockNumber()

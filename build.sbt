@@ -2,10 +2,11 @@ name := "scalether"
 
 def base(project: Project): Project = project.settings(
   organization := "io.daonomic.scalether",
+  bintrayPackage := s"scalether-${name.value}",
   bintrayOrganization := Some("daonomic"),
   bintrayPackageLabels := Seq("daonomic", "rpc", "scala", "scalether", "ethereum"),
   licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
-  version := "0.1.1",
+  version := "0.1.0",
   scalaVersion := Versions.scala
 )
 
@@ -14,16 +15,17 @@ def tests(project: Project): Project = project
   .settings(libraryDependencies += "org.scalacheck" %% "scalacheck" % Versions.scalacheck % "test")
   .settings(libraryDependencies += "org.mockito" % "mockito-all" % Versions.mockito)
 
+def common(project: Project): Project = base(project)
+  .dependsOn(domain, `test-common` % "test")
+
 lazy val util = tests(base(project))
 
 lazy val domain = tests(base(project))
   .dependsOn(util)
 
-def common(project: Project): Project = base(project)
-  .dependsOn(domain, `test-common` % "test")
-
 lazy val `test-common` = base(project)
   .dependsOn(domain)
+  .settings(publish := {})
 
 lazy val core = common(project)
   .dependsOn(util)
