@@ -4,7 +4,7 @@ import cats.implicits._
 import io.daonomic.rpc.tries.ScalajHttpTransport
 import scalether.core.Ethereum
 import scalether.domain.implicits._
-import scalether.poller.tries.implicits._
+import io.daonomic.blockchain.poller.tries.implicits._
 import scalether.transaction._
 
 import scala.util.Try

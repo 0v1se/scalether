@@ -34,16 +34,11 @@ lazy val `core-mono` = common(project)
 lazy val abi = common(project)
   .dependsOn(core)
 
-lazy val poller = common(project)
-
-lazy val `poller-mono` = common(project)
-  .dependsOn(poller)
-
 lazy val transaction = common(project)
-  .dependsOn(core, poller)
+  .dependsOn(core)
 
 lazy val `transaction-mono` = common(project)
-  .dependsOn(transaction, `core-mono`, `poller-mono`)
+  .dependsOn(transaction, `core-mono`)
 
 lazy val listener = common(project)
   .dependsOn(core)
@@ -66,4 +61,4 @@ lazy val generator = base(project)
 
 lazy val scalether = base(project in file("."))
   .settings(publish := {})
-  .aggregate(util, domain, core, `core-mono`, abi, contract, `contract-mono`, poller, `poller-mono`, transaction, `transaction-mono`, listener, `listener-mono`, generator, test)
+  .aggregate(util, domain, core, `core-mono`, abi, contract, `contract-mono`, transaction, `transaction-mono`, listener, `listener-mono`, generator, test)
