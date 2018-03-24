@@ -5,6 +5,7 @@ import java.math.BigInteger
 import cats.Monad
 import cats.implicits._
 import io.daonomic.blockchain.state.State
+import org.slf4j.{Logger, LoggerFactory}
 import scalether.core.Ethereum
 import scalether.domain.response.Log
 import scalether.util.Hex
@@ -17,9 +18,14 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
                              state: State[BigInteger, F])
                             (implicit m: Monad[F]) {
 
+  val logger: Logger = LoggerFactory.getLogger(getClass)
+
   def check(blockNumber: BigInteger): F[List[Log]] = if (listener.enabled) {
     checkInternal(blockNumber)
   } else {
+    if (logger.isDebugEnabled()) {
+      logger.debug("listener is disabled. ignoring")
+    }
     m.pure(Nil)
   }
 
@@ -31,12 +37,18 @@ class LogListenService[F[_]](ethereum: Ethereum[F],
   } yield logs
 
   private def fetchLogs(blockNumber: BigInteger, savedBlockNumber: Option[BigInteger]): F[List[Log]] = {
+    if (logger.isDebugEnabled()) {
+      logger.debug(s"fetchLogs blockNumber=$blockNumber savedBlockNumber=$savedBlockNumber")
+    }
     if (savedBlockNumber.contains(blockNumber)) {
       m.pure(Nil)
     } else {
       val fromBlock = savedBlockNumber match {
         case Some(value) => value.subtract(BigInteger.valueOf(confidence - 2))
         case None => BigInteger.ZERO
+      }
+      if (logger.isDebugEnabled()) {
+        logger.debug(s"createFilter from=$fromBlock to=$blockNumber")
       }
       for {
         filter <- listener.createFilter(Hex.prefixed(checkForZero(fromBlock)), Hex.prefixed(blockNumber))
