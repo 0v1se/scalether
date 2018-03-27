@@ -48,7 +48,7 @@ class MonoEthereum(transport: MonoTransport)
   override def ethGetTransactionReceipt(hash: String): Mono[Option[TransactionReceipt]] =
     super.ethGetTransactionReceipt(hash)
 
-  override def ethGetTransactionByHash(hash: String): Mono[response.Transaction] =
+  override def ethGetTransactionByHash(hash: String): Mono[Option[response.Transaction]] =
     super.ethGetTransactionByHash(hash)
 
   override def ethGetTransactionCount(address: Address, defaultBlockParameter: String): Mono[BigInteger] =
@@ -80,4 +80,7 @@ class MonoEthereum(transport: MonoTransport)
 
   override def ethGetCode(address: Address, defaultBlockParameter: String): Mono[String] =
     super.ethGetCode(address, defaultBlockParameter)
+
+  override def ethEstimateGas(transaction: Transaction, defaultBlockParameter: String): Mono[BigInteger] =
+    super.ethEstimateGas(transaction, defaultBlockParameter)
 }

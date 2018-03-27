@@ -51,7 +51,7 @@ class Ethereum[F[_]](transport: RpcTransport[F])
   def ethGetTransactionReceipt(hash: String): F[Option[TransactionReceipt]] =
     execOption("eth_getTransactionReceipt", hash)
 
-  def ethGetTransactionByHash(hash: String): F[response.Transaction] =
+  def ethGetTransactionByHash(hash: String): F[Option[response.Transaction]] =
     exec("eth_getTransactionByHash", hash)
 
   def netPeerCount(): F[BigInteger] =
