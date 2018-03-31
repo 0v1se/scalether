@@ -29,7 +29,7 @@
         <#nested/>
     </#if>
 </#compress></#macro>
-<#macro single_scala_type abiType><#compress>
+<#macro single_scala_type abiType components=[]><#compress>
     <#if abiType == 'address'>
         Address
     <#elseif abiType == 'string'>
@@ -41,7 +41,9 @@
     <#elseif abiType?starts_with("bytes")>
         Array[Byte]
     <#elseif abiType?ends_with("[]")>
-        Array[<@single_scala_type abiType?substring(0, abiType?length - 2)/>]
+        Array[<@single_scala_type abiType?substring(0, abiType?length - 2) components/>]
+    <#elseif abiType == "tuple">
+        (<#list components as component><@single_scala_type component.type component.components/><#if component?has_next>, </#if></#list>)
     <#else>
         generic
     </#if>
@@ -50,10 +52,10 @@
     <#if types?size == 0>
         Unit
     <#else>
-        <#list types as type><@single_scala_type type.type/><#if type?has_next>, </#if></#list>
+        <#list types as type><@single_scala_type type.type type.components/><#if type?has_next>, </#if></#list>
     </#if>
 </#compress></#macro>
-<#macro single_type abiType><#compress>
+<#macro single_type abiType components=[]><#compress>
     <#if abiType == 'address'>
         AddressType
     <#elseif abiType == 'string'>
@@ -69,13 +71,15 @@
     <#elseif abiType?starts_with("bytes")>
         Bytes${abiType?substring(5)}Type
     <#elseif abiType?ends_with("[]")>
-        VarArrayType(<@single_type abiType?substring(0, abiType?length - 2)/>)
+        VarArrayType(<@single_type abiType?substring(0, abiType?length - 2) components/>)
+    <#elseif abiType == "tuple">
+        Tuple${components?size}Type(<#list components as component><@single_type component.type component.components/><#if component?has_next>, </#if></#list>)
     <#else>
         Type
     </#if>
 </#compress></#macro>
 <#macro type_list types=[]><#compress>
-    <#list types as type><@single_type type.type/><#if type?has_next>, </#if></#list>
+    <#list types as type><@single_type type.type type.components/><#if type?has_next>, </#if></#list>
 </#compress></#macro>
 <#macro type types=[]><#compress>
     <#if types?size == 0>
@@ -99,7 +103,7 @@
     <#if arg.indexed && isHashTopic(arg)>
         Word
     <#else>
-        <@single_scala_type arg.type/>
+        <@single_scala_type arg.type arg.components/>
     </#if>
 </#compress></#macro>
 <#macro event_indexed_arg arg index><#compress>
@@ -113,7 +117,7 @@
     decodedData._${index + 1}
 </#compress></#macro>
 <#macro if_empty name default_name><#if name?has_content>${name}<#else>${default_name}</#if></#macro>
-<#macro args inputs><#if inputs?has_content>(<#list inputs as inp><#local c=inp?counter/><@if_empty inp.name "arg${c}"/>: <@single_scala_type inp.type/><#if inp?has_next>, </#if></#list>)</#if></#macro>
+<#macro args inputs><#if inputs?has_content>(<#list inputs as inp><#local c=inp?counter/><@if_empty inp.name "arg${c}"/>: <@single_scala_type inp.type inp.components/><#if inp?has_next>, </#if></#list>)</#if></#macro>
 <#macro args_values inputs><#list inputs as inp><#local c=inp?counter/><@if_empty inp.name "arg${c}"/><#if inp?has_next>, </#if></#list></#macro>
 <#macro args_params inputs><#if inputs?size != 0>(</#if><@args_values inputs/><#if inputs?size != 0>)</#if></#macro>
 <#macro args_tuple inputs><#if inputs?size != 1>(</#if><@args_values inputs/><#if inputs?size != 1>)</#if></#macro>
@@ -150,7 +154,7 @@ import scalether.util.Hex
 
 import scala.language.higherKinds
 
-class ${truffle.name}<@monad_param/>(address: Address, sender: <@sender/>)<@implicit>(implicit f: Functor[<@monad/>])</@>
+class ${truffle.name}<@monad_param/>(address: Address, sender: <@sender/>)<@implicit>(implicit f: MonadError[<@monad/>, Throwable])</@>
   extends Contract[<@monad/>](address, sender) {
 
   <#list truffle.abi as item>
@@ -184,7 +188,7 @@ object ${truffle.name} extends ContractObject {
   def deploy<@monad_param/>(sender: <@sender/>)<@args constructor_args/><@implicit>(implicit f: Functor[<@monad/>])</@>: <@monad/>[String] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData<@args_params constructor_args/>))
 
-  def deployAndWait<@monad_param/>(sender: <@sender/>, poller: <@poller/>)<@args constructor_args/><@implicit>(implicit m: Monad[<@monad/>])</@>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
+  def deployAndWait<@monad_param/>(sender: <@sender/>, poller: <@poller/>)<@args constructor_args/><@implicit>(implicit m: MonadError[<@monad/>, Throwable])</@>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
       poller.waitForTransaction(deploy(sender)<@args_params constructor_args/>)
       .map(receipt => new ${truffle.name}<#if !(F?has_content)>[F]</#if>(receipt.contractAddress, sender))
   </#if>
