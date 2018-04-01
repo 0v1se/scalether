@@ -33,6 +33,28 @@ class AbiTupleIntegrationSpec extends FlatSpec with PropertyChecks with Integrat
     }
   }
 
+  it should "encode single struct" in {
+    forAll(addressAndValue) {
+      case (token, value) =>
+        val hash = test.setRate(token, value).execute().get
+        val receipt = ethereum.ethGetTransactionReceipt(hash).get
+        assert(receipt.isDefined)
+        assert(receipt.get.success)
+        val rates = logsToList(receipt.get.logs)
+        assert(rates.size == 1)
+        assert(rates.head == (token, value))
+    }
+  }
+
+  it should "encode and decode struct" in {
+    forAll(addressAndValue) {
+      case (token, value) =>
+        test.setRate(token, value).execute().get
+        val result = test.getRate.call().get
+        assert(result == (token, value))
+    }
+  }
+
   private def logsToList(logs: List[Log]): List[(Address, BigInteger)] = {
     logs
       .map(log => RateEvent(log))

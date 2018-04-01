@@ -25,6 +25,17 @@ contract IntegrationTest {
         }
     }
 
+    Rate rate;
+
+    function setRate(Rate _rate) public {
+        rate = _rate;
+        RateEvent(_rate.token, _rate.value);
+    }
+
+    function getRate() public returns (Rate) {
+        return rate;
+    }
+
     function emitSimpleEvent(string topic, string value) public {
         SimpleEvent(topic, value);
     }
