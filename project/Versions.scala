@@ -8,6 +8,6 @@ object Versions {
   val mockito = "1.10.19"
   val boncycastle = "1.58"
   val scalaRpc = "0.1.4"
-  val catsMono = "0.1.1"
-  val blockchainCommon = "0.1.4"
+  val catsMono = "0.1.0"
+  val blockchainCommon = "0.1.3"
 }
