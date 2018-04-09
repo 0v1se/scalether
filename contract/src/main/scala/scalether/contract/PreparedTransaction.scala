@@ -11,13 +11,13 @@ import scalether.transaction.TransactionSender
 
 import scala.language.higherKinds
 
-class PreparedTransaction[F[_], O](address: Address,
-                                   signature: Signature[_, O],
-                                   data: Array[Byte],
+class PreparedTransaction[F[_], O](val address: Address,
+                                   val signature: Signature[_, O],
+                                   val data: Array[Byte],
                                    sender: TransactionSender[F],
-                                   value: BigInteger,
-                                   gas: BigInteger,
-                                   gasPrice: BigInteger)
+                                   val value: BigInteger,
+                                   val gas: BigInteger,
+                                   val gasPrice: BigInteger)
                                   (implicit m: MonadError[F, Throwable]) {
 
   def withGas(newGas: BigInteger): PreparedTransaction[F, O] =
