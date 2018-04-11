@@ -108,9 +108,9 @@
 </#compress></#macro>
 <#macro event_indexed_arg arg index><#compress>
     <#if isHashTopic(arg)>
-        Word(log.topics(${index + 1}))
+        log.topics(${index + 1})
     <#else>
-        event.indexed.type${index + 1}.decode(Hex.toBytes(log.topics(${index + 1})), 0).value
+        event.indexed.type${index + 1}.decode(log.topics(${index + 1}).bytes, 0).value
     </#if>
 </#compress></#macro>
 <#macro event_non_indexed_arg arg index><#compress>
@@ -182,8 +182,8 @@ object ${truffle.name} extends ContractObject {
   def encodeArgs<@args constructor_args/>: Array[Byte] =
     constructor.encode(<@args_values constructor_args/>)
 
-  def deployTransactionData<@args constructor_args/>: Array[Byte] =
-    Hex.toBytes(bin) ++ encodeArgs<@args_params constructor_args/>
+  def deployTransactionData<@args constructor_args/>: Binary =
+    Binary(Hex.toBytes(bin) ++ encodeArgs<@args_params constructor_args/>)
 
   def deploy<@monad_param/>(sender: <@sender/>)<@args constructor_args/><@implicit>(implicit f: Functor[<@monad/>])</@>: <@monad/>[String] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData<@args_params constructor_args/>))
@@ -212,10 +212,10 @@ object ${eventName} {
   val event = Event("${item.name}", List(<@type_list item.inputs/>), <@type item.indexed/>, <@type item.nonIndexed/>)
 
   @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
 
   @annotation.varargs def filter(addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList)
 
   def apply(log: response.Log): ${eventName} = {
     assert(log.topics.head == event.id)

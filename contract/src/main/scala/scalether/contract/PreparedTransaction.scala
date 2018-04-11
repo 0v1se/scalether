@@ -5,7 +5,7 @@ import java.math.BigInteger
 import cats.MonadError
 import cats.implicits._
 import scalether.abi.Signature
-import scalether.domain.Address
+import scalether.domain.{Address, Binary}
 import scalether.domain.request.Transaction
 import scalether.transaction.TransactionSender
 
@@ -13,7 +13,7 @@ import scala.language.higherKinds
 
 class PreparedTransaction[F[_], O](val address: Address,
                                    val signature: Signature[_, O],
-                                   val data: Array[Byte],
+                                   val data: Binary,
                                    sender: TransactionSender[F],
                                    val value: BigInteger,
                                    val gas: BigInteger,
@@ -52,5 +52,5 @@ object PreparedTransaction {
                         gas: BigInteger = null,
                         gasPrice: BigInteger = null)
                        (implicit m: MonadError[F, Throwable]): PreparedTransaction[F, O] =
-    new PreparedTransaction[F, O](address, signature, signature.encode(in), sender, value, gas, gasPrice)
+    new PreparedTransaction[F, O](address, signature, Binary(signature.encode(in)), sender, value, gas, gasPrice)
 }

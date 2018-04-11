@@ -33,7 +33,7 @@ class EthereumBlockchain[F[_]](ethereum: Ethereum[F], parity: Parity[F])
 
   override def getTransactionIdsByBlock(block: BigInteger): F[List[String]] =
     ethereum.ethGetBlockByNumber(block)
-    .map(_.transactions)
+    .map(_.transactions.map(_.toString))
 }
 
 class EthereumTransaction(val id: String, traces: List[Trace]) extends Transaction {

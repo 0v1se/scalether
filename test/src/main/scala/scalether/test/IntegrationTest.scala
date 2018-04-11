@@ -54,8 +54,8 @@ object IntegrationTest extends ContractObject {
   def encodeArgs: Array[Byte] =
     constructor.encode()
 
-  def deployTransactionData: Array[Byte] =
-    Hex.toBytes(bin) ++ encodeArgs
+  def deployTransactionData: Binary =
+    Binary(Hex.toBytes(bin) ++ encodeArgs)
 
   def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData))
@@ -71,16 +71,16 @@ object SimpleEvent {
   val event = Event("SimpleEvent", List(StringType, StringType), Tuple1Type(StringType), Tuple1Type(StringType))
 
   @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
 
   @annotation.varargs def filter(addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList)
 
   def apply(log: response.Log): SimpleEvent = {
     assert(log.topics.head == event.id)
 
     val decodedData = event.decode(log.data)
-    val topic = Word(log.topics(1))
+    val topic = log.topics(1)
     val value = decodedData
     SimpleEvent(topic, value)
   }
@@ -92,16 +92,16 @@ object AddressEvent {
   val event = Event("AddressEvent", List(AddressType, StringType), Tuple1Type(AddressType), Tuple1Type(StringType))
 
   @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
 
   @annotation.varargs def filter(addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList)
 
   def apply(log: response.Log): AddressEvent = {
     assert(log.topics.head == event.id)
 
     val decodedData = event.decode(log.data)
-    val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
+    val topic = event.indexed.type1.decode(log.topics(1).bytes, 0).value
     val value = decodedData
     AddressEvent(topic, value)
   }
@@ -113,17 +113,17 @@ object MixedEvent {
   val event = Event("MixedEvent", List(AddressType, StringType, AddressType), Tuple2Type(AddressType, AddressType), Tuple1Type(StringType))
 
   @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
 
   @annotation.varargs def filter(addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList)
 
   def apply(log: response.Log): MixedEvent = {
     assert(log.topics.head == event.id)
 
     val decodedData = event.decode(log.data)
-    val topic = event.indexed.type1.decode(Hex.toBytes(log.topics(1)), 0).value
-    val test = event.indexed.type2.decode(Hex.toBytes(log.topics(2)), 0).value
+    val topic = event.indexed.type1.decode(log.topics(1).bytes, 0).value
+    val test = event.indexed.type2.decode(log.topics(2).bytes, 0).value
     val value = decodedData
     MixedEvent(topic, test, value)
   }
@@ -135,10 +135,10 @@ object RateEvent {
   val event = Event("RateEvent", List(AddressType, Uint256Type), UnitType, Tuple2Type(AddressType, Uint256Type))
 
   @annotation.varargs def filter(fromBlock: String, toBlock: String, addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList, fromBlock = fromBlock, toBlock = toBlock)
 
   @annotation.varargs def filter(addresses: Address*): LogFilter =
-    LogFilter(topics = List(SimpleTopicFilter(Word.apply(event.id))), address = addresses.toList)
+    LogFilter(topics = List(SimpleTopicFilter(event.id)), address = addresses.toList)
 
   def apply(log: response.Log): RateEvent = {
     assert(log.topics.head == event.id)

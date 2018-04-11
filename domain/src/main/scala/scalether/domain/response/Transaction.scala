@@ -2,7 +2,7 @@ package scalether.domain.response
 
 import java.math.BigInteger
 
-import scalether.domain.{Address, Word}
+import scalether.domain.{Address, Binary, Word}
 
 case class Transaction(hash: Word,
                        nonce: BigInteger,
@@ -15,4 +15,4 @@ case class Transaction(hash: Word,
                        value: BigInteger,
                        gasPrice: BigInteger,
                        gas: BigInteger,
-                       input: String)
+                       input: Binary)

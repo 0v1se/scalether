@@ -26,7 +26,7 @@ object TransactionSigner {
     RlpString.create(transaction.gas),
     Option(transaction.to).map(a => RlpString.create(a.bytes)).getOrElse(RlpString.create("")),
     RlpString.create(Option(transaction.value).getOrElse(BigInteger.ZERO)),
-    RlpString.create(transaction.data)
+    RlpString.create(transaction.data.bytes)
   )
 
   protected def asRlp(ecSignature: SignatureData): Array[RlpType] = Array(
