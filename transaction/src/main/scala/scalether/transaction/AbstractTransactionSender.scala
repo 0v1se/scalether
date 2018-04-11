@@ -5,7 +5,7 @@ import java.math.BigInteger
 import cats.implicits._
 import cats.MonadError
 import scalether.core.Ethereum
-import scalether.domain.Address
+import scalether.domain.{Address, Binary}
 import scalether.domain.request.Transaction
 
 import scala.language.higherKinds
@@ -14,7 +14,7 @@ abstract class AbstractTransactionSender[F[_]](val ethereum: Ethereum[F], val fr
                                               (implicit me: MonadError[F, Throwable])
   extends TransactionSender[F] {
 
-  def call(transaction: Transaction): F[Array[Byte]] =
+  def call(transaction: Transaction): F[Binary] =
     ethereum.ethCall(transaction.copy(from = from), "latest")
 
   override def estimate(transaction: Transaction): F[BigInteger] =

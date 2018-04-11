@@ -8,7 +8,7 @@ import io.daonomic.rpc.mono.MonoTransport
 import reactor.core.publisher.Mono
 import scalether.domain.request.{LogFilter, Transaction}
 import scalether.domain.response.{Block, Log, TransactionReceipt}
-import scalether.domain.{Address, response}
+import scalether.domain.{Address, Binary, Word, response}
 
 import scala.collection.JavaConverters._
 
@@ -30,25 +30,25 @@ class MonoEthereum(transport: MonoTransport)
   override def ethBlockNumber(): Mono[BigInteger] =
     super.ethBlockNumber()
 
-  override def ethGetBlockByHash(hash: String): Mono[Block] =
+  override def ethGetBlockByHash(hash: Word): Mono[Block] =
     super.ethGetBlockByHash(hash)
 
   override def ethGetBlockByNumber(number: BigInteger): Mono[Block] =
     super.ethGetBlockByNumber(number)
 
-  override def ethCall(transaction: Transaction, defaultBlockParameter: String): Mono[Array[Byte]] =
+  override def ethCall(transaction: Transaction, defaultBlockParameter: String): Mono[Binary] =
     super.ethCall(transaction, defaultBlockParameter)
 
-  override def ethSendTransaction(transaction: Transaction): Mono[String] =
+  override def ethSendTransaction(transaction: Transaction): Mono[Word] =
     super.ethSendTransaction(transaction)
 
-  override def ethSendRawTransaction(transaction: String): Mono[String] =
+  override def ethSendRawTransaction(transaction: Binary): Mono[Word] =
     super.ethSendRawTransaction(transaction)
 
-  override def ethGetTransactionReceipt(hash: String): Mono[Option[TransactionReceipt]] =
+  override def ethGetTransactionReceipt(hash: Word): Mono[Option[TransactionReceipt]] =
     super.ethGetTransactionReceipt(hash)
 
-  override def ethGetTransactionByHash(hash: String): Mono[Option[response.Transaction]] =
+  override def ethGetTransactionByHash(hash: Word): Mono[Option[response.Transaction]] =
     super.ethGetTransactionByHash(hash)
 
   override def ethGetTransactionCount(address: Address, defaultBlockParameter: String): Mono[BigInteger] =
@@ -78,7 +78,7 @@ class MonoEthereum(transport: MonoTransport)
   def ethGetFilterChangesJava(id: BigInteger): Mono[util.List[Log]] =
     super.ethGetFilterChanges(id).map(_.asJava)
 
-  override def ethGetCode(address: Address, defaultBlockParameter: String): Mono[String] =
+  override def ethGetCode(address: Address, defaultBlockParameter: String): Mono[Binary] =
     super.ethGetCode(address, defaultBlockParameter)
 
   override def ethEstimateGas(transaction: Transaction, defaultBlockParameter: String): Mono[BigInteger] =

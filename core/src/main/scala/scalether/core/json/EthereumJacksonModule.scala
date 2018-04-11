@@ -3,6 +3,7 @@ package scalether.core.json
 import java.math.BigInteger
 
 import com.fasterxml.jackson.databind.module.SimpleModule
+import scalether.domain.jackson._
 import scalether.domain.request.TopicFilter
 import scalether.domain.{Address, Binary, Word}
 
@@ -15,7 +16,5 @@ class EthereumJacksonModule extends SimpleModule {
   addSerializer(classOf[Binary], BinarySerializer)
   addDeserializer(classOf[Word], WordDeserializer)
   addSerializer(classOf[Word], WordSerializer)
-  addDeserializer(classOf[Array[Byte]], BytesDeserializer)
-  addSerializer(classOf[Array[Byte]], BytesSerializer)
   addSerializer(classOf[TopicFilter], TopicFilterSerializer)
 }

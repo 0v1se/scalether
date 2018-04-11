@@ -5,7 +5,7 @@ import java.math.BigInteger
 import cats.MonadError
 import cats.implicits._
 import scalether.abi.Signature
-import scalether.domain.{Address, Binary}
+import scalether.domain.{Address, Binary, Word}
 import scalether.domain.request.Transaction
 import scalether.transaction.TransactionSender
 
@@ -31,15 +31,15 @@ class PreparedTransaction[F[_], O](val address: Address,
 
   def call(): F[O] =
     sender.call(Transaction(to = address, data = data, value = value, gas = gas, gasPrice = gasPrice))
-      .map(signature.decode)
+      .map(binary => signature.decode(binary.bytes))
 
-  def execute(): F[String] =
+  def execute(): F[Word] =
     sender.sendTransaction(Transaction(to = address, data = data, value = value, gas = gas, gasPrice = gasPrice))
 
   def estimate(): F[BigInteger] =
     sender.estimate(Transaction(to = address, data = data, value = value, gas = gas, gasPrice = gasPrice))
 
-  def estimateAndExecute(): F[String] =
+  def estimateAndExecute(): F[Word] =
     estimate().flatMap(estimated => this.withGas(estimated).execute())
 }
 

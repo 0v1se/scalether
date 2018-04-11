@@ -1,12 +1,14 @@
 package scalether.domain
 
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.StandardCharsets
 
 import org.web3j.crypto.Hash
 import scalether.util.Hex
 
 case class Address(bytes: Array[Byte]) extends Bytes {
   assert(bytes.length == 20)
+
+  def toBinary: Binary = Binary(bytes)
 
   def toChecksumString: String = {
     val s = Hex.to(bytes)
@@ -23,4 +25,7 @@ case class Address(bytes: Array[Byte]) extends Bytes {
 object Address {
   def apply(hex: String): Address =
     new Address(Hex.toBytes(hex))
+
+  def apply(binary: Binary): Address =
+    new Address(binary.bytes)
 }

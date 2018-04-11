@@ -4,6 +4,7 @@ import cats.implicits._
 import io.daonomic.rpc.tries.ScalajHttpTransport
 import org.scalatest.FlatSpec
 import scalether.core.{Ethereum, Parity}
+import scalether.domain.Word
 
 import scala.util.Try
 
@@ -16,6 +17,6 @@ class ParitySpec extends FlatSpec {
   }
 
   "Ethereum" should "get transaction by hash" taggedAs ManualTag in {
-    println(ethereum.ethGetTransactionByHash("0x4442468db05a4ab2edf6a4550882d023ef1aa80cb92f33f850d21c181e6597f7"))
+    println(ethereum.ethGetTransactionByHash(Word("0x4442468db05a4ab2edf6a4550882d023ef1aa80cb92f33f850d21c181e6597f7")))
   }
 }

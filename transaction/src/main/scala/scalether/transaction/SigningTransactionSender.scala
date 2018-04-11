@@ -6,7 +6,7 @@ import cats.{Monad, MonadError}
 import cats.implicits._
 import org.web3j.crypto.Keys
 import scalether.core.Ethereum
-import scalether.domain.Address
+import scalether.domain.{Address, Binary, Word}
 import scalether.domain.request.Transaction
 import scalether.util.Hex
 
@@ -22,14 +22,14 @@ class SigningTransactionSender[F[_]](ethereum: Ethereum[F],
 
   private val signer = new TransactionSigner(privateKey)
 
-  def sendTransaction(transaction: Transaction): F[String] = fill(transaction).flatMap {
+  def sendTransaction(transaction: Transaction): F[Word] = fill(transaction).flatMap {
     transaction =>
       ethereum.ethCall(transaction, "latest").flatMap { _ =>
         if (transaction.nonce != null) {
-          ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction)))
+          ethereum.ethSendRawTransaction(Binary(signer.sign(transaction)))
         } else {
           nonceProvider.nonce(address = from).flatMap(
-            nonce => ethereum.ethSendRawTransaction(Hex.prefixed(signer.sign(transaction.copy(nonce = nonce))))
+            nonce => ethereum.ethSendRawTransaction(Binary(signer.sign(transaction.copy(nonce = nonce))))
           )
         }
       }

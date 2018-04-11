@@ -57,7 +57,7 @@ object IntegrationTest extends ContractObject {
   def deployTransactionData: Binary =
     Binary(Hex.toBytes(bin) ++ encodeArgs)
 
-  def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[String] =
+  def deploy[F[_]](sender: TransactionSender[F])(implicit f: Functor[F]): F[Word] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData))
 
   def deployAndWait[F[_]](sender: TransactionSender[F], poller: TransactionPoller[F])(implicit m: MonadError[F, Throwable]): F[IntegrationTest[F]] =

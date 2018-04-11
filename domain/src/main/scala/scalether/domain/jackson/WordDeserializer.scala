@@ -1,4 +1,4 @@
-package scalether.core.json
+package scalether.domain.jackson
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken.VALUE_STRING

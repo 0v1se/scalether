@@ -5,7 +5,7 @@ import java.math.BigInteger
 import io.daonomic.cats.mono.implicits._
 import reactor.core.publisher.Mono
 import scalether.abi.Signature
-import scalether.domain.{Address, Binary}
+import scalether.domain.{Address, Binary, Word}
 import scalether.transaction.MonoTransactionSender
 
 class MonoPreparedTransaction[O](address: Address,
@@ -28,11 +28,11 @@ class MonoPreparedTransaction[O](address: Address,
 
   override def call(): Mono[O] = super.call()
 
-  override def execute(): Mono[String] = super.execute()
+  override def execute(): Mono[Word] = super.execute()
 
   override def estimate(): Mono[BigInteger] = super.estimate()
 
-  override def estimateAndExecute(): Mono[String] = super.estimateAndExecute()
+  override def estimateAndExecute(): Mono[Word] = super.estimateAndExecute()
 }
 
 object MonoPreparedTransaction {

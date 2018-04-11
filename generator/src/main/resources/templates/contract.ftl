@@ -185,7 +185,7 @@ object ${truffle.name} extends ContractObject {
   def deployTransactionData<@args constructor_args/>: Binary =
     Binary(Hex.toBytes(bin) ++ encodeArgs<@args_params constructor_args/>)
 
-  def deploy<@monad_param/>(sender: <@sender/>)<@args constructor_args/><@implicit>(implicit f: Functor[<@monad/>])</@>: <@monad/>[String] =
+  def deploy<@monad_param/>(sender: <@sender/>)<@args constructor_args/><@implicit>(implicit f: Functor[<@monad/>])</@>: <@monad/>[Word] =
     sender.sendTransaction(request.Transaction(data = deployTransactionData<@args_params constructor_args/>))
 
   def deployAndWait<@monad_param/>(sender: <@sender/>, poller: <@poller/>)<@args constructor_args/><@implicit>(implicit m: MonadError[<@monad/>, Throwable])</@>: <@monad/>[${truffle.name}<#if !(F?has_content)>[F]</#if>] =
