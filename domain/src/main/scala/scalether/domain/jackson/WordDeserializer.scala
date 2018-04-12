@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer
 import scalether.domain.Word
 
-object WordDeserializer extends StdScalarDeserializer[Word](classOf[Word]) {
+class WordDeserializer extends StdScalarDeserializer[Word](classOf[Word]) {
   def deserialize(jp: JsonParser, ctxt: DeserializationContext): Word = jp.getCurrentToken match {
     case VALUE_STRING => Word(jp.getText.trim)
     case _ => ctxt.handleUnexpectedToken(_valueClass, jp).asInstanceOf[Word]

@@ -2,9 +2,13 @@ package scalether.domain
 
 import java.nio.charset.StandardCharsets
 
+import com.fasterxml.jackson.databind.annotation.{JsonDeserialize, JsonSerialize}
 import org.web3j.crypto.Hash
+import scalether.domain.jackson.{AddressDeserializer, AddressSerializer}
 import scalether.util.Hex
 
+@JsonSerialize(using = classOf[AddressSerializer])
+@JsonDeserialize(using = classOf[AddressDeserializer])
 case class Address(bytes: Array[Byte]) extends Bytes {
   assert(bytes.length == 20)
 

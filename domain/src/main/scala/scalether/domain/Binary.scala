@@ -1,7 +1,11 @@
 package scalether.domain
 
+import com.fasterxml.jackson.databind.annotation.{JsonDeserialize, JsonSerialize}
+import scalether.domain.jackson.{BinaryDeserializer, BinarySerializer}
 import scalether.util.Hex
 
+@JsonSerialize(using = classOf[BinarySerializer])
+@JsonDeserialize(using = classOf[BinaryDeserializer])
 case class Binary(bytes: Array[Byte]) extends Bytes
 
 object Binary {

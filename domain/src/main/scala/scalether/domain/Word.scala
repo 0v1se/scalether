@@ -1,7 +1,11 @@
 package scalether.domain
 
+import com.fasterxml.jackson.databind.annotation.{JsonDeserialize, JsonSerialize}
+import scalether.domain.jackson.{WordDeserializer, WordSerializer}
 import scalether.util.Hex
 
+@JsonSerialize(using = classOf[WordSerializer])
+@JsonDeserialize(using = classOf[WordDeserializer])
 case class Word(bytes: Array[Byte]) extends Bytes {
   assert(bytes.length == 32)
 
