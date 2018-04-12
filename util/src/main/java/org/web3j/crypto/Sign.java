@@ -12,6 +12,7 @@ import org.bouncycastle.math.ec.ECAlgorithms;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.FixedPointCombMultiplier;
 import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
+import org.web3j.utils.Numeric;
 import scalether.util.Bytes;
 import scalether.util.Padding;
 
@@ -57,8 +58,8 @@ public class Sign {
 
         // 1 header + 32 bytes for R + 32 bytes for S
         byte v = (byte) headerByte;
-        byte[] r = Padding.padLeft(sig.r.toByteArray(), Bytes.ZERO);
-        byte[] s = Padding.padLeft(sig.s.toByteArray(), Bytes.ZERO);
+        byte[] r = Numeric.toBytesPadded(sig.r, 32);
+        byte[] s = Numeric.toBytesPadded(sig.s, 32);
 
         return new SignatureData(v, r, s);
     }
