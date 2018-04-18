@@ -13,6 +13,10 @@ contract IntegrationTest {
     event MixedEvent(address indexed topic, string value, address indexed test);
     event RateEvent(address token, uint256 value);
 
+    event TestEvent(uint256 value1);
+    event TestEvent(uint256 value1, uint256 value2);
+    event TestEvent(uint256 value1, uint256 value2, uint256 value3);
+
     struct Rate {
         address token;
         uint256 value;

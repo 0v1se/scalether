@@ -197,15 +197,18 @@ object ${truffle.name} extends ContractObject {
 <#assign map={}/>
 <#list truffle.abi as item>
   <#if item.type == "event">
-    <#if (map[item.name]??)>
-      <#assign eventName="${item.name}${map[item.name]}"/>
+    <#assign simpleName=item.name/>
+    <#if simpleName?ends_with('Event')>
+        <#assign simpleName=simpleName[0..*(simpleName?length-5)]/>
+    </#if>
+    <#if (map[simpleName]??)>
+      <#assign eventName="${simpleName}${map[simpleName]}"/>
+      <#assign map=map + {simpleName: 1 + map[simpleName]}/>
     <#else>
-      <#assign map=map + {item.name: 1}/>
-      <#assign eventName=item.name/>
+      <#assign eventName=simpleName/>
+      <#assign map=map + {simpleName: 1}/>
     </#if>
-    <#if !(eventName?ends_with('Event'))>
-        <#assign eventName="${eventName}Event"/>
-    </#if>
+    <#assign eventName="${eventName}Event"/>
 case class ${eventName}(<#list item.all as arg>${arg.name}: <@event_arg_type arg/><#if arg?has_next>, </#if></#list>)
 
 object ${eventName} {
