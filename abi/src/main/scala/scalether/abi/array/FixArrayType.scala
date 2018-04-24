@@ -9,9 +9,8 @@ class FixArrayType[T](length: Int, `type`: Type[T])
   extends ArrayType[T](`type`) {
 
   assert(length != 0)
-  assert(`type`.size.isDefined)
 
-  override def size = Some(`type`.size.get * length)
+  override def size: Option[Int] = `type`.size.map(_ * length)
 
   def string = s"${`type`.string}[$length]"
 

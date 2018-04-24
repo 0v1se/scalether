@@ -1,5 +1,7 @@
 name := "scalether"
 
+parallelExecution in ThisBuild := false
+
 def base(project: Project): Project = project.settings(
   organization := "io.daonomic.scalether",
   bintrayPackage := s"scalether-${name.value}",

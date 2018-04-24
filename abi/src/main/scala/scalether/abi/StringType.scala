@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets
 object StringType extends Type[String] {
   def string = "string"
 
-  override def size = None
+  override def size: Option[Int] = None
 
   def encode(value: String): Array[Byte] = {
     val bytes = value.getBytes(StandardCharsets.UTF_8)

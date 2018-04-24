@@ -35,6 +35,16 @@ contract IntegrationTest {
         }
     }
 
+    function getStructWithString() constant public returns (StructWithString) {
+        return StructWithString("", 0);
+    }
+
+    function getStructsWithString() constant public returns (StructWithString[1]) {
+        StructWithString[1] memory result;
+        result[0] = StructWithString("", 0);
+        return result;
+    }
+
     function setRates(Rate[] rates) public {
         uint length = rates.length;
         for (uint i=0; i<length; i++) {
@@ -54,14 +64,14 @@ contract IntegrationTest {
     }
 
     function emitSimpleEvent(string topic, string value) public {
-        SimpleEvent(topic, value);
+        emit SimpleEvent(topic, value);
     }
 
     function emitAddressEvent(address topic, string value) public {
-        AddressEvent(topic, value);
+        emit AddressEvent(topic, value);
     }
 
     function emitMixedEvent(address topic, string value, address test) public {
-        MixedEvent(topic, value, test);
+        emit MixedEvent(topic, value, test);
     }
 }

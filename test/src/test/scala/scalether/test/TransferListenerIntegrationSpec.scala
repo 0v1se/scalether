@@ -11,6 +11,7 @@ import io.daonomic.rpc.tries.ScalajHttpTransport
 import org.scalatest.FlatSpec
 import scalether.core.{Ethereum, Parity}
 import scalether.listener.EthereumBlockchain
+import io.daonomic.blockchain.poller.tries.implicits._
 
 import scala.util.{Failure, Try}
 
