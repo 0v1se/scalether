@@ -12,6 +12,7 @@ contract IntegrationTest {
     event AddressEvent(address indexed topic, string value);
     event MixedEvent(address indexed topic, string value, address indexed test);
     event RateEvent(address token, uint256 value);
+    event StringEvent(string str, uint256 value);
 
     event TestEvent(uint256 value1);
     event TestEvent(uint256 value1, uint256 value2);
@@ -22,10 +23,22 @@ contract IntegrationTest {
         uint256 value;
     }
 
+    struct StructWithString {
+        string str;
+        uint256 value;
+    }
+
+    function checkStructsWithString(StructWithString[] structs) public {
+        uint length = structs.length;
+        for (uint i=0; i<length; i++) {
+            emit StringEvent(structs[i].str, structs[i].value);
+        }
+    }
+
     function setRates(Rate[] rates) public {
         uint length = rates.length;
         for (uint i=0; i<length; i++) {
-            RateEvent(rates[i].token, rates[i].value);
+            emit RateEvent(rates[i].token, rates[i].value);
         }
     }
 
@@ -33,7 +46,7 @@ contract IntegrationTest {
 
     function setRate(Rate _rate) public {
         rate = _rate;
-        RateEvent(_rate.token, _rate.value);
+        emit RateEvent(_rate.token, _rate.value);
     }
 
     function getRate() public returns (Rate) {
